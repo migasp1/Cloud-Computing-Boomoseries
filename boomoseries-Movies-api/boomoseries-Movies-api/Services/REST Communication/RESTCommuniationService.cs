@@ -17,9 +17,11 @@ namespace boomoseries_Movies_api.Services.REST_Communication
 
         public async Task<string> ObtainSepcificMovie(string movieTitle)
         {
-            HttpResponseMessage response = await httpClient.GetAsync("https://localhost:5001/api/v1/Netflix/movies/" + movieTitle);
-            response.EnsureSuccessStatusCode();
-            string responseBody = await response.Content.ReadAsStringAsync();
+            HttpResponseMessage netflixResponse = await httpClient.GetAsync(microservicesBaseURL[0] + movieTitle);
+            //HttpResponseMessage disneyResponse = await httpClient.GetAsync(microservicesBaseURL[2] + movieTitle);
+            //HttpResponseMessage amazonResponse = await httpClient.GetAsync(microservicesBaseURL[3] + movieTitle);
+            netflixResponse.EnsureSuccessStatusCode();
+            string responseBody = await netflixResponse.Content.ReadAsStringAsync();
             System.Console.WriteLine(responseBody);
             return responseBody;
         } 
