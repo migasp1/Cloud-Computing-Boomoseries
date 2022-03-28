@@ -9,9 +9,9 @@ namespace boomoseries_Movies_api.Helpers
         private static readonly string DisneyPlusBaseUrl = "https://localhost:5005/api/v1/Disney/movies/";
         private static readonly string AmazonPrimeBaseUrl = "https://localhost:5007/api/v1/Amazon/movies/";
 
-        public static List<string> GetMicroservicesBaseURL()
+        public static string[] GetMicroservicesBaseURL()
         {
-            var urls = new List<string>
+            var urls = new string[]
             {
                 NetflixBaseUrl,
                 IMDBBaseUrl,
