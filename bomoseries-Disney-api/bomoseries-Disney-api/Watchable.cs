@@ -1,6 +1,6 @@
 ﻿namespace boomoseries_Disney_api
 {
-    public class watchable
+    public class Watchable
     {
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
