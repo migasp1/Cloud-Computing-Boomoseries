@@ -1,3 +1,5 @@
+using boomoseries_Movies_api.Services;
+using boomoseries_Movies_api.Services.REST_Communication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +30,7 @@ namespace boomoseries_Movies_api
         {
 
             services.AddControllers();
+            services.AddSingleton<ICommunicationService, RESTCommuniationService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "boomoseries_Movies_api", Version = "v1" });
