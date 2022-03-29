@@ -6,7 +6,7 @@ namespace boomoseries_Disney_api.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        public DbSet<watchable> Watchables { get; set; }
+        public DbSet<Watchable> Watchables { get; set; }
 
     }
 }
