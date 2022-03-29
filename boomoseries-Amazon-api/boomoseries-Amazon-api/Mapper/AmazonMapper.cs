@@ -13,7 +13,7 @@ namespace boomoseries_Amazon_api.Mapper
                 Rating = watchable.Rating,
                 Date = watchable.Date,
                 Type = watchable.Type,
-                Platform = "Netflix"
+                Platform = "Amazon"
             };
         }
     }

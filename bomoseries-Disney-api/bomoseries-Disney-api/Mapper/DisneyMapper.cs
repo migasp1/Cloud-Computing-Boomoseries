@@ -14,7 +14,7 @@ namespace bomoseries_Disney_api.Mapper
                 Rating = watchable.Rating,
                 Date = watchable.Date,
                 Type = watchable.Type,
-                Platform = "Netflix"
+                Platform = "Disney"
             };
         }
     }

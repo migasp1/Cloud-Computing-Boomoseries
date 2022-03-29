@@ -2,6 +2,7 @@
 using boomoseries_Movies_api.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -19,16 +20,22 @@ namespace boomoseries_Movies_api.Services.REST_Communication
 
         public async Task<string> ObtainSepcificMovie(string movieTitle)
         {
-            HttpResponseMessage netflixResponse = await httpClient.GetAsync(microservicesBaseURL[0] + movieTitle);
+            
+            
+            
+            //HttpResponseMessage netflixResponse = await httpClient.GetAsync(microservicesBaseURL[0] + movieTitle);
             //HttpResponseMessage disneyResponse = await httpClient.GetAsync(microservicesBaseURL[2] + movieTitle);
             //HttpResponseMessage amazonResponse = await httpClient.GetAsync(microservicesBaseURL[3] + movieTitle);
 
             //Makes the requests to different microservices
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url)).ToList();
 
             //Wait for all the requests to finish
             await Task.WhenAll(requests);
-
+            stopwatch.Stop();
+            System.Diagnostics.Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var responses = requests.Select(task => task.Result);
 
@@ -39,26 +46,25 @@ namespace boomoseries_Movies_api.Services.REST_Communication
                 string s = await r.Content.ReadAsStringAsync();
                 if (s.Contains("Netflix"))
                 {
-                    Console.WriteLine("Encontramos um Filme no netflix");
+                    System.Diagnostics.Debug.WriteLine("Encontramos um Filme no netflix");
                 }
-                else if(s.Contains("Amazon"))
+                if (s.Contains("Amazon"))
                 {
-                    Console.WriteLine("Encontramos um Filme no Amazon Prime");
+                    System.Diagnostics.Debug.WriteLine("Encontramos um Filme no Amazon Prime");
                 }
-                else if (s.Contains("Disney"))
+                if (s.Contains("Disney"))
                 {
-                    Console.WriteLine("Encontramos um Filme no Disney+");
+                    System.Diagnostics.Debug.WriteLine("Encontramos um Filme no Disney+");
                 }
-                else if (s.Contains("IMDB"))
+                if (s.Contains("IMDB"))
                 {
-                    Console.WriteLine("Encontramos um Filme no IMDB");
+                    System.Diagnostics.Debug.WriteLine("Encontramos um Filme no IMDB");
                 }
             }
 
-            netflixResponse.EnsureSuccessStatusCode();
-            string responseBody = await netflixResponse.Content.ReadAsStringAsync();
-            System.Console.WriteLine(responseBody);
-            return responseBody;
+            // string responseBody = await netflixResponse.Content.ReadAsStringAsync();
+            //System.Console.WriteLine(responseBody);
+            return "Bom dia";
         }
     }
 }

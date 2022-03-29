@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace boomoseries_IMDB_api
+﻿namespace boomoseries_IMDB_api.DTOs
 {
-    public class IMDBWatchable
+    public class WatchableDTO
     {
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
@@ -10,5 +8,6 @@ namespace boomoseries_IMDB_api
         public string Director { get; set; } = string.Empty;
         public float Rating { get; set; }
         public string Cast { get; set; }
+        public string Platform { get; set; }
     }
 }

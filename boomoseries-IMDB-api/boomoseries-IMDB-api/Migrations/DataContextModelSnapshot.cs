@@ -25,7 +25,10 @@ namespace boomoseries_IMDB_api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Date")
+                    b.Property<string>("Cast")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Director")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("Rating")
