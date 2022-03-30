@@ -21,14 +21,30 @@ namespace boomoseries_Movies_api.Controllers
             try
             {
                 var responseBody = await commService.ObtainSepcificMovie(movie_title);
-                MovieDTO deserializedMovie = JsonConvert.DeserializeObject<MovieDTO>(responseBody);
-                return Ok(deserializedMovie);    
+                //MovieDTO deserializedMovie = JsonConvert.DeserializeObject<MovieDTO>(responseBody);
+                return Ok(responseBody);    
             }
             catch (Exception ex)
             {
                return BadRequest("Oops, something went wrong! " + ex.Message);
             }
             
+        }
+
+        [HttpGet("/api/v1/Movies/")]
+        public async Task<IActionResult> GetMovies()
+        {
+            try
+            {
+                var responseBody = await commService.ObtainMovies();
+                //MovieDTO deserializedMovie = JsonConvert.DeserializeObject<MovieDTO>(responseBody);
+                return Ok(responseBody);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Oops, something went wrong! " + ex.Message);
+            }
+
         }
     }
 }
