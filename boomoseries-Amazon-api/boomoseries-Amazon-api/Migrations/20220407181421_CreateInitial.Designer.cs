@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace boomoseries_Amazon_api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220328163110_CreateInitial")]
+    [Migration("20220407181421_CreateInitial")]
     partial class CreateInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,7 +20,7 @@ namespace boomoseries_Amazon_api.Migrations
                 .HasAnnotation("ProductVersion", "5.0.15")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("boomoseries_Amazon_api.watchable", b =>
+            modelBuilder.Entity("boomoseries_Amazon_api.Watchable", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,8 +30,8 @@ namespace boomoseries_Amazon_api.Migrations
                     b.Property<string>("Date")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Rating")
-                        .HasColumnType("real");
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");

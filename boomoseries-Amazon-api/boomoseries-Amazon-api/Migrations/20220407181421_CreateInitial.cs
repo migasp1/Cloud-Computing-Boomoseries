@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace boomoseries_IMDB_api.Migrations
+namespace boomoseries_Amazon_api.Migrations
 {
     public partial class CreateInitial : Migration
     {
@@ -14,9 +14,8 @@ namespace boomoseries_IMDB_api.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Director = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Rating = table.Column<float>(type: "real", nullable: false),
-                    Cast = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Date = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Rating = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {

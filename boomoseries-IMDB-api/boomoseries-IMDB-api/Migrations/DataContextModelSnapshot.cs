@@ -31,8 +31,8 @@ namespace boomoseries_IMDB_api.Migrations
                     b.Property<string>("Director")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Rating")
-                        .HasColumnType("real");
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");

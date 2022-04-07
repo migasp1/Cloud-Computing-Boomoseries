@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace bomoseries_Disney_api.Migrations
+namespace boomoseries_Netflix_api.Migrations
 {
     public partial class CreateInitial : Migration
     {
@@ -15,7 +15,7 @@ namespace bomoseries_Disney_api.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Date = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Rating = table.Column<float>(type: "real", nullable: false)
+                    Rating = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {

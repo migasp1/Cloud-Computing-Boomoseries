@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using boomoseries_IMDB_api.Data;
+using boomoseries_Disney_api.Data;
 
-namespace boomoseries_IMDB_api.Migrations
+namespace bomoseries_Disney_api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220329223947_CreateInitial")]
+    [Migration("20220407181544_CreateInitial")]
     partial class CreateInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,21 +20,18 @@ namespace boomoseries_IMDB_api.Migrations
                 .HasAnnotation("ProductVersion", "5.0.15")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("boomoseries_IMDB_api.IMDBWatchable", b =>
+            modelBuilder.Entity("boomoseries_Disney_api.Watchable", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Cast")
+                    b.Property<string>("Date")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Director")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Rating")
-                        .HasColumnType("real");
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
