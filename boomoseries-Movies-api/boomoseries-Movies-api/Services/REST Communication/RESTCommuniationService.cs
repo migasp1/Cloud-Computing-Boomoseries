@@ -23,7 +23,6 @@ namespace boomoseries_Movies_api.Services.REST_Communication
 
         public async Task<string> ObtainMovies()
         {
-
             //Makes the requests to different microservices
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -32,39 +31,44 @@ namespace boomoseries_Movies_api.Services.REST_Communication
             //Wait for all the requests to finish
             await Task.WhenAll(requests);
             stopwatch.Stop();
-            System.Diagnostics.Debug.WriteLine(stopwatch.ElapsedMilliseconds);
+            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var responses = requests.Select(task => task.Result);
-
-            foreach (var r in responses)
+            List<MovieDTO> movieDTOs = new();
+            foreach (var response in responses)
             {
-                // Extract the message body
-               
-                string s = await r.Content.ReadAsStringAsync();
-                if (s.Contains("Netflix"))
+                var responseString = await response.Content.ReadAsStringAsync();
+                if (responseString.Contains("Netflix"))
                 {
-                    System.Diagnostics.Debug.WriteLine("Encontramos um Filme no netflix");
+                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
+                    MovieDTO movieDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
+                    movieDTOs.Add(movieDto);
                 }
-                if (s.Contains("Amazon"))
+                else if (responseString.Contains("Amazon"))
                 {
-                    System.Diagnostics.Debug.WriteLine("Encontramos um Filme no Amazon Prime");
+                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
+                    MovieDTO movieDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
+                    movieDTOs.Add(movieDto);
                 }
-                if (s.Contains("Disney"))
+                else if (responseString.Contains("Disney"))
                 {
-                    System.Diagnostics.Debug.WriteLine("Encontramos um Filme no Disney+");
+                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
+                    MovieDTO movieDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
+                    movieDTOs.Add(movieDto);
                 }
-                if (s.Contains("IMDB"))
+                else if (responseString.Contains("IMDB"))
                 {
-                    System.Diagnostics.Debug.WriteLine("Encontramos um Filme no IMDB");
+                    //WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
+                    //MovieDTO movieDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
+                    //movieDTOs.Add(movieDto);
+                    Debug.WriteLine("APARECEU");
                 }
             }
-
-            return "Success!";
+            return movieDTOs;
         }
 
-        public async Task<string> ObtainSepcificMovie(string movieTitle)
+        public async Task<List<MovieDTO>> ObtainSepcificMovie(string movieTitle)
         {
-
             //Makes the requests to different microservices
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -82,27 +86,31 @@ namespace boomoseries_Movies_api.Services.REST_Communication
                 var responseString = await response.Content.ReadAsStringAsync();
                 if (responseString.Contains("Netflix"))
                 {
-                    List<WatchableDTO> deserializedWatchable = JsonConvert.DeserializeObject<List<WatchableDTO>>(responseString);
-                    foreach (var item in deserializedWatchable)
-                    {
-                        MovieDTO movieDto = MovieEntityMapper.MapToDTO(item);
-                        movieDtos.Add(movieDto);
-                    }
+                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
+                    MovieDTO movieDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
+                    movieDTOs.Add(movieDto);
                 }
                 else if (responseString.Contains("Amazon"))
                 {
-                    System.Diagnostics.Debug.WriteLine("Encontramos um Filme no Amazon Prime");
+                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
+                    MovieDTO movieDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
+                    movieDTOs.Add(movieDto);
                 }
                 else if (responseString.Contains("Disney"))
                 {
-                    System.Diagnostics.Debug.WriteLine("Encontramos um Filme no Disney+");
+                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
+                    MovieDTO movieDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
+                    movieDTOs.Add(movieDto);
                 }
                 else if (responseString.Contains("IMDB"))
                 {
-                    System.Diagnostics.Debug.WriteLine("Encontramos um Filme no IMDB");
+                    //WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
+                    //MovieDTO movieDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
+                    //movieDTOs.Add(movieDto);
+                    Debug.WriteLine("APARECEU");
                 }
             }
-            return "Success!";
+            return movieDTOs;
         }
 
         [HttpGet("movies")]

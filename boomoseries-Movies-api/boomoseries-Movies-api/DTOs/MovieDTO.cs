@@ -1,4 +1,6 @@
-﻿namespace boomoseries_Movies_api.DTOs
+﻿using System.Collections.Generic;
+
+namespace boomoseries_Movies_api.DTOs
 {
     public class MovieDTO
     {
