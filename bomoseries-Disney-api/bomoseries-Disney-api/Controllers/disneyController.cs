@@ -2,7 +2,7 @@
 using bomoseries_Disney_api.Mapper;
 using boomoseries_Disney_api.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -71,6 +71,30 @@ namespace Disney_MicroService.Controllers
             }
         }
 
+        [HttpGet("movies/random")]
+        public async Task<IActionResult> GetRandomMovie()
+        {
+            var dbSet = dataContext.Watchables;
+
+            var totalMovies = dbSet.Count();
+
+            Random random = new();
+
+            int randomId = random.Next(1, totalMovies);
+
+            var randomMovie = dbSet.Where(s => s.Type == "Movie").SingleOrDefault(s => s.Id == randomId);
+
+            if (randomMovie == null)
+            {
+                return NotFound("This movie doesn't exist");
+            }
+            else
+            {
+                WatchableDTO movieDTO = DisneyMapper.MapToDTO(randomMovie);
+                return Ok(movieDTO);
+            }
+        }
+
         [HttpGet("series")]
         public async Task<IActionResult> GetSeries(double? min_rating)
         {
@@ -117,6 +141,30 @@ namespace Disney_MicroService.Controllers
             {
                 WatchableDTO serieDTO = DisneyMapper.MapToDTO(serie);
                 return Ok(serie);
+            }
+        }
+
+        [HttpGet("series/random")]
+        public async Task<IActionResult> GetRandomSerie()
+        {
+            var dbSet = dataContext.Watchables;
+
+            var totalSeries = dbSet.Count();
+
+            Random random = new();
+
+            int randomId = random.Next(1, totalSeries);
+
+            var randomSerie = dbSet.Where(s => s.Type == "TV Show").SingleOrDefault(s => s.Id == randomId);
+
+            if (randomSerie == null)
+            {
+                return NotFound("This serie doesn't exist");
+            }
+            else
+            {
+                WatchableDTO serieDTO = DisneyMapper.MapToDTO(randomSerie);
+                return Ok(serieDTO);
             }
         }
     }

@@ -62,7 +62,5 @@ namespace boomosseries_GoodReads_api.Controllers
                 return Ok(booksDTO);
             }
         }
-
     }
-
 }
