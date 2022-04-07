@@ -2,6 +2,7 @@
 using boomoseries_IMDB_api.DTOs;
 using boomoseries_IMDB_api.Mapper;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +18,29 @@ namespace boomoseries_IMDB_api.Controllers
         public IMDBController(DataContext dataContext)
         {
             this.dataContext = dataContext;
+        }
+
+        [HttpGet("movies/random")]
+        public async Task<IActionResult> GetRandomMovie()
+        {
+            var dbSet = dataContext.Watchables;
+
+            var totalMovies = dbSet.Count();
+
+            Random random = new();
+
+            int randomId = random.Next(1, totalMovies);
+
+            var randomMovie = dbSet.Where(s => s.Type == "Movie").SingleOrDefault(s => s.Id == randomId);
+            if (randomMovie == null)
+            {
+                return NotFound("This movie doesn't exist");
+            }
+            else
+            {
+                WatchableDTO movieDTO = IMDBMapper.MapToDTO(randomMovie); 
+                return Ok(movieDTO);
+            }
         }
 
         [HttpGet("movies")]
@@ -65,6 +89,29 @@ namespace boomoseries_IMDB_api.Controllers
             {
                 WatchableDTO movieDTO = IMDBMapper.MapToDTO(movie);
                 return Ok(movieDTO);
+            }
+        }
+
+        [HttpGet("series/random")]
+        public async Task<IActionResult> GetRandomSerie()
+        {
+            var dbSet = dataContext.Watchables;
+
+            var totalSeries = dbSet.Count();
+
+            Random random = new();
+
+            int randomId = random.Next(1, totalSeries);
+
+            var randomSerie = dbSet.Where(s => s.Type == "TV Show").SingleOrDefault(s => s.Id == randomId);
+            if (randomSerie == null)
+            {
+                return NotFound("This serie doesn't exist");
+            }
+            else
+            {
+                WatchableDTO serieDTO = IMDBMapper.MapToDTO(randomSerie); 
+                return Ok(serieDTO);
             }
         }
 

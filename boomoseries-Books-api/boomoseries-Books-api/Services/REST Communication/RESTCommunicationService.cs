@@ -18,9 +18,9 @@ namespace boomoseries_Books_api.Services.REST_Communication
         {
         }
 
-        public async Task<string> ObtainBooks()
+        public async Task<List<BooksDTO>> ObtainBooks()
         {
-
+            List<BooksDTO> booksDtos = new();
             //Makes the requests to different microservices
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -32,21 +32,27 @@ namespace boomoseries_Books_api.Services.REST_Communication
             System.Diagnostics.Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var responses = requests.Select(task => task.Result);
-
-            foreach (var r in responses)
+            foreach (var response in responses)
             {
-                // Extract the message body
-                r.EnsureSuccessStatusCode();
-                string s = await r.Content.ReadAsStringAsync();
-                System.Diagnostics.Debug.WriteLine(s);
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    continue;
+                }
+                var responseString = await response.Content.ReadAsStringAsync();
+                List<BooksDTO> deserializedBook = JsonConvert.DeserializeObject<List<BooksDTO>>(responseString);
+                foreach (var item in deserializedBook)
+                {
+                    booksDtos.Add(item);
+                }
+
             }
 
-            return "Success!";
+            return booksDtos;
         }
 
-        public async Task<string> ObtainSpecificBook(string bookTitle)
+        public async Task<List<BooksDTO>> ObtainSpecificBook(string bookTitle)
         {
-
+            List<BooksDTO> booksDtos = new();
             //Makes the requests to different microservices
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -58,17 +64,19 @@ namespace boomoseries_Books_api.Services.REST_Communication
             System.Diagnostics.Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var responses = requests.Select(task => task.Result);
-            System.Diagnostics.Debug.WriteLine(responses);
 
-            foreach (var r in responses)
+            foreach (var response in responses)
             {
-                // Extract the message body
-                r.EnsureSuccessStatusCode();
-                string s = await r.Content.ReadAsStringAsync();
-          
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    continue;
+                }
+                var responseString = await response.Content.ReadAsStringAsync();
+                BooksDTO deserializedBook = JsonConvert.DeserializeObject<BooksDTO>(responseString);
+                booksDtos.Add(deserializedBook);
             }
 
-            return "Success!";
+            return booksDtos;
         }
 
         public async Task<List<BooksDTO>> ObtainBooksByRating(double min_rating)

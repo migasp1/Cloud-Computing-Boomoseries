@@ -14,7 +14,7 @@ namespace boomoseries_Books_api.Controllers
             this.commService = commService;
         }
 
-        [HttpGet("/api/v1/Books/{book_title}")]
+        [HttpGet("/api/v1/books/{book_title}")]
         public async Task<IActionResult> GetSpecificMovie(string book_title)
         {
             try
@@ -27,8 +27,8 @@ namespace boomoseries_Books_api.Controllers
                 return BadRequest("Oops, something went wrong! " + ex.Message);
             }
         }
-        /*
-        [HttpGet("/api/v1/Books")]
+        
+        [HttpGet("/api/v1/books")]
         public async Task<IActionResult> GetMovies()
         {
             try
@@ -41,8 +41,8 @@ namespace boomoseries_Books_api.Controllers
                 return BadRequest("Oops, something went wrong! " + ex.Message);
             }
         }
-        */
-        [HttpGet("/api/v1/Books")]
+        
+        [HttpGet("/api/v1/books/rating")]
         public async Task<IActionResult> GetBooksByRating(double min_rating)
         {
             try

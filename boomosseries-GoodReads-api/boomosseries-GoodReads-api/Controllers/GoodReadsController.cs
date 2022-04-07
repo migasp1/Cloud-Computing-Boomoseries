@@ -21,7 +21,6 @@ namespace boomosseries_GoodReads_api.Controllers
         [HttpGet("books")]
         public async Task<IActionResult> GetBooks(double? min_rating)
         {
-            double? temp = min_rating;
             var books = await dataContext.Books.ToListAsync();
             List<BooksDTO> bookDTO = new();
             foreach (var book in books)
