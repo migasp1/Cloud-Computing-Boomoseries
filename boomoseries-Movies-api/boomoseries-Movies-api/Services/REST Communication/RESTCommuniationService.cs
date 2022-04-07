@@ -119,7 +119,10 @@ namespace boomoseries_Movies_api.Services.REST_Communication
             var responses = requests.Select(task => task.Result);
             foreach (var response in responses)
             {
-                //response.EnsureSuccessStatusCode();
+                if(response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    continue;
+                }
                 var responseString = await response.Content.ReadAsStringAsync();
                 List<WatchableDTO> deserializedWatchable = JsonConvert.DeserializeObject<List<WatchableDTO>>(responseString);
                 foreach (var item in deserializedWatchable)
