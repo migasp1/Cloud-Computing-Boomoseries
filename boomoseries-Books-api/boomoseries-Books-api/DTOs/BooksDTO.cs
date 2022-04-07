@@ -1,12 +1,11 @@
-﻿namespace boomosseries_GoodReads_api
+﻿namespace boomoseries_Books_api.DTOs
 {
-    public class Books
+    public class BooksDTO
     {
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Author { get; set; } = string.Empty;
         public int Pages { get; set; }
         public double Rating { get; set; }
-
     }
 }

@@ -14,7 +14,7 @@ namespace boomosseries_GoodReads_api.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Author = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Pages = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Pages = table.Column<int>(type: "int", nullable: false),
                     Rating = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>

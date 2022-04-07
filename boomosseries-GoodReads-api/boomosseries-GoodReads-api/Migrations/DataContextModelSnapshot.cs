@@ -28,8 +28,8 @@ namespace boomosseries_GoodReads_api.Migrations
                     b.Property<string>("Author")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Pages")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Pages")
+                        .HasColumnType("int");
 
                     b.Property<double>("Rating")
                         .HasColumnType("float");
