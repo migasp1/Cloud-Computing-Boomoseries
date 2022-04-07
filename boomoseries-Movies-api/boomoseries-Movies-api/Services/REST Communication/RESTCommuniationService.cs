@@ -39,7 +39,7 @@ namespace boomoseries_Movies_api.Services.REST_Communication
             foreach (var r in responses)
             {
                 // Extract the message body
-                r.EnsureSuccessStatusCode();
+               
                 string s = await r.Content.ReadAsStringAsync();
                 if (s.Contains("Netflix"))
                 {
@@ -76,30 +76,32 @@ namespace boomoseries_Movies_api.Services.REST_Communication
             Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var responses = requests.Select(task => task.Result);
-
-            foreach (var r in responses)
+            List<MovieDTO> movieDTOs = new();
+            foreach (var response in responses)
             {
-                // Extract the message body
-                r.EnsureSuccessStatusCode();
-                string s = await r.Content.ReadAsStringAsync();
-                if (s.Contains("Netflix"))
+                var responseString = await response.Content.ReadAsStringAsync();
+                if (responseString.Contains("Netflix"))
                 {
-                    System.Diagnostics.Debug.WriteLine("Encontramos um Filme no netflix");
+                    List<WatchableDTO> deserializedWatchable = JsonConvert.DeserializeObject<List<WatchableDTO>>(responseString);
+                    foreach (var item in deserializedWatchable)
+                    {
+                        MovieDTO movieDto = MovieEntityMapper.MapToDTO(item);
+                        movieDtos.Add(movieDto);
+                    }
                 }
-                if (s.Contains("Amazon"))
+                else if (responseString.Contains("Amazon"))
                 {
                     System.Diagnostics.Debug.WriteLine("Encontramos um Filme no Amazon Prime");
                 }
-                if (s.Contains("Disney"))
+                else if (responseString.Contains("Disney"))
                 {
                     System.Diagnostics.Debug.WriteLine("Encontramos um Filme no Disney+");
                 }
-                if (s.Contains("IMDB"))
+                else if (responseString.Contains("IMDB"))
                 {
                     System.Diagnostics.Debug.WriteLine("Encontramos um Filme no IMDB");
                 }
             }
-
             return "Success!";
         }
 
