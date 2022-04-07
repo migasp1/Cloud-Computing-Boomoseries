@@ -28,9 +28,9 @@ namespace boomoseries_Movies_api.Controllers
             {
                return BadRequest("Oops, something went wrong! " + ex.Message);
             }
-            
         }
 
+        /*
         [HttpGet("/api/v1/Movies/")]
         public async Task<IActionResult> GetMovies()
         {
@@ -38,6 +38,22 @@ namespace boomoseries_Movies_api.Controllers
             {
                 var responseBody = await commService.ObtainMovies();
                 //MovieDTO deserializedMovie = JsonConvert.DeserializeObject<MovieDTO>(responseBody);
+                return Ok(responseBody);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Oops, something went wrong! " + ex.Message);
+            }
+        }
+        */
+
+        [HttpGet("/api/v1/Movies")]
+        public async Task<IActionResult> GetMoviesByRating(double minRating)
+        {
+            //[FromQuery(Name = "min_rating")]
+            try
+            {
+                var responseBody = await commService.GetMoviesByRating(minRating);
                 return Ok(responseBody);
             }
             catch (Exception ex)

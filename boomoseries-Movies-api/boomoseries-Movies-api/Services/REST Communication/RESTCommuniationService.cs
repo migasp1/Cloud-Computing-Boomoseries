@@ -1,5 +1,8 @@
 ﻿using boomoseries_Movies_api.DTOs;
 using boomoseries_Movies_api.Helpers;
+using boomoseries_Movies_api.Mapper;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,7 +23,7 @@ namespace boomoseries_Movies_api.Services.REST_Communication
 
         public async Task<string> ObtainMovies()
         {
- 
+
             //Makes the requests to different microservices
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -58,18 +61,19 @@ namespace boomoseries_Movies_api.Services.REST_Communication
 
             return "Success!";
         }
+
         public async Task<string> ObtainSepcificMovie(string movieTitle)
         {
 
             //Makes the requests to different microservices
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url + movieTitle)).ToList();
+            var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url + "/" + movieTitle)).ToList();
 
             //Wait for all the requests to finish
             await Task.WhenAll(requests);
             stopwatch.Stop();
-            System.Diagnostics.Debug.WriteLine(stopwatch.ElapsedMilliseconds);
+            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var responses = requests.Select(task => task.Result);
 
@@ -97,6 +101,37 @@ namespace boomoseries_Movies_api.Services.REST_Communication
             }
 
             return "Success!";
+        }
+
+        [HttpGet("movies")]
+        public async Task<List<MovieDTO>> GetMoviesByRating(double min_rating)
+        {
+            List<MovieDTO> movieDtos = new();
+            Stopwatch stopwatch = new();
+            stopwatch.Start();
+            var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url + "?min_rating=" + min_rating)).ToList();
+
+            //Wait for all the requests to finish
+            await Task.WhenAll(requests);
+            stopwatch.Stop();
+            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
+            //Get the responses
+            var responses = requests.Select(task => task.Result);
+            foreach (var response in responses)
+            {
+                //response.EnsureSuccessStatusCode();
+                var responseString = await response.Content.ReadAsStringAsync();
+                List<WatchableDTO> deserializedWatchable = JsonConvert.DeserializeObject<List<WatchableDTO>>(responseString);
+                foreach (var item in deserializedWatchable)
+                {
+                    MovieDTO movieDto = MovieEntityMapper.MapToDTO(item);
+                    movieDtos.Add(movieDto);
+                }
+            }
+
+            var results = movieDtos.GroupBy(m => m.Platform).SelectMany(movies => movies).ToList();
+
+            return results;
         }
     }
 }

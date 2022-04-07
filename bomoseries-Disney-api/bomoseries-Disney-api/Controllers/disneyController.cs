@@ -22,7 +22,7 @@ namespace Disney_MicroService.Controllers
         }
 
         [HttpGet("movies")]
-        public async Task<IActionResult> GetMovies(float? min_rating)
+        public async Task<IActionResult> GetMovies(double? min_rating)
         {
             var movies = dataContext.Watchables.Where(Watchable => Watchable.Type == "Movie");
             List<WatchableDTO> movieDTOs = new();
@@ -72,7 +72,7 @@ namespace Disney_MicroService.Controllers
         }
 
         [HttpGet("series")]
-        public async Task<IActionResult> GetSeries(float? min_rating)
+        public async Task<IActionResult> GetSeries(double? min_rating)
         {
             var series = dataContext.Watchables.Where(Watchable => Watchable.Type == "TV Show");
             List<WatchableDTO> seriesDTOs = new();

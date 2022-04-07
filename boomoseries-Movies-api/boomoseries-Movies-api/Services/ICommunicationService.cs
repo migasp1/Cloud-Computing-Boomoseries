@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using boomoseries_Movies_api.DTOs;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace boomoseries_Movies_api.Services
 {
@@ -6,5 +8,6 @@ namespace boomoseries_Movies_api.Services
     {
         Task<string> ObtainSepcificMovie(string movieTitle);
         Task<string> ObtainMovies();
+        Task<List<MovieDTO>> GetMoviesByRating(double min_rating);
     }
 }

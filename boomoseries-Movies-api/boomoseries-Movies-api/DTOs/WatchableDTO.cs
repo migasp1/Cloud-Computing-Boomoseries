@@ -1,4 +1,4 @@
-﻿namespace boomoseries_Amazon_api.DTOs
+﻿namespace boomoseries_Movies_api.DTOs
 {
     public class WatchableDTO
     {
