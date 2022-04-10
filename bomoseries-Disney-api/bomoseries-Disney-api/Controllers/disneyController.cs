@@ -58,7 +58,8 @@ namespace Disney_MicroService.Controllers
         public async Task<IActionResult> GetSpecificMovie(string movie_title)
         {
             var movies = dataContext.Watchables.Where(Watchable => Watchable.Type == "Movie");
-            var movie = movies.FirstOrDefault(movies => movies.Title == movie_title);
+
+            var movie = movies.FirstOrDefault(movie => movie.Title.ToLower().Contains(movie_title.ToLower()));
 
             if (movie == null)
             {
@@ -131,7 +132,7 @@ namespace Disney_MicroService.Controllers
         public async Task<IActionResult> GetSpecificSerie(string serie_title)
         {
             var series = dataContext.Watchables.Where(Watchable => Watchable.Type == "TV Show");
-            var serie = series.FirstOrDefault(series => series.Title == serie_title);
+            var serie = series.FirstOrDefault(movie => movie.Title.ToLower().Contains(serie_title.ToLower()));
 
             if (serie == null)
             {
