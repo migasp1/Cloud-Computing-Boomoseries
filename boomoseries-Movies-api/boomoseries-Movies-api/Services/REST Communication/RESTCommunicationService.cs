@@ -12,16 +12,16 @@ using System.Threading.Tasks;
 
 namespace boomoseries_Movies_api.Services.REST_Communication
 {
-    public class RESTCommuniationService : ICommunicationService
+    public class RESTCommunicationService : ICommunicationService
     {
         private static readonly string[] microservicesBaseURL = URLHelper.GetMicroservicesBaseURL();
         private static readonly HttpClient httpClient = new();
 
-        public RESTCommuniationService()
+        public RESTCommunicationService()
         {
         }
 
-        public async Task<string> ObtainMovies()
+        public async Task<List<MovieDTO>> ObtainMovies()
         {
             //Makes the requests to different microservices
             Stopwatch stopwatch = new Stopwatch();
