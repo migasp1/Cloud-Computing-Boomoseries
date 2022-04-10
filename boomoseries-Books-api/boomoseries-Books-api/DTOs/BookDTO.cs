@@ -1,6 +1,6 @@
 ﻿namespace boomoseries_Books_api.DTOs
 {
-    public class BooksDTO
+    public class BookDTO
     {
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
