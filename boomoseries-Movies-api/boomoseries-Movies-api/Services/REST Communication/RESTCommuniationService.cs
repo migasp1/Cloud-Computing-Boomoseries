@@ -21,12 +21,12 @@ namespace boomoseries_Movies_api.Services.REST_Communication
         {
         }
 
-        public async Task<string> ObtainMovies()
+        public async Task<List<MovieDTO>> ObtainRandomMovies()
         {
             //Makes the requests to different microservices
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url)).ToList();
+            var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url + "/random")).ToList();
 
             //Wait for all the requests to finish
             await Task.WhenAll(requests);

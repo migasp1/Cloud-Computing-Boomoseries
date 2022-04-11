@@ -30,23 +30,6 @@ namespace boomoseries_Movies_api.Controllers
             }
         }
 
-        /*
-        [HttpGet("/api/v1/Movies/")]
-        public async Task<IActionResult> GetMovies()
-        {
-            try
-            {
-                var responseBody = await commService.ObtainMovies();
-                //MovieDTO deserializedMovie = JsonConvert.DeserializeObject<MovieDTO>(responseBody);
-                return Ok(responseBody);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("Oops, something went wrong! " + ex.Message);
-            }
-        }
-        */
-
         [HttpGet("/api/v1/Movies")]
         public async Task<IActionResult> GetMoviesByRating(double minRating)
         {
@@ -54,6 +37,21 @@ namespace boomoseries_Movies_api.Controllers
             try
             {
                 var responseBody = await commService.GetMoviesByRating(minRating);
+                return Ok(responseBody);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Oops, something went wrong! " + ex.Message);
+            }
+
+        }
+
+        [HttpGet("/api/v1/Movies/random")]
+        public async Task<IActionResult> GetRandomMovies()
+        {
+            try
+            {
+                var responseBody = await commService.ObtainRandomMovies();
                 return Ok(responseBody);
             }
             catch (Exception ex)
