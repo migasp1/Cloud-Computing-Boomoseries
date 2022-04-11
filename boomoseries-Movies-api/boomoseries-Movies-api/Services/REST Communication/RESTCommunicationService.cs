@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace boomoseries_Movies_api.Services.REST_Communication
 {
-    public class RESTCommuniationService : ICommunicationService
+    public class RESTCommunicationService : ICommunicationService
     {
         private static readonly string[] microservicesBaseURL = URLHelper.GetMicroservicesBaseURL();
         private static readonly HttpClient httpClient = new();
 
-        public RESTCommuniationService()
+        public RESTCommunicationService()
         {
         }
 

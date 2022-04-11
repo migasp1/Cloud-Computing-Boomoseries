@@ -18,9 +18,9 @@ namespace boomoseries_Books_api.Services.REST_Communication
         {
         }
 
-        public async Task<List<BooksDTO>> ObtainBooks()
+        public async Task<List<BookDTO>> ObtainBooks()
         {
-            List<BooksDTO> booksDtos = new();
+            List<BookDTO> booksDtos = new();
             //Makes the requests to different microservices
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -39,7 +39,7 @@ namespace boomoseries_Books_api.Services.REST_Communication
                     continue;
                 }
                 var responseString = await response.Content.ReadAsStringAsync();
-                List<BooksDTO> deserializedBook = JsonConvert.DeserializeObject<List<BooksDTO>>(responseString);
+                List<BookDTO> deserializedBook = JsonConvert.DeserializeObject<List<BookDTO>>(responseString);
                 foreach (var item in deserializedBook)
                 {
                     booksDtos.Add(item);
@@ -50,9 +50,9 @@ namespace boomoseries_Books_api.Services.REST_Communication
             return booksDtos;
         }
 
-        public async Task<List<BooksDTO>> ObtainSpecificBook(string bookTitle)
+        public async Task<List<BookDTO>> ObtainSpecificBook(string bookTitle)
         {
-            List<BooksDTO> booksDtos = new();
+            List<BookDTO> booksDtos = new();
             //Makes the requests to different microservices
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -72,16 +72,16 @@ namespace boomoseries_Books_api.Services.REST_Communication
                     continue;
                 }
                 var responseString = await response.Content.ReadAsStringAsync();
-                BooksDTO deserializedBook = JsonConvert.DeserializeObject<BooksDTO>(responseString);
+                BookDTO deserializedBook = JsonConvert.DeserializeObject<BookDTO>(responseString);
                 booksDtos.Add(deserializedBook);
             }
 
             return booksDtos;
         }
 
-        public async Task<List<BooksDTO>> ObtainBooksByRating(double min_rating)
+        public async Task<List<BookDTO>> ObtainBooksByRating(double min_rating)
         {
-            List<BooksDTO> booksDtos = new();
+            List<BookDTO> booksDtos = new();
             Stopwatch stopwatch = new();
             stopwatch.Start();
             var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url + "?min_rating=" + min_rating)).ToList();
@@ -99,7 +99,7 @@ namespace boomoseries_Books_api.Services.REST_Communication
                     continue;
                 }
                 var responseString = await response.Content.ReadAsStringAsync();
-                List<BooksDTO> deserializedBook = JsonConvert.DeserializeObject<List<BooksDTO>>(responseString);
+                List<BookDTO> deserializedBook = JsonConvert.DeserializeObject<List<BookDTO>>(responseString);
                 foreach (var item in deserializedBook)
                 {
                     booksDtos.Add(item);

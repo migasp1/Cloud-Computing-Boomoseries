@@ -80,8 +80,8 @@ namespace boomoseries_Netflix_api.Controllers
         public async Task<IActionResult> GetSpecificMovie(string movie_title)
         {
             var movies = dataContext.Watchables.Where(watchable => watchable.Type == "Movie");
-            var movie = movies.FirstOrDefault(movies => movies.Title == movie_title);
-            
+            var movie = movies.FirstOrDefault(movie => movie.Title.ToLower().Contains(movie_title.ToLower()));
+
             if (movie == null) 
             {
                 return NotFound("This movie doesn't exist");
@@ -153,7 +153,7 @@ namespace boomoseries_Netflix_api.Controllers
         public async Task<IActionResult> GetSpecificSerie(string serie_title)
         {
             var series = dataContext.Watchables.Where(watchable => watchable.Type == "TV Show");
-            var serie = series.FirstOrDefault(series => series.Title == serie_title);
+            var serie = series.FirstOrDefault(serie => serie.Title.ToLower().Contains(serie_title.ToLower()));
 
             if (serie == null)
             {

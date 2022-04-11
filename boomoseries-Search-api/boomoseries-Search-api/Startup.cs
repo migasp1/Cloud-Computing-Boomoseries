@@ -1,5 +1,5 @@
-using boomoseries_Movies_api.Services;
-using boomoseries_Movies_api.Services.REST_Communication;
+using boomoseries_Search_api.Services;
+using boomoseries_Search_api.Services.RESTCommunication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace boomoseries_Movies_api
+namespace boomoseries_Search_api
 {
     public class Startup
     {
@@ -33,7 +33,7 @@ namespace boomoseries_Movies_api
             services.AddSingleton<ICommunicationService, RESTCommunicationService>();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "boomoseries_Movies_api", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "boomoseries_Search_api", Version = "v1" });
             });
         }
 
@@ -44,7 +44,7 @@ namespace boomoseries_Movies_api
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "boomoseries_Movies_api v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "boomoseries_Search_api v1"));
             }
 
             app.UseHttpsRedirection();

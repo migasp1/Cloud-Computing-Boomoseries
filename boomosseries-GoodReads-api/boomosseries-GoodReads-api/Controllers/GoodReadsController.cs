@@ -50,8 +50,7 @@ namespace boomosseries_GoodReads_api.Controllers
         public async Task<IActionResult> GetSpecificBook(string book_title)
         {
             var books = await dataContext.Books.ToListAsync();
-            var book = books.FirstOrDefault(books => books.Title == book_title);
-
+            var book = books.FirstOrDefault(book => book.Title.ToLower().Contains(book_title.ToLower()));
             if (book == null)
             {
                 return NotFound("This book does not exist");
