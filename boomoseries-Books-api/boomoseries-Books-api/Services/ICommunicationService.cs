@@ -7,7 +7,7 @@ namespace boomoseries_Books_api.Services
     public interface ICommunicationService
     {
         Task<List<BookDTO>> ObtainSpecificBook(string bookTitle);
-        Task<List<BookDTO>> ObtainBooks();
+        Task<List<BookDTO>> ObtainRandomBooks();
         Task<List<BookDTO>> ObtainBooksByRating(double min_rating);
     }
 }

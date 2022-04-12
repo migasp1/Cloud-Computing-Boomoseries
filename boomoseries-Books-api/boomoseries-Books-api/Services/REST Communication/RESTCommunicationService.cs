@@ -11,42 +11,32 @@ namespace boomoseries_Books_api.Services.REST_Communication
 {
     public class RESTCommunicationService : ICommunicationService
     {
-        private static readonly string[] microservicesBaseURL = URLHelper.GetMicroservicesBaseURL();
+        private static readonly string microservicesBaseURL = URLHelper.GetMicroservicesBaseURL();
         private static readonly HttpClient httpClient = new();
 
         public RESTCommunicationService()
         {
         }
 
-        public async Task<List<BookDTO>> ObtainBooks()
+        public async Task<List<BookDTO>> ObtainRandomBooks()
         {
             List<BookDTO> booksDtos = new();
             //Makes the requests to different microservices
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url)).ToList();
+            var request = httpClient.GetAsync(microservicesBaseURL + "/random");
 
-            //Wait for all the requests to finish
-            await Task.WhenAll(requests);
             stopwatch.Stop();
             System.Diagnostics.Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
-            var responses = requests.Select(task => task.Result);
-            foreach (var response in responses)
+            var response = request.Result;
+
+            var responseString = await response.Content.ReadAsStringAsync();
+            List<BookDTO> deserializedBook = JsonConvert.DeserializeObject<List<BookDTO>>(responseString);
+            foreach (var item in deserializedBook)
             {
-                if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                {
-                    continue;
-                }
-                var responseString = await response.Content.ReadAsStringAsync();
-                List<BookDTO> deserializedBook = JsonConvert.DeserializeObject<List<BookDTO>>(responseString);
-                foreach (var item in deserializedBook)
-                {
-                    booksDtos.Add(item);
-                }
-
+                booksDtos.Add(item);
             }
-
             return booksDtos;
         }
 
@@ -94,7 +84,7 @@ namespace boomoseries_Books_api.Services.REST_Communication
             var responses = requests.Select(task => task.Result);
             foreach (var response in responses)
             {
-                if(response.StatusCode != System.Net.HttpStatusCode.OK)
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
                     continue;
                 }
@@ -104,7 +94,7 @@ namespace boomoseries_Books_api.Services.REST_Communication
                 {
                     booksDtos.Add(item);
                 }
-                
+
             }
 
             return booksDtos;

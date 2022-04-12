@@ -64,26 +64,30 @@ namespace boomosseries_GoodReads_api.Controllers
         }
 
         [HttpGet("books/random")]
-        public async Task<IActionResult> GetRandomMovie()
+        public async Task<IActionResult> GetRandomMovies()
         {
             var dbSet = dataContext.Books;
 
             var totalBooks = dbSet.Count();
 
             Random random = new();
-
-            int randomId = random.Next(1, totalBooks + 1);
-
-            var randomBook = dbSet.SingleOrDefault(s => s.Id == randomId);
-
-            if (randomBook == null)
+            List<BooksDTO> books = new List<BooksDTO>();            
+            
+            for (int i = 0; i < 3; i++)
             {
-                return NotFound("This movie doesn't exist");
+                int randomId = random.Next(1, totalBooks + 1);
+                var randomBook = dbSet.SingleOrDefault(s => s.Id == randomId);
+                BooksDTO bookDTO = GoodReadsMapper.MapToDTO(randomBook);
+                books.Add(bookDTO);
+            }
+
+            if (books.Count == 0)
+            {
+                return BadRequest("Oops, something went wrong!");
             }
             else
             {
-                BooksDTO bookDTO = GoodReadsMapper.MapToDTO(randomBook);
-                return Ok(bookDTO);
+                return Ok(books);
             }
         }
     }

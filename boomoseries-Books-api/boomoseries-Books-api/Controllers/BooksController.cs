@@ -15,7 +15,7 @@ namespace boomoseries_Books_api.Controllers
         }
 
         [HttpGet("/api/v1/books/{book_title}")]
-        public async Task<IActionResult> GetSpecificMovie(string book_title)
+        public async Task<IActionResult> GetSpecificBook(string book_title)
         {
             try
             {
@@ -29,11 +29,11 @@ namespace boomoseries_Books_api.Controllers
         }
         
         [HttpGet("/api/v1/books")]
-        public async Task<IActionResult> GetMovies()
+        public async Task<IActionResult> GetBooks()
         {
             try
             {
-                var responseBody = await commService.ObtainBooks();
+                var responseBody = await commService.ObtainRandomBooks();
                 return Ok(responseBody);
             }
             catch (Exception ex)
