@@ -3,6 +3,7 @@ using boomosseries_GoodReads_api.DTOs;
 using boomosseries_GoodReads_api.Mapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -59,6 +60,30 @@ namespace boomosseries_GoodReads_api.Controllers
             {
                 BooksDTO booksDTO = GoodReadsMapper.MapToDTO(book);
                 return Ok(booksDTO);
+            }
+        }
+
+        [HttpGet("books/random")]
+        public async Task<IActionResult> GetRandomMovie()
+        {
+            var dbSet = dataContext.Books;
+
+            var totalBooks = dbSet.Count();
+
+            Random random = new();
+
+            int randomId = random.Next(1, totalBooks + 1);
+
+            var randomBook = dbSet.SingleOrDefault(s => s.Id == randomId);
+
+            if (randomBook == null)
+            {
+                return NotFound("This movie doesn't exist");
+            }
+            else
+            {
+                BooksDTO bookDTO = GoodReadsMapper.MapToDTO(randomBook);
+                return Ok(bookDTO);
             }
         }
     }
