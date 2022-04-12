@@ -1,4 +1,7 @@
-﻿namespace boomoseries_Search_api.DTOs
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+
+namespace bomoseries_Series_api.DTOs
 {
     public class SerieDTO
     {
