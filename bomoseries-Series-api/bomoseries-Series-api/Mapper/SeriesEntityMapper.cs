@@ -5,9 +5,9 @@ namespace bomoseries_Series_api.Mapper
 {
     public class SeriesEntityMapper
     {
-        public static SeriesDTO MapToDTO(WatchableDTO watchable)
+        public static SerieDTO MapToDTO(WatchableDTO watchable)
         {
-            return new SeriesDTO()
+            return new SerieDTO()
             {
                 Title = watchable.Title,
                 Date = watchable.Date,
