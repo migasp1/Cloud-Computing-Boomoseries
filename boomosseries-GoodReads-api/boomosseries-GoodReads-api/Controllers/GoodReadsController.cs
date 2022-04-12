@@ -64,7 +64,7 @@ namespace boomosseries_GoodReads_api.Controllers
         }
 
         [HttpGet("books/random")]
-        public async Task<IActionResult> GetRandomMovies()
+        public async Task<IActionResult> GetRandomBooks()
         {
             var dbSet = dataContext.Books;
 

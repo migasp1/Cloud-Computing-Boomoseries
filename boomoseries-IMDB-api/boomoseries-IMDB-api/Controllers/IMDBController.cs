@@ -29,7 +29,7 @@ namespace boomoseries_IMDB_api.Controllers
 
             Random random = new();
 
-            int randomId = random.Next(1, totalMovies);
+            int randomId = random.Next(1, totalMovies + 1);
 
             var randomMovie = dbSet.Where(s => s.Type == "Movie").SingleOrDefault(s => s.Id == randomId);
             if (randomMovie == null)
@@ -101,7 +101,7 @@ namespace boomoseries_IMDB_api.Controllers
 
             Random random = new();
 
-            int randomId = random.Next(1, totalSeries);
+            int randomId = random.Next(1, totalSeries + 1);
 
             var randomSerie = dbSet.Where(s => s.Type == "TV Show").SingleOrDefault(s => s.Id == randomId);
             if (randomSerie == null)
