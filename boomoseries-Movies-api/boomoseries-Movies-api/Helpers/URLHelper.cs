@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace boomoseries_Movies_api.Helpers
+﻿namespace boomoseries_Movies_api.Helpers
 {
     public class URLHelper
     {
