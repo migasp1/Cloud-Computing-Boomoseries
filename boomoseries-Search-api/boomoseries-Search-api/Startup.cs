@@ -30,7 +30,9 @@ namespace boomoseries_Search_api
         {
 
             services.AddControllers();
-            services.AddSingleton<ICommunicationService, RESTMoviesCommunicationService>();
+            services.AddSingleton<ICommunicationServiceMovies, RESTMoviesCommunicationService>();
+            services.AddSingleton<ICommunicationServiceSeries, RESTSeriesCommunicationService>();
+            services.AddSingleton<ICommunicationServiceBooks, RESTBooksCommunicationService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "boomoseries_Search_api", Version = "v1" });

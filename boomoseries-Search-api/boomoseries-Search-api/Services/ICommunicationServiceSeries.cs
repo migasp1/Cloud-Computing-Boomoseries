@@ -1,11 +1,10 @@
-﻿using bomoseries_Series_api.DTOs;
-using Microsoft.AspNetCore.Mvc;
+﻿using boomoseries_Search_api.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace bomoseries_Series_api.Services
+namespace boomoseries_Search_api.Services
 {
-    public interface ICommunicationService
+    public interface ICommunicationServiceSeries
     {
         Task<List<SerieDTO>> ObtainSepcificSeries(string seriesTitle);
         Task<List<SerieDTO>> GetSeriesByRating(double min_rating);

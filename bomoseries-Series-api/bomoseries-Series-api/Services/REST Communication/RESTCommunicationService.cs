@@ -22,7 +22,7 @@ namespace bomoseries_Series_api.Services.REST_Communication
         {
         }
 
-        public async Task<List<SeriesDTO>> ObtainRandomSeries()
+        public async Task<List<SerieDTO>> ObtainRandomSeries()
         {
             //Makes the requests to different microservices
             Stopwatch stopwatch = new Stopwatch();
@@ -35,26 +35,26 @@ namespace bomoseries_Series_api.Services.REST_Communication
             Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var responses = requests.Select(task => task.Result);
-            List<SeriesDTO> SeriesDTOs = new();
+            List<SerieDTO> SeriesDTOs = new();
             foreach (var response in responses)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
                 if (responseString.Contains("Netflix"))
                 {
                     WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    SeriesDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
+                    SerieDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
                     SeriesDTOs.Add(SeriesDto);
                 }
                 else if (responseString.Contains("Amazon"))
                 {
                     WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    SeriesDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
+                    SerieDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
                     SeriesDTOs.Add(SeriesDto);
                 }
                 else if (responseString.Contains("Disney"))
                 {
                     WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    SeriesDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
+                    SerieDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
                     SeriesDTOs.Add(SeriesDto);
                 }
                 else if (responseString.Contains("IMDB"))
@@ -68,7 +68,7 @@ namespace bomoseries_Series_api.Services.REST_Communication
             return SeriesDTOs;
         }
 
-        public async Task<List<SeriesDTO>> ObtainSepcificSeries(string seriesTitle)
+        public async Task<List<SerieDTO>> ObtainSepcificSeries(string seriesTitle)
         {
             //Makes the requests to different microservices
             Stopwatch stopwatch = new Stopwatch();
@@ -81,7 +81,7 @@ namespace bomoseries_Series_api.Services.REST_Communication
             Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var responses = requests.Select(task => task.Result);
-            List<SeriesDTO> SeriesDTOs = new();
+            List<SerieDTO> SeriesDTOs = new();
             IMDBDTO castAndCrew = null;
             foreach (var response in responses)
             {
@@ -89,19 +89,19 @@ namespace bomoseries_Series_api.Services.REST_Communication
                 if (responseString.Contains("Netflix"))
                 {
                     WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    SeriesDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
+                    SerieDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
                     SeriesDTOs.Add(SeriesDto);
                 }
                 else if (responseString.Contains("Amazon"))
                 {
                     WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    SeriesDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
+                    SerieDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
                     SeriesDTOs.Add(SeriesDto);
                 }
                 else if (responseString.Contains("Disney"))
                 {
                     WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    SeriesDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
+                    SerieDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
                     SeriesDTOs.Add(SeriesDto);
                 }
                 else if (responseString.Contains("IMDB"))
@@ -122,10 +122,9 @@ namespace bomoseries_Series_api.Services.REST_Communication
             return SeriesDTOs;
         }
 
-        [HttpGet("series")]
-        public async Task<List<SeriesDTO>> GetSeriesByRating(double min_rating)
+        public async Task<List<SerieDTO>> GetSeriesByRating(double min_rating)
         {
-            List<SeriesDTO> SeriesDtos = new();
+            List<SerieDTO> SeriesDtos = new();
             Stopwatch stopwatch = new();
             stopwatch.Start();
             var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url + "?min_rating=" + min_rating)).ToList();
@@ -146,7 +145,7 @@ namespace bomoseries_Series_api.Services.REST_Communication
                 List<WatchableDTO> deserializedWatchable = JsonConvert.DeserializeObject<List<WatchableDTO>>(responseString);
                 foreach (var item in deserializedWatchable)
                 {
-                    SeriesDTO SeriesDto = SeriesEntityMapper.MapToDTO(item);
+                    SerieDTO SeriesDto = SeriesEntityMapper.MapToDTO(item);
                     SeriesDtos.Add(SeriesDto);
                 }
             }

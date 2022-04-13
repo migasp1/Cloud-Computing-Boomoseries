@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace bomoseries_Series_api.DTOs
 {
-    public class SeriesDTO
+    public class SerieDTO
     {
         public string Title { get; set; }
         public string Date { get; set; }
