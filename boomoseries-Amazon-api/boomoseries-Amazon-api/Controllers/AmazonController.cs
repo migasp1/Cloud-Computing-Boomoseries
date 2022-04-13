@@ -46,7 +46,7 @@ namespace AmazonPrime_Microservice.Controllers
         [HttpGet("movies")]
         public async Task<IActionResult> GetMovies(double? min_rating)
         {
-            var movies = dataContext.Watchables.Where(Watchable => Watchable.Type == "Movie");
+            var movies = dataContext.Watchables.Where(Watchable => Watchable.Type == "Movie").Take(2);
             List<WatchableDTO> movieDTOs = new();
 
             foreach (var movie in movies)
@@ -118,7 +118,7 @@ namespace AmazonPrime_Microservice.Controllers
         [HttpGet("series")]
         public async Task<IActionResult> GetSeries(double? min_rating)
         {
-            var series = dataContext.Watchables.Where(Watchable => Watchable.Type == "TV Show");
+            var series = dataContext.Watchables.Where(Watchable => Watchable.Type == "TV Show").Take(2);
             List<WatchableDTO> seriesDTOs = new();
 
             foreach (var serie in series)
@@ -149,8 +149,7 @@ namespace AmazonPrime_Microservice.Controllers
         [HttpGet("series/{serie_title}")]
         public async Task<IActionResult> GetSpecificSerie(string serie_title)
         {
-            var series = dataContext.Watchables.Where(Watchable => Watchable.Type == "TV Show");
-            var serie = series.FirstOrDefault(movie => movie.Title.ToLower().Contains(serie_title.ToLower()));
+            var serie = dataContext.Watchables.Where(Watchable => Watchable.Type == "TV Show").FirstOrDefault(serie => serie.Title.ToLower().Contains(serie_title.ToLower()));
 
             if (serie == null)
             {
@@ -159,7 +158,7 @@ namespace AmazonPrime_Microservice.Controllers
             else
             {
                 WatchableDTO serieDTO = AmazonMapper.MapToDTO(serie);
-                return Ok(serie);
+                return Ok(serieDTO);
             }
         }
     }

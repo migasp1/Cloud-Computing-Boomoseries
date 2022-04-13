@@ -140,7 +140,7 @@ namespace Disney_MicroService.Controllers
             else
             {
                 WatchableDTO serieDTO = DisneyMapper.MapToDTO(serie);
-                return Ok(serie);
+                return Ok(serieDTO);
             }
         }
 

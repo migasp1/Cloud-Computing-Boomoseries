@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-
-namespace bomoseries_Series_api.DTOs
+﻿namespace bomoseries_Series_api.DTOs
 {
-    public class SeriesDTO
+    public class IMDBWatchableDTO
     {
         public string Title { get; set; }
         public string Date { get; set; }

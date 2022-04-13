@@ -7,5 +7,7 @@ namespace boomoseries_Search_api.Services.RESTCommunication
     {
         private static readonly string[] microservicesBaseURL = URLHelper.GetMicroservicesBaseURL();
         private static readonly HttpClient httpClient = new();
+
+
     }
 }
