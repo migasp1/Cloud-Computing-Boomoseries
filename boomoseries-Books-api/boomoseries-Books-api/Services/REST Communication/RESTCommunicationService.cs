@@ -46,25 +46,21 @@ namespace boomoseries_Books_api.Services.REST_Communication
             //Makes the requests to different microservices
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url + "/" + bookTitle)).ToList();
+            var request = httpClient.GetAsync(microservicesBaseURL + "/" + bookTitle);
 
             //Wait for all the requests to finish
-            await Task.WhenAll(requests);
             stopwatch.Stop();
             System.Diagnostics.Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
-            var responses = requests.Select(task => task.Result);
+            var response = request.Result;
 
-            foreach (var response in responses)
-            {
-                if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                {
-                    continue;
-                }
-                var responseString = await response.Content.ReadAsStringAsync();
-                BookDTO deserializedBook = JsonConvert.DeserializeObject<BookDTO>(responseString);
-                booksDtos.Add(deserializedBook);
+            var responseString = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound) {
+                return booksDtos;
             }
+            BookDTO deserializedBook = JsonConvert.DeserializeObject<BookDTO>(responseString);
+            booksDtos.Add(deserializedBook);
+
 
             return booksDtos;
         }
@@ -74,28 +70,21 @@ namespace boomoseries_Books_api.Services.REST_Communication
             List<BookDTO> booksDtos = new();
             Stopwatch stopwatch = new();
             stopwatch.Start();
-            var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url + "?min_rating=" + min_rating)).ToList();
+            var request = httpClient.GetAsync(microservicesBaseURL + "?min_rating=" + min_rating);
 
             //Wait for all the requests to finish
-            await Task.WhenAll(requests);
             stopwatch.Stop();
             Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
-            var responses = requests.Select(task => task.Result);
-            foreach (var response in responses)
+            var response = request.Result;
+            var responseString = await response.Content.ReadAsStringAsync();
+            List<BookDTO> deserializedBook = JsonConvert.DeserializeObject<List<BookDTO>>(responseString);
+            foreach (var item in deserializedBook)
             {
-                if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                {
-                    continue;
-                }
-                var responseString = await response.Content.ReadAsStringAsync();
-                List<BookDTO> deserializedBook = JsonConvert.DeserializeObject<List<BookDTO>>(responseString);
-                foreach (var item in deserializedBook)
-                {
-                    booksDtos.Add(item);
-                }
-
+                booksDtos.Add(item);
             }
+
+            
 
             return booksDtos;
         }

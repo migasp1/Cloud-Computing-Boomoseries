@@ -14,21 +14,24 @@ namespace boomoseries_Books_api.Controllers
             this.commService = commService;
         }
 
-        [HttpGet("/api/v1/books/{book_title}")]
+        [HttpGet("/api/v1/Books/{book_title}")]
         public async Task<IActionResult> GetSpecificBook(string book_title)
         {
             try
             {
                 var responseBody = await commService.ObtainSpecificBook(book_title);
+                if (responseBody.Count == 0) {
+                    return NotFound("This Book Doesn't Exist!");
+                }
                 return Ok(responseBody);
             }
             catch (Exception ex)
             {
-                return BadRequest("Oops, something went wrong! " + ex.Message);
+                return BadRequest("Oops, something went wrong! ");
             }
         }
         
-        [HttpGet("/api/v1/books")]
+        [HttpGet("/api/v1/Books/random")]
         public async Task<IActionResult> GetBooks()
         {
             try
@@ -38,11 +41,11 @@ namespace boomoseries_Books_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Oops, something went wrong! " + ex.Message);
+                return BadRequest("Oops, something went wrong! ");
             }
         }
         
-        [HttpGet("/api/v1/books/rating")]
+        [HttpGet("/api/v1/Books")]
         public async Task<IActionResult> GetBooksByRating(double min_rating)
         {
             try
@@ -52,7 +55,7 @@ namespace boomoseries_Books_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Oops, something went wrong! " + ex.Message);
+                return BadRequest("Oops, something went wrong! ");
             }
         }
     }

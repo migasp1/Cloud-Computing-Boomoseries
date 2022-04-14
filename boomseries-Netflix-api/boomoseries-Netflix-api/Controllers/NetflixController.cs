@@ -25,22 +25,24 @@ namespace boomoseries_Netflix_api.Controllers
         {
             var dbSet = dataContext.Watchables;
 
-            var totalMovies = dbSet.Count();
+            List<WatchableDTO> movies = new List<WatchableDTO>();
+            var rows = dbSet.Where(s => s.Type == "Movie").OrderBy(t => Guid.NewGuid())
+                        .Take(1);
 
-            Random random = new ();
+            foreach (var item in rows)
+            {
+                WatchableDTO movieDTO = NetflixMapper.MapToDTO(item);
+                movies.Add(movieDTO);
+            }
 
-            int randomId = random.Next(1, totalMovies + 1);
-
-            var randomMovie = dbSet.Where(s => s.Type == "Movie").SingleOrDefault(s => s.Id == randomId);
             
-            if (randomMovie == null)
+            if (rows == null)
             {
                 return NotFound("This movie doesn't exist");
             }
             else
             {
-                WatchableDTO movieDTO = NetflixMapper.MapToDTO(randomMovie);
-                return Ok(movieDTO);
+                return Ok(movies);
             }
         }
 
@@ -130,22 +132,23 @@ namespace boomoseries_Netflix_api.Controllers
         {
             var dbSet = dataContext.Watchables;
 
-            var totalSeries = dbSet.Count();
+            List<WatchableDTO> series = new List<WatchableDTO>();
+            var rows = dbSet.Where(s => s.Type == "TV Show").OrderBy(t => Guid.NewGuid())
+                        .Take(1);
 
-            Random random = new();
+            foreach (var item in rows)
+            {
+                WatchableDTO serieDTO = NetflixMapper.MapToDTO(item);
+                series.Add(serieDTO);
+            }
 
-            int randomId = random.Next(1, totalSeries + 1);
-
-            var randomSerie = dbSet.Where(s => s.Type == "TV Show").SingleOrDefault(s => s.Id == randomId);
-
-            if (randomSerie == null)
+            if (rows == null)
             {
                 return NotFound("This serie doesn't exist");
             }
             else
             {
-                WatchableDTO serieDTO = NetflixMapper.MapToDTO(randomSerie);
-                return Ok(serieDTO);
+                return Ok(series);
             }
         }
 

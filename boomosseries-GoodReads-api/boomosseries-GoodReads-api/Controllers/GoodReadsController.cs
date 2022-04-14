@@ -34,7 +34,7 @@ namespace boomosseries_GoodReads_api.Controllers
             }
             else if (min_rating != null)
             {
-                var result = bookDTO.Where(book => book.Rating >= min_rating);
+                var result = bookDTO.Where(book => book.Rating >= min_rating).Take(5);
                 if (!result.Any())
                 {
                     return NotFound("There are no books with more than rating" + min_rating + ".");
@@ -68,18 +68,15 @@ namespace boomosseries_GoodReads_api.Controllers
         {
             var dbSet = dataContext.Books;
 
-            var totalBooks = dbSet.Count();
+            List<BooksDTO> books = new List<BooksDTO>();
+            var rows = dbSet.OrderBy(t => Guid.NewGuid())
+                        .Take(3);
 
-            Random random = new();
-            List<BooksDTO> books = new List<BooksDTO>();            
-            
-            for (int i = 0; i < 3; i++)
-            {
-                int randomId = random.Next(1, totalBooks + 1);
-                var randomBook = dbSet.SingleOrDefault(s => s.Id == randomId);
-                BooksDTO bookDTO = GoodReadsMapper.MapToDTO(randomBook);
+            foreach (var item in rows) {
+                BooksDTO bookDTO = GoodReadsMapper.MapToDTO(item);
                 books.Add(bookDTO);
             }
+            
 
             if (books.Count == 0)
             {

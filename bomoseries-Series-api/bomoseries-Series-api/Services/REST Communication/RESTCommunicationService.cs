@@ -16,6 +16,7 @@ namespace bomoseries_Series_api.Services.REST_Communication
     public class RESTCommunicationService : ICommunicationService
     {
         private static readonly string[] microservicesBaseURL = URLHelper.GetMicroservicesBaseURL();
+        private static readonly string IMDBBaseUrl = "https://localhost:5003/api/v1/IMDB/series";
         private static readonly HttpClient httpClient = new();
 
         public RESTCommunicationService()
@@ -35,37 +36,61 @@ namespace bomoseries_Series_api.Services.REST_Communication
             Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var responses = requests.Select(task => task.Result);
-            List<SerieDTO> SeriesDTOs = new();
+            List<SerieDTO> SeriesDtos = new();
             foreach (var response in responses)
             {
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    continue;
+                }
                 var responseString = await response.Content.ReadAsStringAsync();
-                if (responseString.Contains("Netflix"))
+                List<WatchableDTO> deserializedWatchable = JsonConvert.DeserializeObject<List<WatchableDTO>>(responseString);
+                foreach (var item in deserializedWatchable)
                 {
-                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    SerieDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
-                    SeriesDTOs.Add(SeriesDto);
-                }
-                else if (responseString.Contains("Amazon"))
-                {
-                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    SerieDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
-                    SeriesDTOs.Add(SeriesDto);
-                }
-                else if (responseString.Contains("Disney"))
-                {
-                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    SerieDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
-                    SeriesDTOs.Add(SeriesDto);
-                }
-                else if (responseString.Contains("IMDB"))
-                {
-                    //WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    //SeriesDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
-                    //SeriesDTOs.Add(SeriesDto);
-                    Debug.WriteLine("APARECEU");
+                    SerieDTO SeriesDto = SeriesEntityMapper.MapToDTO(item);
+                    SeriesDtos.Add(SeriesDto);
                 }
             }
-            return SeriesDTOs;
+
+            List<HttpResponseMessage> httpResponses = new List<HttpResponseMessage>();
+            foreach (var serie in SeriesDtos)
+            {
+                var requestTCC = await httpClient.GetAsync(IMDBBaseUrl + "/" + serie.Title);
+                httpResponses.Add(requestTCC);
+            }
+
+            List<IMDBDTO> imdbDTOs = new();
+
+            foreach (var response in httpResponses)
+            {
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    continue;
+                }
+                var responseString = await response.Content.ReadAsStringAsync();
+                IMDBWatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<IMDBWatchableDTO>(responseString);
+                IMDBDTO imdbTCC = IMDBEntityMapper.MapToDTO(deserializedWatchable);
+                imdbDTOs.Add(imdbTCC);
+            }
+
+            List<IMDBDTO> uniqueImdb = imdbDTOs.DistinctBy(x => x.Title).ToList();
+
+            for (int i = 0; i < SeriesDtos.Count; i++)
+            {
+                for (int j = 0; j < uniqueImdb.Count; j++)
+                {
+                    if (uniqueImdb[j].Title.ToLower().Equals(SeriesDtos[i].Title.ToLower()))
+                    {
+                        SeriesDtos[i].Director = uniqueImdb[j].Director;
+                        SeriesDtos[i].Cast = uniqueImdb[j].Cast;
+                    }
+                }
+            }
+
+            var results = SeriesDtos.GroupBy(m => m.Platform).SelectMany(series => series).ToList();
+            stopwatch.Stop();
+            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
+            return results;
         }
 
         public async Task<List<SerieDTO>> ObtainSepcificSeries(string seriesTitle)
@@ -81,45 +106,58 @@ namespace bomoseries_Series_api.Services.REST_Communication
             Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var responses = requests.Select(task => task.Result);
-            List<SerieDTO> SeriesDTOs = new();
-            IMDBDTO castAndCrew = null;
+            List<SerieDTO> SeriesDtos = new();
             foreach (var response in responses)
             {
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    continue;
+                }
                 var responseString = await response.Content.ReadAsStringAsync();
-                if (responseString.Contains("Netflix"))
-                {
-                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    SerieDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
-                    SeriesDTOs.Add(SeriesDto);
-                }
-                else if (responseString.Contains("Amazon"))
-                {
-                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    SerieDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
-                    SeriesDTOs.Add(SeriesDto);
-                }
-                else if (responseString.Contains("Disney"))
-                {
-                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    SerieDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
-                    SeriesDTOs.Add(SeriesDto);
-                }
-                else if (responseString.Contains("IMDB"))
-                {
-                    IMDBWatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<IMDBWatchableDTO>(responseString);
-                    castAndCrew = IMDBEntityMapper.MapToDTO(deserializedWatchable);
-                }
+                WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
+                SerieDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
+                SeriesDtos.Add(SeriesDto);
             }
-            if (castAndCrew != null)
+
+            List<HttpResponseMessage> httpResponses = new List<HttpResponseMessage>();
+            foreach (var serie in SeriesDtos)
             {
-                foreach (var serie in SeriesDTOs)
+                var requestTCC = await httpClient.GetAsync(IMDBBaseUrl + "/" + serie.Title);
+                httpResponses.Add(requestTCC);
+            }
+
+            List<IMDBDTO> imdbDTOs = new();
+
+            foreach (var response in httpResponses)
+            {
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    serie.Director = castAndCrew.Director;
-                    serie.Cast = castAndCrew.Cast;
+                    continue;
+                }
+                var responseString = await response.Content.ReadAsStringAsync();
+                IMDBWatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<IMDBWatchableDTO>(responseString);
+                IMDBDTO imdbTCC = IMDBEntityMapper.MapToDTO(deserializedWatchable);
+                imdbDTOs.Add(imdbTCC);
+            }
+
+            List<IMDBDTO> uniqueImdb = imdbDTOs.DistinctBy(x => x.Title).ToList();
+
+            for (int i = 0; i < SeriesDtos.Count; i++)
+            {
+                for (int j = 0; j < uniqueImdb.Count; j++)
+                {
+                    if (uniqueImdb[j].Title.ToLower().Equals(SeriesDtos[i].Title.ToLower()))
+                    {
+                        SeriesDtos[i].Director = uniqueImdb[j].Director;
+                        SeriesDtos[i].Cast = uniqueImdb[j].Cast;
+                    }
                 }
             }
 
-            return SeriesDTOs;
+            var results = SeriesDtos.GroupBy(m => m.Platform).SelectMany(series => series).ToList();
+            stopwatch.Stop();
+            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
+            return results;
         }
 
         public async Task<List<SerieDTO>> GetSeriesByRating(double min_rating)
@@ -153,7 +191,7 @@ namespace bomoseries_Series_api.Services.REST_Communication
             List<HttpResponseMessage> httpResponses = new List<HttpResponseMessage>();      
             foreach (var serie in SeriesDtos)
             {
-                var requestTCC = await httpClient.GetAsync(microservicesBaseURL[1] + "/" + serie.Title);
+                var requestTCC = await httpClient.GetAsync(IMDBBaseUrl + "/" + serie.Title);
                 httpResponses.Add(requestTCC);
             }
 

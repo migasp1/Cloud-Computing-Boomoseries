@@ -151,7 +151,7 @@ namespace boomoseries_IMDB_api.Controllers
         public async Task<IActionResult> GetSpecificSerie(string serie_title)
         {
             var series = dataContext.Watchables.Where(watchable => watchable.Type == "TV Show");
-            var serie = series.FirstOrDefault(movie => movie.Title.ToLower().Contains(serie_title.ToLower()));
+            var serie = series.FirstOrDefault(serie => serie.Title.ToLower().Contains(serie_title.ToLower()));
 
             if (serie is null)
             {

@@ -34,37 +34,23 @@ namespace boomoseries_Movies_api.Services.REST_Communication
             Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var responses = requests.Select(task => task.Result);
-            List<MovieDTO> movieDTOs = new();
+            List<MovieDTO> movieDtos = new();
             foreach (var response in responses)
             {
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    continue;
+                }
                 var responseString = await response.Content.ReadAsStringAsync();
-                if (responseString.Contains("Netflix"))
+                List<WatchableDTO> deserializedWatchable = JsonConvert.DeserializeObject<List<WatchableDTO>>(responseString);
+                foreach (var item in deserializedWatchable)
                 {
-                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    MovieDTO movieDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
-                    movieDTOs.Add(movieDto);
-                }
-                else if (responseString.Contains("Amazon"))
-                {
-                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    MovieDTO movieDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
-                    movieDTOs.Add(movieDto);
-                }
-                else if (responseString.Contains("Disney"))
-                {
-                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    MovieDTO movieDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
-                    movieDTOs.Add(movieDto);
-                }
-                else if (responseString.Contains("IMDB"))
-                {
-                    //WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    //MovieDTO movieDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
-                    //movieDTOs.Add(movieDto);
-                    Debug.WriteLine("APARECEU");
+                    MovieDTO movieDto = MovieEntityMapper.MapToDTO(item);
+                    movieDtos.Add(movieDto);
                 }
             }
-            return movieDTOs;
+
+            return movieDtos;
         }
 
         public async Task<List<MovieDTO>> ObtainSepcificMovie(string movieTitle)
