@@ -7,7 +7,7 @@
         public double Rating { get; set; }
         public string Type { get; set; }
         public string Platform { get; set; }
-        //public string Director { get; set; }
-        //public IEnumerable<string> Cast { get; set; }
+        public string Director { get; set; }
+        public string Cast { get; set; }
     }
 }
