@@ -53,8 +53,8 @@ namespace boomoseries_Users_api.Controllers
         public IActionResult GetById(int id)
         {
             var user = _userService.GetById(id);
-            var model = _mapper.Map<UserModel>(user);
-            return Ok(model);
+            //var model = _mapper.Map<UserModel>(user); //still need to make some changes, possibly
+            return Ok(user);
         }
 
         [HttpPut("{id}")]

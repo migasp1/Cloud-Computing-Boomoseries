@@ -2,6 +2,6 @@
 {
     public class URLHelper
     {
-        public static readonly string _baseUsersMicroserviceURL = "https://localhost:5021/Users/register";
+        public static readonly string _baseUsersMicroserviceURL = "https://localhost:5021/Users";
     }
 }
