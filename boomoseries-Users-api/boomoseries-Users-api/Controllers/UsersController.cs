@@ -23,7 +23,7 @@ namespace boomoseries_Users_api.Controllers
         }
 
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody] AuthenticateModel model)
+        public IActionResult Authenticate(AuthenticateModel model)
         {
             var user = _userService.Authenticate(model.Username, model.Password);
 
@@ -34,7 +34,7 @@ namespace boomoseries_Users_api.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register([FromBody] RegisterModel model)
+        public IActionResult Register(RegisterModel model)
         {
             var user = _mapper.Map<User>(model);
 
@@ -58,7 +58,7 @@ namespace boomoseries_Users_api.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] UpdateModel model)
+        public IActionResult Update(int id, UpdateModel model)
         {
             var user = _mapper.Map<User>(model);
             user.Id = id;
