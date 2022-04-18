@@ -57,12 +57,41 @@ namespace bomoseries_Series_api.Services.REST_Communication
                     SerieDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
                     SeriesDTOs.Add(SeriesDto);
                 }
-                else if (responseString.Contains("IMDB"))
+
+                List<HttpResponseMessage> httpResponses = new List<HttpResponseMessage>();
+                var uniqueSeriesDTOs = SeriesDTOs.DistinctBy(s => s.Title).ToList();    
+                foreach (var serie in uniqueSeriesDTOs)
                 {
-                    //WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    //SeriesDTO SeriesDto = SeriesEntityMapper.MapToDTO(deserializedWatchable);
-                    //SeriesDTOs.Add(SeriesDto);
-                    Debug.WriteLine("APARECEU");
+                    var requestTCC = await httpClient.GetAsync(microservicesBaseURL[1] + "/" + serie.Title);
+                    httpResponses.Add(requestTCC);
+                }
+
+                List<IMDBDTO> imdbDTOs = new();
+
+                foreach (var response in httpResponses)
+                {
+                    if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                    {
+                        continue;
+                    }
+                    var responseString = await response.Content.ReadAsStringAsync();
+                    IMDBWatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<IMDBWatchableDTO>(responseString);
+                    IMDBDTO imdbTCC = IMDBEntityMapper.MapToDTO(deserializedWatchable);
+                    imdbDTOs.Add(imdbTCC);
+                }
+
+                List<IMDBDTO> uniqueImdb = imdbDTOs.DistinctBy(x => x.Title).ToList();
+
+                for (int i = 0; i < SeriesDtos.Count; i++)
+                {
+                    for (int j = 0; j < uniqueImdb.Count; j++)
+                    {
+                        if (uniqueImdb[j].Title.ToLower().Equals(SeriesDtos[i].Title.ToLower()))
+                        {
+                            SeriesDtos[i].Director = uniqueImdb[j].Director;
+                            SeriesDtos[i].Cast = uniqueImdb[j].Cast;
+                        }
+                    }
                 }
             }
             return SeriesDTOs;

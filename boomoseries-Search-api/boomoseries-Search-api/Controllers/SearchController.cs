@@ -32,7 +32,7 @@ namespace boomoseries_Search_api.Controllers
                     return BadRequest("Oops, something went wrong! " + ex.Message);
                 }
             }
-            else if (type.Equals("Serie"))
+            else if (type.Equals("TV Show"))
             {
                 try
                 {
@@ -74,7 +74,7 @@ namespace boomoseries_Search_api.Controllers
                     return BadRequest("Oops, something went wrong! " + ex.Message);
                 }
             }
-            else if (type.Equals("Serie"))
+            else if (type.Equals("TV Show"))
             {
                 try
                 {
@@ -116,7 +116,7 @@ namespace boomoseries_Search_api.Controllers
                     return BadRequest("Oops, something went wrong! " + ex.Message);
                 }
             }
-            else if (type.Equals("Serie"))
+            else if (type.Equals("TV Show"))
             {
                 try
                 {
