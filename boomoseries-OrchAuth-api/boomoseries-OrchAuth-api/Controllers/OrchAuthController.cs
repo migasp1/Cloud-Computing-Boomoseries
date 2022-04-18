@@ -1,6 +1,9 @@
 ﻿using boomoseries_OrchAuth_api.Entities;
+using boomoseries_OrchAuth_api.Helpers;
 using boomoseries_OrchAuth_api.Models;
 using boomoseries_OrchAuth_api.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -13,21 +16,26 @@ using System.Threading.Tasks;
 
 namespace boomoseries_OrchAuth_api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class OrchAuthController : Controller
     {
         private readonly IUsersCommunicationService _userService;
+        private readonly IUserPreferencesService _userPreferencesService;
         private readonly AppSettings _appSettings;
 
         public OrchAuthController(
             IUsersCommunicationService userService,
+            IUserPreferencesService userPreferencesService,
             IOptions<AppSettings> appSettings)
         {
             _userService = userService;
             _appSettings = appSettings.Value;
+            _userPreferencesService = userPreferencesService;
         }
 
+        [AllowAnonymous]
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate(AuthenticateModel model)
         {
@@ -70,6 +78,7 @@ namespace boomoseries_OrchAuth_api.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterModel model)
         {
@@ -88,6 +97,14 @@ namespace boomoseries_OrchAuth_api.Controllers
                 var registerModel = JsonConvert.DeserializeObject<RegisterModel>(responseString);
                 return Ok(registerModel);
             }
+        }
+
+        [HttpPost("favorites")]
+        public async Task<IActionResult> GetUserFavorites()
+        {
+            var userId = int.Parse(HttpContext.GetUserId());
+            var response = _userPreferencesService.GetFavoriteWatchables(userId);   
+            return Ok(response);
         }
     }
 }

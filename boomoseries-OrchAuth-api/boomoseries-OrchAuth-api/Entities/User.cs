@@ -1,4 +1,5 @@
-﻿namespace boomoseries_OrchAuth_api.Entities
+﻿
+namespace boomoseries_OrchAuth_api.Entities
 {
     public class User
     {
