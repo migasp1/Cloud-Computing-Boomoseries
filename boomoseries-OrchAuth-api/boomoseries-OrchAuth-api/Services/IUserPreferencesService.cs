@@ -5,6 +5,6 @@ namespace boomoseries_OrchAuth_api.Services
 {
     public interface IUserPreferencesService
     {
-        Task<HttpContent> GetFavoriteWatchables(int id);
+        Task<string> GetFavoriteWatchables(int id);
     }
 }

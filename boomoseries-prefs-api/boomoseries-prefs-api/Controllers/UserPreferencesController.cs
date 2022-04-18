@@ -3,6 +3,7 @@ using boomoseries_prefs_api.Entities;
 using boomoseries_prefs_api.Models;
 using boomoseries_prefs_api.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 
 namespace boomoseries_prefs_api.Controllers
@@ -62,10 +63,11 @@ namespace boomoseries_prefs_api.Controllers
             {
                 var userBooks = _prefService.GetUserFavoriteBooks(userId);
                 var userWatchables = _prefService.GetUserFavoriteWatchables(userId);
-                return Ok(new 
+
+                return Ok(new FavoritesModel
                 {
-                    userBooks,
-                    userWatchables
+                    Books = userBooks,
+                    Watchables = userWatchables
                 });
             }
             catch (Exception ex)

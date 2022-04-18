@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -51,7 +53,7 @@ namespace boomoseries_OrchAuth_api.Controllers
             {
                 var responseString = await response.Content.ReadAsStringAsync();
                 var user = JsonConvert.DeserializeObject<User>(responseString);
-                
+
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
                 var tokenDescriptor = new SecurityTokenDescriptor
@@ -84,7 +86,7 @@ namespace boomoseries_OrchAuth_api.Controllers
         {
             var response = await _userService.RegisterUser(model);
 
-            if(response.StatusCode != System.Net.HttpStatusCode.OK)
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
 
                 var errorMessage = response.Content.ReadAsStringAsync().Result;
@@ -93,7 +95,7 @@ namespace boomoseries_OrchAuth_api.Controllers
             }
             else
             {
-                var responseString = await response.Content.ReadAsStringAsync();      
+                var responseString = await response.Content.ReadAsStringAsync();
                 var registerModel = JsonConvert.DeserializeObject<RegisterModel>(responseString);
                 return Ok(registerModel);
             }
@@ -102,9 +104,20 @@ namespace boomoseries_OrchAuth_api.Controllers
         [HttpPost("favorites")]
         public async Task<IActionResult> GetUserFavorites()
         {
-            var userId = int.Parse(HttpContext.GetUserId());
-            var response = _userPreferencesService.GetFavoriteWatchables(userId);   
-            return Ok(response);
+            try
+            {
+                var userId = int.Parse(HttpContext.GetUserId());
+                var response = await _userPreferencesService.GetFavoriteWatchables(userId);
+                var deserialized = JsonConvert.DeserializeObject<FavoritesModel>(response);
+
+                return Ok(deserialized);
+            }
+            catch (Exception)
+            {
+                return BadRequest(new { message = "Oops, something went wrong!" });
+            }
         }
+
+        //missing: search communication, post favorite watchable and post favorite book
     }
 }
