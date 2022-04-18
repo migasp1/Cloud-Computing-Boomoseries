@@ -2,9 +2,9 @@
 {
     public class URLHelper
     {
-        private static readonly string NetflixBaseUrl = "https://localhost:5001/api/v1/Netflix/movies";
-        private static readonly string DisneyPlusBaseUrl = "https://localhost:5005/api/v1/Disney/movies";
-        private static readonly string AmazonPrimeBaseUrl = "https://localhost:5007/api/v1/Amazon/movies";
+        private static readonly string NetflixBaseUrl = "http://25.95.87.113:5000/api/v1/Netflix/movies";
+        private static readonly string DisneyPlusBaseUrl = "http://25.95.87.113:5004/api/v1/Disney/movies";
+        private static readonly string AmazonPrimeBaseUrl = "http://25.95.87.113:5006/api/v1/Amazon/movies";
 
         public static string[] GetMicroservicesBaseURL()
         {
