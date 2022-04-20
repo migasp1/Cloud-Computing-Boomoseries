@@ -6,16 +6,16 @@
             private static readonly string SeriesBaseUrl = "http://localhost:5016/api/v1/Series";
             private static readonly string BooksBaseUrl = "http://localhost:5014/api/v1/Books";
 
-            public static string[] GetMicroservicesBaseURL()
+        public static string[] GetMicroservicesBaseURL()
+        {
+            var urls = new string[]
             {
-                var urls = new string[]
-                {
                 MoviesBaseUrl,
                 SeriesBaseUrl,
                 BooksBaseUrl,
-                };
+            };
 
-                return urls;
+            return urls;
         }
     }
 }

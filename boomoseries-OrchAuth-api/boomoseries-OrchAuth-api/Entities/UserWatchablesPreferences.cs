@@ -1,8 +1,7 @@
 ﻿namespace boomoseries_OrchAuth_api.Entities
 {
-    public class UserWatchablesPreferences
+    public class UserWatchablePreferenceDTO
     {
-        public int Id { get; set; }
         public int Userid { get; set; }
         public string Title { get; set; }
         public string Date { get; set; }

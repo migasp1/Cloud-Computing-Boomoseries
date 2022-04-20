@@ -1,5 +1,6 @@
 ﻿using boomoseries_prefs_api.Data;
 using boomoseries_prefs_api.Entities;
+using boomoseries_prefs_api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

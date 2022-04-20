@@ -85,6 +85,34 @@ namespace bomoseries_Series_api.Services.REST_Communication
                         SeriesDtos[i].Cast = uniqueImdb[j].Cast;
                     }
                 }
+
+                List<IMDBDTO> imdbDTOs = new();
+
+                foreach (var response in httpResponses)
+                {
+                    if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                    {
+                        continue;
+                    }
+                    var responseString = await response.Content.ReadAsStringAsync();
+                    IMDBWatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<IMDBWatchableDTO>(responseString);
+                    IMDBDTO imdbTCC = IMDBEntityMapper.MapToDTO(deserializedWatchable);
+                    imdbDTOs.Add(imdbTCC);
+                }
+
+                List<IMDBDTO> uniqueImdb = imdbDTOs.DistinctBy(x => x.Title).ToList();
+
+                for (int i = 0; i < SeriesDtos.Count; i++)
+                {
+                    for (int j = 0; j < uniqueImdb.Count; j++)
+                    {
+                        if (uniqueImdb[j].Title.ToLower().Equals(SeriesDtos[i].Title.ToLower()))
+                        {
+                            SeriesDtos[i].Director = uniqueImdb[j].Director;
+                            SeriesDtos[i].Cast = uniqueImdb[j].Cast;
+                        }
+                    }
+                }
             }
 
             var results = SeriesDtos.GroupBy(m => m.Platform).SelectMany(series => series).ToList();

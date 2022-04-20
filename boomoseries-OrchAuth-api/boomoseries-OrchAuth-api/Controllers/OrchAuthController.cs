@@ -1,4 +1,5 @@
-﻿using boomoseries_OrchAuth_api.Entities;
+﻿using AutoMapper;
+using boomoseries_OrchAuth_api.Entities;
 using boomoseries_OrchAuth_api.Helpers;
 using boomoseries_OrchAuth_api.Models;
 using boomoseries_OrchAuth_api.Services;
@@ -26,19 +27,22 @@ namespace boomoseries_OrchAuth_api.Controllers
         private readonly ISearchCommunicationServiceWatchables commServiceSearchWatchables;
         private readonly ISearchCommunicationServiceBooks commServiceSearchBooks;
         private readonly AppSettings _appSettings;
+        private readonly IMapper _mapper;
 
         public OrchAuthController(
             IUsersCommunicationService userService,
             IUserPreferencesService userPreferencesService,
-            IOptions<AppSettings> appSettings)
+            IOptions<AppSettings> appSettings,
+            IMapper mapper)
         {
             _userService = userService;
             _appSettings = appSettings.Value;
             _userPreferencesService = userPreferencesService;
+            _mapper = mapper;
         }
 
         [AllowAnonymous]
-        [HttpPost("authenticate")]
+        [HttpPost("Authenticate")]
         public async Task<IActionResult> Authenticate(AuthenticateModel model)
         {
             var response = await _userService.AuthenticateUser(model);
@@ -53,7 +57,7 @@ namespace boomoseries_OrchAuth_api.Controllers
             {
                 var responseString = await response.Content.ReadAsStringAsync();
                 var user = JsonConvert.DeserializeObject<User>(responseString);
-                
+
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
                 var tokenDescriptor = new SecurityTokenDescriptor
@@ -81,12 +85,12 @@ namespace boomoseries_OrchAuth_api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterModel model)
         {
             var response = await _userService.RegisterUser(model);
 
-            if(response.StatusCode != System.Net.HttpStatusCode.OK)
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
 
                 var errorMessage = response.Content.ReadAsStringAsync().Result;
@@ -95,18 +99,67 @@ namespace boomoseries_OrchAuth_api.Controllers
             }
             else
             {
-                var responseString = await response.Content.ReadAsStringAsync();      
+                var responseString = await response.Content.ReadAsStringAsync();
                 var registerModel = JsonConvert.DeserializeObject<RegisterModel>(responseString);
                 return Ok(registerModel);
             }
         }
 
-        [HttpPost("favorites")]
+
+        [HttpPost("Favorites/Book")]
+        public async Task<IActionResult> AddFavoriteBook(UserBookPreferenceModel model)
+        {
+            try
+            {
+                var bookModel = _mapper.Map<UserBookPreferenceDTO>(model);
+                var userId = int.Parse(HttpContext.GetUserId());
+                bookModel.Userid = userId;    
+                var response = await _userPreferencesService.AddFavoriteBook(bookModel);
+                var deserialized = JsonConvert.DeserializeObject<FavoritesModel>(response);
+
+                return Ok(deserialized);
+            }
+            catch (Exception ex)
+            {
+                //return BadRequest(new { message = "Oops, something went wrong!" });
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("Favorites/Watchable")]
+        public async Task<IActionResult> AddFavoriteWatchable(UserWatchablePreferenceModel model)
+        {
+            try
+            {
+                var watchableModel = _mapper.Map<UserWatchablePreferenceDTO>(model);
+                var userId = int.Parse(HttpContext.GetUserId());
+                watchableModel.Userid = userId;
+                var response = await _userPreferencesService.AddFavoriteWatchables(watchableModel);
+                var deserialized = JsonConvert.DeserializeObject<FavoritesModel>(response);
+
+                return Ok(deserialized);
+            }
+            catch (Exception)
+            {
+                return BadRequest(new { message = "Oops, something went wrong!" });
+            }
+        }
+
+        [HttpPost("Favorites")]
         public async Task<IActionResult> GetUserFavorites()
         {
-            var userId = int.Parse(HttpContext.GetUserId());
-            var response = _userPreferencesService.GetFavoriteWatchables(userId);   
-            return Ok(response);
+            try
+            {
+                var userId = int.Parse(HttpContext.GetUserId());
+                var response = await _userPreferencesService.GetFavoriteWatchables(userId);
+                var deserialized = JsonConvert.DeserializeObject<FavoritesModel>(response);
+
+                return Ok(deserialized);
+            }
+            catch (Exception)
+            {
+                return BadRequest(new { message = "Oops, something went wrong!" });
+            }
         }
 
         [HttpGet("Search")]

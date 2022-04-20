@@ -16,7 +16,7 @@ namespace boomoseries_Movies_api.Services.REST_Communication
     public class RESTCommunicationService : ICommunicationService
     {
         private static readonly string[] microservicesBaseURL = URLHelper.GetMicroservicesBaseURL();
-        private static readonly string IMDBBaseUrl = "http://localhost:5002/api/v1/IMDB/movies";
+        private static readonly string IMDBBaseUrl = "http://host.docker.internal:5002/api/v1/IMDB/movies";
         private static readonly HttpClient httpClient = new();
 
         public RESTCommunicationService()

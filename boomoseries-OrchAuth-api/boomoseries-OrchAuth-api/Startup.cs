@@ -1,3 +1,5 @@
+using AutoMapper;
+using boomoseries_OrchAuth_api.Mapper;
 using boomoseries_OrchAuth_api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -29,7 +31,14 @@ namespace boomoseries_OrchAuth_api
             services.AddControllers();
             services.AddScoped<IUsersCommunicationService, UsersRESTCommunicationService>();
             services.AddScoped<IUserPreferencesService, UserPreferencesService>();
+            // Auto Mapper Configurations
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
 
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
