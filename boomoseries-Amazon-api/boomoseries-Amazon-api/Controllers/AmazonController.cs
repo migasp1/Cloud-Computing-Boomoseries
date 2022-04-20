@@ -140,7 +140,7 @@ namespace AmazonPrime_Microservice.Controllers
                 var result = seriesDTOs.Where(serie => serie.Rating >= min_rating);
                 if (!result.Any())
                 {
-                    return NotFound("There are no series with more then rating" + min_rating + ".");
+                    return NotFound("There are no series with more then rating " + min_rating + ".");
                 }
                 else
                 {

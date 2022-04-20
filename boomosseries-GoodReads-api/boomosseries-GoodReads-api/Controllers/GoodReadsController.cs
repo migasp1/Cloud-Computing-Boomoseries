@@ -37,7 +37,7 @@ namespace boomosseries_GoodReads_api.Controllers
                 var result = bookDTO.Where(book => book.Rating >= min_rating).Take(5);
                 if (!result.Any())
                 {
-                    return NotFound("There are no books with more than rating" + min_rating + ".");
+                    return NotFound("There are no books with more than rating " + min_rating + ".");
                 }
                 else
                 {

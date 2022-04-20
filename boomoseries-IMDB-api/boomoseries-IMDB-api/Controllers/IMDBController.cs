@@ -20,29 +20,6 @@ namespace boomoseries_IMDB_api.Controllers
             this.dataContext = dataContext;
         }
 
-        [HttpGet("movies/random")]
-        public async Task<IActionResult> GetRandomMovie()
-        {
-            var dbSet = dataContext.Watchables;
-
-            var totalMovies = dbSet.Count();
-
-            Random random = new();
-
-            int randomId = random.Next(1, totalMovies + 1);
-
-            var randomMovie = dbSet.Where(s => s.Type == "Movie").SingleOrDefault(s => s.Id == randomId);
-            if (randomMovie == null)
-            {
-                return NotFound("This movie doesn't exist");
-            }
-            else
-            {
-                WatchableDTO movieDTO = IMDBMapper.MapToDTO(randomMovie); 
-                return Ok(movieDTO);
-            }
-        }
-
         [HttpGet("movies")]
         public async Task<IActionResult> GetMovies(double? min_rating)
         {
@@ -89,29 +66,6 @@ namespace boomoseries_IMDB_api.Controllers
             {
                 WatchableDTO movieDTO = IMDBMapper.MapToDTO(movie);
                 return Ok(movieDTO);
-            }
-        }
-
-        [HttpGet("series/random")]
-        public async Task<IActionResult> GetRandomSerie()
-        {
-            var dbSet = dataContext.Watchables;
-
-            var totalSeries = dbSet.Count();
-
-            Random random = new();
-
-            int randomId = random.Next(1, totalSeries + 1);
-
-            var randomSerie = dbSet.Where(s => s.Type == "TV Show").SingleOrDefault(s => s.Id == randomId);
-            if (randomSerie == null)
-            {
-                return NotFound("This serie doesn't exist");
-            }
-            else
-            {
-                WatchableDTO serieDTO = IMDBMapper.MapToDTO(randomSerie); 
-                return Ok(serieDTO);
             }
         }
 
