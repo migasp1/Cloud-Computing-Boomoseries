@@ -5,7 +5,7 @@ namespace boomoseries_OrchAuth_api.Models
 {
     public class FavoritesModel
     {
-        public List<UserBookPreferences> Books { get; set; }
-        public List<UserWatchablesPreferences> Watchables { get; set; }
+        public List<UserBookPreferenceDTO> Books { get; set; }
+        public List<UserWatchablePreferenceDTO> Watchables { get; set; }
     }
 }

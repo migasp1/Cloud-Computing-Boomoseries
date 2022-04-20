@@ -8,12 +8,10 @@ using System;
 
 namespace boomoseries_prefs_api.Controllers
 {
+    [ApiController]
     [Route("[controller]")]
     public class UserPreferencesController : Controller
     {
-        //POST : PREF MOVIE OR SERIE
-        //POST : PREF BOOK
-        //GET : ALL ITEMS, let the framework serielize for me, I just need the lists and return an anonymous object
         private IUserPreferenceService _prefService;
         private readonly IMapper _mapper;
 
@@ -26,13 +24,13 @@ namespace boomoseries_prefs_api.Controllers
         }
 
         [HttpPost("Favorites/Watchable")]
-        public IActionResult AddUserFavoriteWatchable(UserWatchablePreferenceModel userWatchable)
+        public IActionResult AddUserFavoriteWatchable(UserWatchablePreferenceDTO watchableModel)
         {
-            var user = _mapper.Map<UserWatchablePreference>(userWatchable);
             try
             {
-                _prefService.AddUserWatchbleFavorite(user);
-                return Ok(user);
+                var entity = _mapper.Map<UserWatchablePreference>(watchableModel);
+                _prefService.AddUserWatchbleFavorite(entity);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -41,13 +39,13 @@ namespace boomoseries_prefs_api.Controllers
         }
 
         [HttpPost("Favorites/Book")]
-        public IActionResult AddUserFavoriteBook(UserBookPreferenceModel userBook)
+        public IActionResult AddUserFavoriteBook(UserBookPreferenceDTO bookModel)
         {
-            var user = _mapper.Map<UserBookPreference>(userBook);
+            var entity = _mapper.Map<UserBookPreference>(bookModel);
             try
             {
-                _prefService.AddUserBookFavorite(user);
-                return Ok(user);
+                _prefService.AddUserBookFavorite(entity);
+                return Ok();
             }
             catch (Exception ex)
             {

@@ -1,8 +1,7 @@
-﻿namespace boomoseries_prefs_api.Models
+﻿namespace boomoseries_OrchAuth_api.Models
 {
     public class UserWatchablePreferenceModel
     {
-        public int Userid { get; set; }
         public string Title { get; set; }
         public string Date { get; set; }
         public double Rating { get; set; }

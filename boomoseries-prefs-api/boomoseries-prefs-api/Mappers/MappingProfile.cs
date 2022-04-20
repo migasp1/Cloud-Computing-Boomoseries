@@ -8,8 +8,8 @@ namespace boomoseries_prefs_api.Mappers
     {
         public MappingProfile()
         {
-            CreateMap<UserWatchablePreferenceModel, UserWatchablePreference>();
-            CreateMap<UserBookPreferenceModel, UserBookPreference>();
+            CreateMap<UserWatchablePreferenceDTO, UserWatchablePreference>();
+            CreateMap<UserBookPreferenceDTO, UserBookPreference>();
         }
     }
 }
