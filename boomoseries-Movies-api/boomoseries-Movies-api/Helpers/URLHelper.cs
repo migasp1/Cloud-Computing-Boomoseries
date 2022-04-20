@@ -7,12 +7,12 @@
         private static readonly string DisneyPlusBaseUrl = "http://host.docker.internal:5004/api/v1/Disney/movies";
         private static readonly string AmazonPrimeBaseUrl = "http://host.docker.internal:5006/api/v1/Amazon/movies";
 
+
         public static string[] GetMicroservicesBaseURL()
         {
             var urls = new string[]
             {
                 NetflixBaseUrl,
-                IMDBBaseUrl,
                 DisneyPlusBaseUrl,
                 AmazonPrimeBaseUrl
             };

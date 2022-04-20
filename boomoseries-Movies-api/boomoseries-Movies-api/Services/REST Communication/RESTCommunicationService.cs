@@ -2,6 +2,7 @@
 using boomoseries_Movies_api.Helpers;
 using boomoseries_Movies_api.Mapper;
 using Microsoft.AspNetCore.Mvc;
+using MoreLinq;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace boomoseries_Movies_api.Services.REST_Communication
     public class RESTCommunicationService : ICommunicationService
     {
         private static readonly string[] microservicesBaseURL = URLHelper.GetMicroservicesBaseURL();
+        private static readonly string IMDBBaseUrl = "http://localhost:5002/api/v1/IMDB/movies";
         private static readonly HttpClient httpClient = new();
 
         public RESTCommunicationService()
@@ -45,12 +47,50 @@ namespace boomoseries_Movies_api.Services.REST_Communication
                 List<WatchableDTO> deserializedWatchable = JsonConvert.DeserializeObject<List<WatchableDTO>>(responseString);
                 foreach (var item in deserializedWatchable)
                 {
-                    MovieDTO movieDto = MovieEntityMapper.MapToDTO(item);
-                    movieDtos.Add(movieDto);
+                    MovieDTO MoviesDto = MovieEntityMapper.MapToDTO(item);
+                    movieDtos.Add(MoviesDto);
                 }
             }
 
-            return movieDtos;
+            List<HttpResponseMessage> httpResponses = new List<HttpResponseMessage>();
+            foreach (var movie in movieDtos)
+            {
+                var requestTCC = await httpClient.GetAsync(IMDBBaseUrl + "/" + movie.Title);
+                httpResponses.Add(requestTCC);
+            }
+
+            List<IMDBDTO> imdbDTOs = new();
+
+            foreach (var response in httpResponses)
+            {
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    continue;
+                }
+                var responseString = await response.Content.ReadAsStringAsync();
+                IMDBWatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<IMDBWatchableDTO>(responseString);
+                IMDBDTO imdbTCC = IMDBEntityMapper.MapToDTO(deserializedWatchable);
+                imdbDTOs.Add(imdbTCC);
+            }
+
+            List<IMDBDTO> uniqueImdb = imdbDTOs.DistinctBy(x => x.Title).ToList();
+
+            for (int i = 0; i < movieDtos.Count; i++)
+            {
+                for (int j = 0; j < uniqueImdb.Count; j++)
+                {
+                    if (uniqueImdb[j].Title.ToLower().Equals(movieDtos[i].Title.ToLower()))
+                    {
+                        movieDtos[i].Director = uniqueImdb[j].Director;
+                        movieDtos[i].Cast = uniqueImdb[j].Cast;
+                    }
+                }
+            }
+
+            var results = movieDtos.GroupBy(m => m.Platform).SelectMany(series => series).ToList();
+            stopwatch.Stop();
+            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
+            return results;
         }
 
         public async Task<List<MovieDTO>> ObtainSepcificMovie(string movieTitle)
@@ -69,34 +109,55 @@ namespace boomoseries_Movies_api.Services.REST_Communication
             List<MovieDTO> movieDTOs = new();
             foreach (var response in responses)
             {
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    continue;
+                }
                 var responseString = await response.Content.ReadAsStringAsync();
-                if (responseString.Contains("Netflix"))
+                WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
+                MovieDTO MoviesDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
+                movieDTOs.Add(MoviesDto);
+            }
+
+            List<HttpResponseMessage> httpResponses = new List<HttpResponseMessage>();
+            foreach (var movie in movieDTOs)
+            {
+                var requestTCC = await httpClient.GetAsync(IMDBBaseUrl + "/" + movie.Title);
+                httpResponses.Add(requestTCC);
+            }
+
+            List<IMDBDTO> imdbDTOs = new();
+
+            foreach (var response in httpResponses)
+            {
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    MovieDTO movieDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
-                    movieDTOs.Add(movieDto);
+                    continue;
                 }
-                else if (responseString.Contains("Amazon"))
+                var responseString = await response.Content.ReadAsStringAsync();
+                IMDBWatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<IMDBWatchableDTO>(responseString);
+                IMDBDTO imdbTCC = IMDBEntityMapper.MapToDTO(deserializedWatchable);
+                imdbDTOs.Add(imdbTCC);
+            }
+
+            List<IMDBDTO> uniqueImdb = imdbDTOs.DistinctBy(x => x.Title).ToList();
+
+            for (int i = 0; i < movieDTOs.Count; i++)
+            {
+                for (int j = 0; j < uniqueImdb.Count; j++)
                 {
-                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    MovieDTO movieDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
-                    movieDTOs.Add(movieDto);
-                }
-                else if (responseString.Contains("Disney"))
-                {
-                    WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    MovieDTO movieDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
-                    movieDTOs.Add(movieDto);
-                }
-                else if (responseString.Contains("IMDB"))
-                {
-                    //WatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<WatchableDTO>(responseString);
-                    //MovieDTO movieDto = MovieEntityMapper.MapToDTO(deserializedWatchable);
-                    //movieDTOs.Add(movieDto);
-                    Debug.WriteLine("APARECEU");
+                    if (uniqueImdb[j].Title.ToLower().Equals(movieDTOs[i].Title.ToLower()))
+                    {
+                        movieDTOs[i].Director = uniqueImdb[j].Director;
+                        movieDTOs[i].Cast = uniqueImdb[j].Cast;
+                    }
                 }
             }
-            return movieDTOs;
+
+            var results = movieDTOs.GroupBy(m => m.Platform).SelectMany(series => series).ToList();
+            stopwatch.Stop();
+            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
+            return results;
         }
 
         [HttpGet("movies")]
@@ -115,7 +176,7 @@ namespace boomoseries_Movies_api.Services.REST_Communication
             var responses = requests.Select(task => task.Result);
             foreach (var response in responses)
             {
-                if(response.StatusCode != System.Net.HttpStatusCode.OK)
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
                     continue;
                 }
@@ -123,13 +184,49 @@ namespace boomoseries_Movies_api.Services.REST_Communication
                 List<WatchableDTO> deserializedWatchable = JsonConvert.DeserializeObject<List<WatchableDTO>>(responseString);
                 foreach (var item in deserializedWatchable)
                 {
-                    MovieDTO movieDto = MovieEntityMapper.MapToDTO(item);
-                    movieDtos.Add(movieDto);
+                    MovieDTO MoviesDto = MovieEntityMapper.MapToDTO(item);
+                    movieDtos.Add(MoviesDto);
                 }
             }
 
-            var results = movieDtos.GroupBy(m => m.Platform).SelectMany(movies => movies).ToList();
+            List<HttpResponseMessage> httpResponses = new List<HttpResponseMessage>();
+            foreach (var movie in movieDtos)
+            {
+                var requestTCC = await httpClient.GetAsync(IMDBBaseUrl + "/" + movie.Title);
+                httpResponses.Add(requestTCC);
+            }
 
+            List<IMDBDTO> imdbDTOs = new();
+
+            foreach (var response in httpResponses)
+            {
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    continue;
+                }
+                var responseString = await response.Content.ReadAsStringAsync();
+                IMDBWatchableDTO deserializedWatchable = JsonConvert.DeserializeObject<IMDBWatchableDTO>(responseString);
+                IMDBDTO imdbTCC = IMDBEntityMapper.MapToDTO(deserializedWatchable);
+                imdbDTOs.Add(imdbTCC);
+            }
+
+            List<IMDBDTO> uniqueImdb = imdbDTOs.DistinctBy(x => x.Title).ToList();
+
+            for (int i = 0; i < movieDtos.Count; i++)
+            {
+                for (int j = 0; j < uniqueImdb.Count; j++)
+                {
+                    if (uniqueImdb[j].Title.ToLower().Equals(movieDtos[i].Title.ToLower()))
+                    {
+                        movieDtos[i].Director = uniqueImdb[j].Director;
+                        movieDtos[i].Cast = uniqueImdb[j].Cast;
+                    }
+                }
+            }
+
+            var results = movieDtos.GroupBy(m => m.Platform).SelectMany(series => series).ToList();
+            stopwatch.Stop();
+            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             return results;
         }
     }

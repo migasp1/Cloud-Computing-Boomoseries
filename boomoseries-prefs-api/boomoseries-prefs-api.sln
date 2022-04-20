@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "boomoseries-prefs-api", "boomoseries-prefs-api\boomoseries-prefs-api.csproj", "{C0B5829A-5C9A-4D76-9378-AD50C3375411}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C0B5829A-5C9A-4D76-9378-AD50C3375411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0B5829A-5C9A-4D76-9378-AD50C3375411}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0B5829A-5C9A-4D76-9378-AD50C3375411}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0B5829A-5C9A-4D76-9378-AD50C3375411}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DDF40B86-DFDE-4410-8237-22AD118B4C8E}
+	EndGlobalSection
+EndGlobal
