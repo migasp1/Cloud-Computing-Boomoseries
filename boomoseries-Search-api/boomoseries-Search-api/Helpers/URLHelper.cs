@@ -2,9 +2,9 @@
 {
     public class URLHelper
     {
-            private static readonly string MoviesBaseUrl = "https://localhost:5009/api/v1/Movies";
-            private static readonly string SeriesBaseUrl = "https://localhost:50017/api/v1/Series";
-            private static readonly string BooksBaseUrl = "https://localhost:5015/api/v1/Books";
+            private static readonly string MoviesBaseUrl = "http://host.docker.internal:5008/api/v1/Movies";
+            private static readonly string SeriesBaseUrl = "http://host.docker.internal:5016/api/v1/Series";
+            private static readonly string BooksBaseUrl = "http://host.docker.internal:5014/api/v1/Books";
 
             public static string[] GetMicroservicesBaseURL()
             {
