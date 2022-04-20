@@ -31,6 +31,8 @@ namespace boomoseries_OrchAuth_api
             services.AddControllers();
             services.AddScoped<IUsersCommunicationService, UsersRESTCommunicationService>();
             services.AddScoped<IUserPreferencesService, UserPreferencesService>();
+            services.AddScoped<ISearchCommunicationServiceBooks, SearchRESTComunicationServiceBooks>();
+            services.AddScoped<ISearchCommunicationServiceWatchables, SearchRESTCommunicationServiceWatchables>();
             // Auto Mapper Configurations
             var mapperConfig = new MapperConfiguration(mc =>
             {

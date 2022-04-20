@@ -24,6 +24,8 @@ namespace boomoseries_OrchAuth_api.Controllers
     {
         private readonly IUsersCommunicationService _userService;
         private readonly IUserPreferencesService _userPreferencesService;
+        private readonly ISearchCommunicationServiceWatchables _commServiceSearchWatchables;
+        private readonly ISearchCommunicationServiceBooks _commServiceSearchBooks;
         private readonly AppSettings _appSettings;
         private readonly IMapper _mapper;
 
@@ -31,12 +33,16 @@ namespace boomoseries_OrchAuth_api.Controllers
             IUsersCommunicationService userService,
             IUserPreferencesService userPreferencesService,
             IOptions<AppSettings> appSettings,
-            IMapper mapper)
+            IMapper mapper,
+            ISearchCommunicationServiceBooks commServiceSearchBooks,
+            ISearchCommunicationServiceWatchables commServiceSearchWatchables)
         {
             _userService = userService;
             _appSettings = appSettings.Value;
             _userPreferencesService = userPreferencesService;
             _mapper = mapper;
+            _commServiceSearchWatchables= commServiceSearchWatchables;
+            _commServiceSearchBooks = commServiceSearchBooks;
         }
 
         [AllowAnonymous]
@@ -158,6 +164,141 @@ namespace boomoseries_OrchAuth_api.Controllers
             {
                 return BadRequest(new { message = "Oops, something went wrong!" });
             }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("Search")]
+        public async Task<IActionResult> SearchItemsByRating(string type, double minRating)
+        {
+            if(type == null)
+                return BadRequest("Oops, something went wrong! ");
+            if (type.Equals("Movie"))
+            {
+                try
+                {
+                    var responseBody = await _commServiceSearchWatchables.GetWatchblesByRating(type, minRating);
+                    return Ok(responseBody);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                }
+            }
+            else if (type.Equals("TV Show"))
+            {
+                try
+                {
+                    var responseBody = await _commServiceSearchWatchables.GetWatchblesByRating(type, minRating);
+                    return Ok(responseBody);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                }
+            }
+            else if (type.Equals("Book"))
+            {
+                try
+                {
+                    var responseBody = await _commServiceSearchBooks.ObtainBooksByRating(type, minRating);
+                    return Ok(responseBody);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                }
+            }
+            return BadRequest("Oops, something went wrong! ");
+        }
+
+        [AllowAnonymous]
+        [HttpGet("Search/{item_title}")]
+        public async Task<IActionResult> GetSpecificItem(string type, string item_title)
+        {
+            if (type == null)
+                return BadRequest("Oops, something went wrong! ");
+            if (type.Equals("Movie"))
+            {
+                try
+                {
+                    var responseBody = await _commServiceSearchWatchables.ObtainSepcificWatchables(type, item_title);
+                    return Ok(responseBody);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                }
+            }
+            else if (type.Equals("TV Show"))
+            {
+                try
+                {
+                    var responseBody = await _commServiceSearchWatchables.ObtainSepcificWatchables(type, item_title);
+                    return Ok(responseBody);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                }
+            }
+            else if (type.Equals("Book"))
+            {
+                try
+                {
+                    var responseBody = await _commServiceSearchBooks.ObtainSpecificBook(type, item_title);
+                    return Ok(responseBody);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                }
+            }
+            return BadRequest("Oops, something went wrong! ");
+        }
+
+        [AllowAnonymous]
+        [HttpGet("Search/random")]
+        public async Task<IActionResult> GetRandomItems(string type)
+        {
+            if (type == null)
+                return BadRequest("Oops, something went wrong! ");
+            if (type.Equals("Movie"))
+            {
+                try
+                {
+                    var responseBody = await _commServiceSearchWatchables.ObtainRandomWatchable(type);
+                    return Ok(responseBody);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                }
+            }
+            else if (type.Equals("TV Show"))
+            {
+                try
+                {
+                    var responseBody = await _commServiceSearchWatchables.ObtainRandomWatchable(type);
+                    return Ok(responseBody);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                }
+            }
+            else if (type.Equals("Book"))
+            {
+                try
+                {
+                    var responseBody = await _commServiceSearchBooks.ObtainRandomBooks(type);
+                    return Ok(responseBody);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                }
+            }
+            return BadRequest("Oops, something went wrong! ");
         }
     }
 }
