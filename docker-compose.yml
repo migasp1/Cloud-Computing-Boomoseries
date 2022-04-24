@@ -138,7 +138,7 @@ services:
         build:
             dockerfile: Dockerfile
             context: ./boomseries-OrchAuth-api/boomseries-OrchAuth-api
-        image: orchauthmicroservice
+        image: orchmicroservice
         hostname: orchauth
         container_name: orchauthmicroservice
         ports:
