@@ -19,7 +19,7 @@ namespace boomoseries_OrchAuth_api.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v1/[controller]")]
     public class OrchAuthController : Controller
     {
         private readonly IUsersCommunicationService _userService;

@@ -19,4 +19,10 @@ RUN dotnet publish "boomoseries-Netflix-api.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+
+ENV netflix-host=http://host.docker.internal:5000/api/v1/Netflix/movies
+ENV disney-host=http://host.docker.internal:5000/api/v1/Netflix/movies
+ENV amazon-host=http://host.docker.internal:5000/api/v1/Netflix/movies
+ENV imdb-host=http://host.docker.internal:5002/api/v1/IMDB/movies
 ENTRYPOINT ["dotnet", "boomoseries-Netflix-api.dll"]

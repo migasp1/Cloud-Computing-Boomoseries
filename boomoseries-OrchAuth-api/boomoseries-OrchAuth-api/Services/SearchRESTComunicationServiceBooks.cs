@@ -1,6 +1,7 @@
 ﻿using boomoseries_OrchAuth_api.DTOs;
 using boomoseries_OrchAuth_api.Helpers;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
@@ -10,7 +11,7 @@ namespace boomoseries_OrchAuth_api.Services
 {
     public class SearchRESTComunicationServiceBooks : ISearchCommunicationServiceBooks
     {
-        private static readonly string microservicesBaseURL = URLHelper._baseSearchMicroserviceURL;
+        private static readonly string microservicesBaseURL = Environment.GetEnvironmentVariable("SEARCH_HOST");
         private static readonly HttpClient httpClient = new();
 
         public async Task<List<BookDTO>> ObtainRandomBooks(string type)
