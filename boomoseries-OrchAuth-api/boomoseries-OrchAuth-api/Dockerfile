@@ -19,4 +19,7 @@ RUN dotnet publish "boomoseries-OrchAuth-api.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV USERS_HOST=http://host.docker.internal:5020/Users
+ENV PREFS_HOST=http://host.docker.internal:5024/UserPreferences/Favorites
+ENV SEARCH_HOST=http://host.docker.internal:5018/api/v1/Search
 ENTRYPOINT ["dotnet", "boomoseries-OrchAuth-api.dll"]

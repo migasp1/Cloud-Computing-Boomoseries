@@ -19,4 +19,5 @@ RUN dotnet publish "boomoseries-Books-api.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV GOODREADS_HOST=http://host.docker.internal:5012/api/v1/GoodReads/books
 ENTRYPOINT ["dotnet", "boomoseries-Books-api.dll"]
