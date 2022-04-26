@@ -22,6 +22,8 @@ namespace boomosseries_GoodReads_api.Controllers
         [HttpGet("books")]
         public async Task<IActionResult> GetBooks(double? min_rating)
         {
+            try
+            {
             var books = await dataContext.Books.ToListAsync();
             List<BooksDTO> bookDTO = new();
             foreach (var book in books)
@@ -43,6 +45,11 @@ namespace boomosseries_GoodReads_api.Controllers
                 {
                     return Ok(result);
                 }
+                }
+            }
+            catch (Exception ex)
+            {
+                BadRequest("Something went wrong: error " + ex.ToString());
             }
             return BadRequest("Something went wrong");
         }

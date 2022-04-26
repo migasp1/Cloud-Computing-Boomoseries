@@ -171,7 +171,7 @@ namespace boomoseries_OrchAuth_api.Controllers
         public async Task<IActionResult> SearchItemsByRating(string type, double minRating)
         {
             if(type == null)
-                return BadRequest("Oops, something went wrong! ");
+                return BadRequest("Oops, something went wrong - Null type!");
             if (type.Equals("Movie"))
             {
                 try
@@ -205,10 +205,10 @@ namespace boomoseries_OrchAuth_api.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                    return BadRequest("Oops, something went wrong! error" + ex.ToString());
                 }
             }
-            return BadRequest("Oops, something went wrong! ");
+            return BadRequest("Oops, something went wrong! Type did not match");
         }
 
         [AllowAnonymous]

@@ -53,7 +53,7 @@ namespace boomoseries_Search_api.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                    return BadRequest("Oops, something went wrong! error: " + ex.ToString());
                 }
             }
             return BadRequest("Oops, something went wrong! ");

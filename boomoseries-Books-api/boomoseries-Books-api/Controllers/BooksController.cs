@@ -55,7 +55,7 @@ namespace boomoseries_Books_api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Oops, something went wrong! ");
+                return BadRequest("Oops, something went wrong! error:" + ex.ToString());
             }
         }
     }
