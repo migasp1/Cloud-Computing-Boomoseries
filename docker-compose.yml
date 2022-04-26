@@ -4,7 +4,7 @@ services:
         build:
             dockerfile: Dockerfile
             context: ./bomoseries-Disney-api/bomoseries-Disney-api
-        image: disneymicroservice
+        image: eu.gcr.io/boomoseries-api/disneymicroservice
         hostname: disney
         container_name: disneymicroservice
         ports:
@@ -14,7 +14,7 @@ services:
         build:
             dockerfile: Dockerfile
             context: ./boomseries-Netflix-api/boomseries-Netflix-api
-        image: netflixmicroservice
+        image: eu.gcr.io/boomoseries-api/netflixmicroservice
         hostname: netflix
         container_name: netflixmicroservice
         ports:
@@ -24,7 +24,7 @@ services:
         build:
             dockerfile: Dockerfile
             context: ./boomseries-Amazon-api/boomseries-Amazon-api
-        image: amazonmicroservice
+        image: eu.gcr.io/boomoseries-api/amazonmicroservice
         hostname: amazon
         container_name: amazonmicroservice
         ports:
@@ -34,7 +34,7 @@ services:
         build:
             dockerfile: Dockerfile
             context: ./boomseries-IMDB-api/boomseries-IMDB-api
-        image: imdbmicroservice
+        image: eu.gcr.io/boomoseries-api/imdbmicroservice
         hostname: imdb
         container_name: imdbmicroservice
         ports:
@@ -43,7 +43,7 @@ services:
         build:
             dockerfile: Dockerfile
             context: ./boomsseries-GoodReads-api/boomsseries-GoodReads-api
-        image: goodreadsmicroservice
+        image: eu.gcr.io/boomoseries-api/goodreadsmicroservice
         hostname: goodreads
         container_name: goodreadsmicroservice
         ports:
@@ -59,7 +59,7 @@ services:
         build:
             dockerfile: Dockerfile
             context: ./boomseries-Movies-api/boomseries-Movies-api
-        image: moviesmicroservice
+        image: eu.gcr.io/boomoseries-api/moviesmicroservice
         hostname: movies
         container_name: moviesmicroservice
         ports:
@@ -75,7 +75,7 @@ services:
         build:
             dockerfile: Dockerfile
             context: ./bomseries-Series-api/bomseries-Series-api
-        image: seriesmicroservice
+        image: eu.gcr.io/boomoseries-api/seriesmicroservice
         hostname: series
         container_name: seriesmicroservice
         ports:
@@ -88,7 +88,7 @@ services:
         build:
             dockerfile: Dockerfile
             context: ./boomseries-Books-api/boomseries-Books-api
-        image: booksmicroservice
+        image: eu.gcr.io/boomoseries-api/booksmicroservice
         hostname: books
         container_name: booksmicroservice
         ports:
@@ -103,7 +103,7 @@ services:
         build:
             dockerfile: Dockerfile
             context: ./boomseries-Search-api/boomseries-Search-api
-        image: searchmicroservice
+        image: eu.gcr.io/boomoseries-api/searchmicroservice
         hostname: search
         container_name: searchmicroservice
         ports:
@@ -113,7 +113,7 @@ services:
         build:
             dockerfile: Dockerfile
             context: ./boomseries-Users-api/boomseries-Users-api
-        image: usersmicroservice
+        image: eu.gcr.io/boomoseries-api/usersmicroservice
         hostname: users
         container_name: usersmicroservice
         ports:
@@ -123,7 +123,7 @@ services:
         build:
             dockerfile: Dockerfile
             context: ./boomseries-prefs-api/boomseries-prefs-api
-        image: prefsmicroservice
+        image: eu.gcr.io/boomoseries-api/prefsmicroservice
         hostname: prefs
         container_name: prefsmicroservice
         ports:
@@ -138,7 +138,7 @@ services:
         build:
             dockerfile: Dockerfile
             context: ./boomseries-OrchAuth-api/boomseries-OrchAuth-api
-        image: orchmicroservice
+        image: eu.gcr.io/boomoseries-api/orchmicroservice
         hostname: orchauth
         container_name: orchauthmicroservice
         ports:

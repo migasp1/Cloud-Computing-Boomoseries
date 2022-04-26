@@ -106,13 +106,13 @@ spec:
 #            command: ["/bin/grpc_health_probe", "-addr=:50055"]
         env:
         - name: "NETFLIX_HOST"
-          value: http://netflix
+          value: http://netflix.default
         - name: "AMAZON_HOST"
-          value: http://amazon
+          value: http://amazon.default
         - name: "DISNEY_HOST"
-          value: http://disney
+          value: http://disney.default
         - name: "IMDB_HOST"
-          value: http://imdb
+          value: http://imdb.default
 ---
 apiVersion: v1
 kind: Service
@@ -213,7 +213,7 @@ spec:
 #            command: ["/bin/grpc_health_probe", "-addr=:50055"]
         env:
         - name: "GOODREADS_HOST"
-          value: http://goodreads
+          value: http://goodreads.default
 ---
 apiVersion: v1
 kind: Service
@@ -314,13 +314,13 @@ spec:
 #            command: ["/bin/grpc_health_probe", "-addr=:50053"]
         env:
         - name: "NETFLIX_HOST"
-          value: http://netflix
+          value: http://netflix.default
         - name: "AMAZON_HOST"
-          value: http://amazon
+          value: http://amazon.default
         - name: "DISNEY_HOST"
-          value: http://disney
+          value: http://disney.default
         - name: "IMDB_HOST"
-          value: http://imdb
+          value: http://imdb.default
 ---
 apiVersion: v1
 kind: Service
@@ -372,11 +372,11 @@ spec:
 #            command: ["/bin/grpc_health_probe", "-addr=:50053"]
         env:
         - name: "SEARCH_HOST"
-          value: http://search
+          value: http://search.default
         - name: "USERS_HOST"
-          value: http://users
+          value: http://users.default
         - name: "PREFS_HOST"
-          value: http://prefs
+          value: http://prefs.default
 ---
 apiVersion: v1
 kind: Service
@@ -477,11 +477,11 @@ spec:
 #            command: ["/bin/grpc_health_probe", "-addr=:50053"]
         env:
         - name: "MOVIES_HOST"
-          value: http://movies
+          value: http://movies.default
         - name: "SERIES_HOST"
-          value: http://series
+          value: http://series.default
         - name: "BOOKS_HOST"
-          value: http://books
+          value: http://books.default
 ---
 apiVersion: v1
 kind: Service
