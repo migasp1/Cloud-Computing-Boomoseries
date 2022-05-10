@@ -36,6 +36,11 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
+  
 ---
 apiVersion: "apps/v1"
 kind: Deployment
@@ -64,13 +69,13 @@ spec:
         - containerPort: 80
         env:
         - name: NETFLIX_HOST
-          value: "http://netflix.default"
+          value: "https://netflix.default"
         - name: AMAZON_HOST
-          value: "http://amazon.default"
+          value: "https://amazon.default"
         - name: DISNEY_HOST
-          value: "http://disney.default"
+          value: "https://disney.default"
         - name: IMDB_HOST
-          value: "http://imdb.default"
+          value: "https://imdb.default"
 ---
 apiVersion: v1
 kind: Service
@@ -84,6 +89,10 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
 kind: Deployment
@@ -123,6 +132,10 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
 kind: Deployment
@@ -151,7 +164,7 @@ spec:
         - containerPort: 80
         env:
         - name: GOODREADS_HOST
-          value: "http://goodreads.default"
+          value: "https://goodreads.default"
 ---
 apiVersion: v1
 kind: Service
@@ -165,6 +178,10 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
 kind: "Deployment"
@@ -204,6 +221,10 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
 kind: Deployment
@@ -232,13 +253,13 @@ spec:
         - containerPort: 80
         env:
         - name: NETFLIX_HOST
-          value: "http://netflix.default"
+          value: "https://netflix.default"
         - name: AMAZON_HOST
-          value: "http://amazon.default"
+          value: "https://amazon.default"
         - name: DISNEY_HOST
-          value: "http://disney.default"
+          value: "https://disney.default"
         - name: IMDB_HOST
-          value: "http://imdb.default"
+          value: "https://imdb.default"
 ---
 apiVersion: v1
 kind: Service
@@ -252,6 +273,10 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -280,11 +305,11 @@ spec:
         - containerPort: 80
         env:
         - name: SEARCH_HOST
-          value: "http://search.default"
+          value: "https://search.default"
         - name: USERS_HOST
-          value: "http://users.default"
+          value: "https://users.default"
         - name: PREFS_HOST
-          value: "http://prefs.default"
+          value: "https://prefs.default"
 ---
 apiVersion: v1
 kind: Service
@@ -298,6 +323,10 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
 kind: Deployment
@@ -337,6 +366,10 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
 kind: Deployment
@@ -365,11 +398,11 @@ spec:
         - containerPort: 80
         env:
         - name: MOVIES_HOST
-          value: "http://movies.default"
+          value: "https://movies.default"
         - name: SERIES_HOST
-          value: "http://series.default"
+          value: "https://series.default"
         - name: BOOKS_HOST
-          value: "http://books.default"
+          value: "https://books.default"
 ---
 apiVersion: v1
 kind: Service
@@ -383,6 +416,10 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
 kind: Deployment
@@ -422,6 +459,10 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
 kind: Deployment
@@ -461,6 +502,10 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
 kind: Deployment
@@ -500,3 +545,7 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
