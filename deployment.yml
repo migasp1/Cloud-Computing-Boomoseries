@@ -1,67 +1,34 @@
----
-apiVersion: "v1"
-kind: "ConfigMap"
-metadata:
-  name: "boomoseries-api"
-  namespace: "default"
-  labels:
-    app: "boomoseries"
-data:
-  DISNEY_HOST: "disney"
-  SERIES_HOST: "series"
-  AMAZON_HOST: "amazon"
-  BOOKS_HOST: "books"
-  IMDB_HOST: "imdb"
-  MOVIES_HOST: "movies"
-  ORCHAUTH_HOST: "orchauth"
-  PREFS_HOST: "prefs"
-  SEARCH_HOST: "search"
-  USERS_HOST: "users"
-  GOODREADS_HOST: "goodreads"
-  NETFLIX_HOST: "netflix"
-  
----
 apiVersion: "apps/v1"
-kind: "Deployment"
+kind: Deployment
 metadata:
-  name: "disney"
-  namespace: "default"
+  name: disney
+  namespace: default
   labels:
-    app: "disney"
+    app: disney
 spec:
   strategy:
     type: Recreate
   replicas: 2
   selector:
     matchLabels:
-      app: "disney"
+      app: disney
   template:
     metadata:
       labels:
-        app: "disney"
+        app: disney
     spec:
       serviceAccountName: default
-#      terminationGracePeriodSeconds: 5
       containers:
-      - name: "disney"
+      - name: disney
         image: "eu.gcr.io/boomoseries-api/disneymicroservice"
         ports:
         - containerPort: 80
-#        readinessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50052"]
-#        livenessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50052"]
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: disney
 spec:
-  #  type: ClusterIP
   selector:
     app: disney
   ports:
@@ -69,57 +36,52 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
+  
 ---
 apiVersion: "apps/v1"
-kind: "Deployment"
+kind: Deployment
 metadata:
-  name: "series"
-  namespace: "default"
+  name: series
+  namespace: default
   labels:
-    app: "series"
+    app: series
 spec:
   strategy:
     type: Recreate
   replicas: 2
   selector:
     matchLabels:
-      app: "series"
+      app: series
   template:
     metadata:
       labels:
-        app: "series"
+        app: series
     spec:
       serviceAccountName: default
-#      terminationGracePeriodSeconds: 5
       containers:
-      - name: "series"
+      - name: series
         image: "eu.gcr.io/boomoseries-api/seriesmicroservice"
         ports:
         - containerPort: 80
-#        readinessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50055"]
-#        livenessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50055"]
         env:
-        - name: "NETFLIX_HOST"
-          value: http://netflix.default
-        - name: "AMAZON_HOST"
-          value: http://amazon.default
-        - name: "DISNEY_HOST"
-          value: http://disney.default
-        - name: "IMDB_HOST"
-          value: http://imdb.default
+        - name: NETFLIX_HOST
+          value: "https://netflix.default"
+        - name: AMAZON_HOST
+          value: "https://amazon.default"
+        - name: DISNEY_HOST
+          value: "https://disney.default"
+        - name: IMDB_HOST
+          value: "https://imdb.default"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: series
 spec:
-  #  type: ClusterIP
   selector:
     app: series
   ports:
@@ -127,48 +89,42 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
-kind: "Deployment"
+kind: Deployment
 metadata:
-  name: "amazon"
-  namespace: "default"
+  name: amazon
+  namespace: default
   labels:
-    app: "amazon"
+    app: amazon
 spec:
   strategy:
     type: Recreate
   replicas: 2
   selector:
     matchLabels:
-      app: "amazon"
+      app: amazon
   template:
     metadata:
       labels:
-        app: "amazon"
+        app: amazon
     spec:
       serviceAccountName: default
-#      terminationGracePeriodSeconds: 5
       containers:
-      - name: "amazon"
+      - name: amazon
         image: "eu.gcr.io/boomoseries-api/amazonmicroservice"
         ports:
         - containerPort: 80
-#        readinessProbe:
-#          periodSeconds: 5
-#          exec:
-#           command: ["/bin/grpc_health_probe", "-addr=:50051"]
-#        livenessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50051"]
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: amazon
 spec:
-  #  type: ClusterIP
   selector:
     app: amazon
   ports:
@@ -176,51 +132,45 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
-kind: "Deployment"
+kind: Deployment
 metadata:
-  name: "books"
-  namespace: "default"
+  name: books
+  namespace: default
   labels:
-    app: "books"
+    app: books
 spec:
   strategy:
     type: Recreate
   replicas: 2
   selector:
     matchLabels:
-      app: "books"
+      app: books
   template:
     metadata:
       labels:
-        app: "books"
+        app: books
     spec:
       serviceAccountName: default
-#      terminationGracePeriodSeconds: 5
       containers:
-      - name: "books"
+      - name: books
         image: "eu.gcr.io/boomoseries-api/booksmicroservice"
         ports:
         - containerPort: 80
-#        readinessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50055"]
-#        livenessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50055"]
         env:
-        - name: "GOODREADS_HOST"
-          value: http://goodreads.default
+        - name: GOODREADS_HOST
+          value: "https://goodreads.default"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: books
 spec:
-  #  type: ClusterIP
   selector:
     app: books
   ports:
@@ -228,48 +178,42 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
 kind: "Deployment"
 metadata:
-  name: "imdb"
-  namespace: "default"
+  name: imdb
+  namespace: default
   labels:
-    app: "imdb"
+    app: imdb
 spec:
   strategy:
     type: Recreate
   replicas: 2
   selector:
     matchLabels:
-      app: "imdb"
+      app: imdb
   template:
     metadata:
       labels:
-        app: "imdb"
+        app: imdb
     spec:
       serviceAccountName: default
-#      terminationGracePeriodSeconds: 5
       containers:
-      - name: "imdb"
+      - name: imdb
         image: "eu.gcr.io/boomoseries-api/imdbmicroservice"
         ports:
         - containerPort: 80
-#        readinessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50050"]
-#        livenessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50050"]
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: imdb
 spec:
-  #  type: ClusterIP
   selector:
     app: imdb
   ports:
@@ -277,57 +221,51 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
-kind: "Deployment"
+kind: Deployment
 metadata:
-  name: "movies"
-  namespace: "default"
+  name: movies
+  namespace: default
   labels:
-    app: "movies"
+    app: movies
 spec:
   strategy:
     type: Recreate
   replicas: 2
   selector:
     matchLabels:
-      app: "movies"
+      app: movies
   template:
     metadata:
       labels:
-        app: "movies"
+        app: movies
     spec:
       serviceAccountName: default
-#      terminationGracePeriodSeconds: 5
       containers:
-      - name: "movies"
+      - name: movies
         image: "eu.gcr.io/boomoseries-api/moviesmicroservice"
         ports:
         - containerPort: 80
-#        readinessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50053"]
-#        livenessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50053"]
         env:
-        - name: "NETFLIX_HOST"
-          value: http://netflix.default
-        - name: "AMAZON_HOST"
-          value: http://amazon.default
-        - name: "DISNEY_HOST"
-          value: http://disney.default
-        - name: "IMDB_HOST"
-          value: http://imdb.default
+        - name: NETFLIX_HOST
+          value: "https://netflix.default"
+        - name: AMAZON_HOST
+          value: "https://amazon.default"
+        - name: DISNEY_HOST
+          value: "https://disney.default"
+        - name: IMDB_HOST
+          value: "https://imdb.default"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: movies
 spec:
-  #  type: ClusterIP
   selector:
     app: movies
   ports:
@@ -335,55 +273,49 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
-apiVersion: "apps/v1"
-kind: "Deployment"
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: "orchauth"
-  namespace: "default"
+  name: orchauth
+  namespace: default
   labels:
-    app: "orchauth"
+    app: orchauth
 spec:
   strategy:
     type: Recreate
   replicas: 2
   selector:
     matchLabels:
-      app: "orchauth"
+      app: orchauth
   template:
     metadata:
       labels:
-        app: "orchauth"
+        app: orchauth
     spec:
       serviceAccountName: default
-#      terminationGracePeriodSeconds: 5
       containers:
-      - name: "orchauth"
+      - name: orchauth
         image: "eu.gcr.io/boomoseries-api/orchmicroservice"
         ports:
         - containerPort: 80
-#        readinessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50053"]
-#        livenessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50053"]
         env:
-        - name: "SEARCH_HOST"
-          value: http://search.default
-        - name: "USERS_HOST"
-          value: http://users.default
-        - name: "PREFS_HOST"
-          value: http://prefs.default
+        - name: SEARCH_HOST
+          value: "https://search.default"
+        - name: USERS_HOST
+          value: "https://users.default"
+        - name: PREFS_HOST
+          value: "https://prefs.default"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: orchauth
 spec:
-  #  type: ClusterIP
   selector:
     app: orchauth
   ports:
@@ -391,48 +323,42 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
-kind: "Deployment"
+kind: Deployment
 metadata:
-  name: "prefs"
-  namespace: "default"
+  name: prefs
+  namespace: default
   labels:
-    app: "prefs"
+    app: prefs
 spec:
   strategy:
     type: Recreate
   replicas: 2
   selector:
     matchLabels:
-      app: "prefs"
+      app: prefs
   template:
     metadata:
       labels:
-        app: "prefs"
+        app: prefs
     spec:
       serviceAccountName: default
-#      terminationGracePeriodSeconds: 5
       containers:
-      - name: "prefs"
+      - name: prefs
         image: "eu.gcr.io/boomoseries-api/prefsmicroservice"
         ports:
         - containerPort: 80
-#        readinessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50050"]
-#        livenessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50050"]
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: prefs
 spec:
-  #  type: ClusterIP
   selector:
     app: prefs
   ports:
@@ -440,55 +366,49 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
-kind: "Deployment"
+kind: Deployment
 metadata:
-  name: "search"
-  namespace: "default"
+  name: search
+  namespace: default
   labels:
-    app: "search"
+    app: search
 spec:
   strategy:
     type: Recreate
   replicas: 2
   selector:
     matchLabels:
-      app: "search"
+      app: search
   template:
     metadata:
       labels:
-        app: "search"
+        app: search
     spec:
       serviceAccountName: default
-#      terminationGracePeriodSeconds: 5
       containers:
-      - name: "search"
+      - name: search
         image: "eu.gcr.io/boomoseries-api/searchmicroservice"
         ports:
         - containerPort: 80
-#        readinessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50053"]
-#        livenessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50053"]
         env:
-        - name: "MOVIES_HOST"
-          value: http://movies.default
-        - name: "SERIES_HOST"
-          value: http://series.default
-        - name: "BOOKS_HOST"
-          value: http://books.default
+        - name: MOVIES_HOST
+          value: "https://movies.default"
+        - name: SERIES_HOST
+          value: "https://series.default"
+        - name: BOOKS_HOST
+          value: "https://books.default"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: search
 spec:
-  #  type: ClusterIP
   selector:
     app: search
   ports:
@@ -496,48 +416,42 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
-kind: "Deployment"
+kind: Deployment
 metadata:
   name: "users"
-  namespace: "default"
+  namespace: default
   labels:
-    app: "users"
+    app: users
 spec:
   strategy:
     type: Recreate
   replicas: 2
   selector:
     matchLabels:
-      app: "users"
+      app: users
   template:
     metadata:
       labels:
-        app: "users"
+        app: users
     spec:
       serviceAccountName: default
-#      terminationGracePeriodSeconds: 5
       containers:
-      - name: "users"
+      - name: users
         image: "eu.gcr.io/boomoseries-api/usersmicroservice"
         ports:
         - containerPort: 80
-#        readinessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50050"]
-#        livenessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50050"]
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: users
 spec:
-  #  type: ClusterIP
   selector:
     app: users
   ports:
@@ -545,48 +459,42 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
-kind: "Deployment"
+kind: Deployment
 metadata:
-  name: "goodreads"
-  namespace: "default"
+  name: goodreads
+  namespace: default
   labels:
-    app: "goodreads"
+    app: goodreads
 spec:
   strategy:
     type: Recreate
   replicas: 2
   selector:
     matchLabels:
-      app: "goodreads"
+      app: goodreads
   template:
     metadata:
       labels:
-        app: "goodreads"
+        app: goodreads
     spec:
       serviceAccountName: default
-#      terminationGracePeriodSeconds: 5
       containers:
-      - name: "goodreads"
+      - name: goodreads
         image: "eu.gcr.io/boomoseries-api/goodreadsmicroservice"
         ports:
         - containerPort: 80
-#        readinessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50050"]
-#        livenessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50050"]
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: goodreads
 spec:
-  #  type: ClusterIP
   selector:
     app: goodreads
   ports:
@@ -594,48 +502,42 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: "apps/v1"
-kind: "Deployment"
+kind: Deployment
 metadata:
-  name: "netflix"
-  namespace: "default"
+  name: netflix
+  namespace: default
   labels:
-    app: "netflix"
+    app: netflix
 spec:
   strategy:
     type: Recreate
   replicas: 2
   selector:
     matchLabels:
-      app: "netflix"
+      app: netflix
   template:
     metadata:
       labels:
-        app: "netflix"
+        app: netflix
     spec:
       serviceAccountName: default
-#      terminationGracePeriodSeconds: 5
       containers:
-      - name: "netflix"
+      - name: netflix
         image: "eu.gcr.io/boomoseries-api/netflixmicroservice"
         ports:
         - containerPort: 80
-#        readinessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50050"]
-#        livenessProbe:
-#          periodSeconds: 5
-#          exec:
-#            command: ["/bin/grpc_health_probe", "-addr=:50050"]
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: netflix
 spec:
-  #  type: ClusterIP
   selector:
     app: netflix
   ports:
@@ -643,3 +545,7 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
