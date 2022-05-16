@@ -13,13 +13,6 @@ namespace boomoseries_Search_api.Helpers
                 Environment.GetEnvironmentVariable("SERIES_HOST"),
                 Environment.GetEnvironmentVariable("BOOKS_HOST"),
             };
-
-            foreach (var u in urls)
-            {
-                Debug.WriteLine(u);
-                Debug.WriteLine("TEST");
-            } 
-
             return urls;
         }
     }

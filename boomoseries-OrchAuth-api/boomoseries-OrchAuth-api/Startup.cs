@@ -4,12 +4,18 @@ using boomoseries_OrchAuth_api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Polly;
+using Polly.Contrib.WaitAndRetry;
+using Polly.Extensions.Http;
+using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,12 +33,24 @@ namespace boomoseries_OrchAuth_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
-            services.AddScoped<IUsersCommunicationService, UsersRESTCommunicationService>();
-            services.AddScoped<IUserPreferencesService, UserPreferencesService>();
-            services.AddScoped<ISearchCommunicationServiceBooks, SearchRESTComunicationServiceBooks>();
-            services.AddScoped<ISearchCommunicationServiceWatchables, SearchRESTCommunicationServiceWatchables>();
+            services.AddHttpClient<ISearchCommunicationServiceWatchables, SearchRESTCommunicationServiceWatchables>("Watchables")
+                 .SetHandlerLifetime(TimeSpan.FromMinutes(1))
+                 .AddPolicyHandler(GetRetryPolicy())
+                 .AddPolicyHandler(GetCircuitBreakerPolicy());
+            services.AddHttpClient<IUsersCommunicationService, UsersRESTCommunicationService>("Users")
+                 .SetHandlerLifetime(TimeSpan.FromMinutes(1))
+                 .AddPolicyHandler(GetRetryPolicy())
+                 .AddPolicyHandler(GetCircuitBreakerPolicy());
+            services.AddHttpClient<IUserPreferencesService, UserPreferencesService>("UserPreferences")
+                 .SetHandlerLifetime(TimeSpan.FromMinutes(1))
+                 .AddPolicyHandler(GetRetryPolicy())
+                 .AddPolicyHandler(GetCircuitBreakerPolicy());
+            services.AddHttpClient<ISearchCommunicationServiceBooks, SearchRESTComunicationServiceBooks>("Books")
+                 .SetHandlerLifetime(TimeSpan.FromMinutes(1))
+                 .AddPolicyHandler(GetRetryPolicy())
+                 .AddPolicyHandler(GetCircuitBreakerPolicy());
+
             // Auto Mapper Configurations
             var mapperConfig = new MapperConfiguration(mc =>
             {
@@ -130,6 +148,22 @@ namespace boomoseries_OrchAuth_api
             {
                 endpoints.MapControllers();
             });
+        }
+        static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        {
+            Random jitterer = new ();
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+                .WaitAndRetryAsync(2, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))  // exponential back-off: 2, 4, 8 etc
+                    + TimeSpan.FromMilliseconds(jitterer.Next(0, 1000))); // plus some jitter: up to 1 second);
+        }
+
+        static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+        {
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .CircuitBreakerAsync(2, TimeSpan.FromSeconds(30));
         }
     }
 }

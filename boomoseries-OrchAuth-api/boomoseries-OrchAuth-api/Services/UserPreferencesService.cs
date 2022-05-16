@@ -13,8 +13,16 @@ namespace boomoseries_OrchAuth_api.Services
 {
     public class UserPreferencesService : IUserPreferencesService
     {
-        private static readonly HttpClient httpClient = new();
+        private readonly HttpClient httpClient;
         private static readonly string _userPreferencesBaseURL = Environment.GetEnvironmentVariable("PREFS_HOST");
+        //private static readonly string _userPreferencesBaseURL = "http://host.docker.internal:5024/UserPreferences/Favorites";
+
+        public UserPreferencesService(
+            HttpClient httpClient
+            )
+        {
+            this.httpClient = httpClient;
+        }
 
         public async Task<string> GetFavoriteWatchables(int id)
         {

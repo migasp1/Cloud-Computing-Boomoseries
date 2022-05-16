@@ -11,13 +11,21 @@ namespace boomoseries_OrchAuth_api.Services
 {
     public class UsersRESTCommunicationService : IUsersCommunicationService
     {
-        private static readonly HttpClient _httpClient = new();
+        //private static readonly string _usersBaseURL = "http://host.docker.internal:5020/Users";
         private static readonly string _usersBaseURL = Environment.GetEnvironmentVariable("USERS_HOST");
+        private readonly HttpClient httpClient;
+
+        public UsersRESTCommunicationService(
+            HttpClient httpClient
+            )
+        {
+            this.httpClient = httpClient;
+        }
 
         public async Task<HttpResponseMessage> AuthenticateUser(AuthenticateModel authenticateModel)
         {
             JsonContent content = JsonContent.Create(authenticateModel);
-            var response = await _httpClient.PostAsync(_usersBaseURL + "/authenticate", content);
+            var response = await httpClient.PostAsync(_usersBaseURL + "/authenticate", content);
 
             return response;
         }
@@ -25,14 +33,14 @@ namespace boomoseries_OrchAuth_api.Services
         public async Task<HttpResponseMessage> RegisterUser(RegisterModel registerModel)
         {
             JsonContent content = JsonContent.Create(registerModel);
-            var response = await _httpClient.PostAsync(_usersBaseURL + "/register", content);
+            var response = await httpClient.PostAsync(_usersBaseURL + "/register", content);
 
             return response;
         }
 
         public async Task<User> GetUserById(int id)
         {
-            var request = _httpClient.GetAsync(_usersBaseURL + "/" + id);
+            var request = httpClient.GetAsync(_usersBaseURL + "/" + id);
             var response = request.Result;
             var responseString = await response.Content.ReadAsStringAsync();
             User user = JsonConvert.DeserializeObject<User>(responseString);
