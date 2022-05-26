@@ -13,21 +13,16 @@ namespace boomoseries_Search_api.Services.RESTCommunication
     public class RESTMoviesCommunicationService : ICommunicationServiceMovies
     {
         private static readonly string[] microservicesBaseURL = URLHelper.GetMicroservicesBaseURL();
-        private static readonly HttpClient httpClient = new();
-        public RESTMoviesCommunicationService()
+        private readonly HttpClient httpClient;
+        public RESTMoviesCommunicationService(HttpClient httpClient)
         {
+            this.httpClient = httpClient;
         }
 
         public async Task<List<MovieDTO>> ObtainRandomMovies()
         {
-            //Makes the requests to different microservices
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
             var request = httpClient.GetAsync(microservicesBaseURL[0] + "/random");
 
-            //Wait for all the requests to finish
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var response = request.Result;
             List<MovieDTO> movieDTOs = new();
@@ -42,13 +37,8 @@ namespace boomoseries_Search_api.Services.RESTCommunication
 
         public async Task<List<MovieDTO>> ObtainSepcificMovie(string movie_title)
         {
-            //Makes the requests to different microservices
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
             var request = httpClient.GetAsync(microservicesBaseURL[0] + "/" + movie_title);
-            //Wait for all the requests to finish
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
+
             //Get the responses
             var response = request.Result;
             List<MovieDTO> movieDTOs = new();
@@ -63,12 +53,9 @@ namespace boomoseries_Search_api.Services.RESTCommunication
 
         public async Task<List<MovieDTO>> GetMoviesByRating(double minRating)
         {
-            Stopwatch stopwatch = new();
-            stopwatch.Start();
+
             var request = httpClient.GetAsync(microservicesBaseURL[0] + "?minRating=" + minRating);
-            //Wait for all the requests to finish
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
+
             //Get the responses
             var response = request.Result;
             List<MovieDTO> movieDTOs = new();

@@ -13,22 +13,19 @@ namespace boomoseries_Search_api.Services.RESTCommunication
     public class RESTBooksCommunicationService : ICommunicationServiceBooks
     {
         private static readonly string[] microservicesBaseURL = URLHelper.GetMicroservicesBaseURL();
-        private static readonly HttpClient httpClient = new();
+        private readonly HttpClient httpClient;
 
-        public RESTBooksCommunicationService()
+        public RESTBooksCommunicationService(HttpClient httpClient)
         {
+            this.httpClient = httpClient;
         }
 
         public async Task<List<BookDTO>> ObtainRandomBooks()
         {
             List<BookDTO> booksDtos = new();
-            //Makes the requests to different microservices
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+
             var request = httpClient.GetAsync(microservicesBaseURL[2] + "/random");
 
-            stopwatch.Stop();
-            System.Diagnostics.Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var response = request.Result;
 
@@ -44,13 +41,9 @@ namespace boomoseries_Search_api.Services.RESTCommunication
         public async Task<List<BookDTO>> ObtainSpecificBook(string book_title)
         {
             List<BookDTO> booksDtos = new();
-            //Makes the requests to different microservices
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+
             var request = httpClient.GetAsync(microservicesBaseURL[2] + "/" + book_title);
 
-            stopwatch.Stop();
-            System.Diagnostics.Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var response = request.Result;
 
@@ -66,13 +59,9 @@ namespace boomoseries_Search_api.Services.RESTCommunication
         public async Task<List<BookDTO>> ObtainBooksByRating(double min_rating)
         {
             List<BookDTO> booksDtos = new();
-            //Makes the requests to different microservices
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+
             var request = httpClient.GetAsync(microservicesBaseURL[2] + "?min_rating=" + min_rating);
 
-            stopwatch.Stop();
-            System.Diagnostics.Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var response = request.Result;
 

@@ -33,9 +33,18 @@ namespace boomoseries_Search_api
         {
 
             services.AddControllers();
-            services.AddSingleton<ICommunicationServiceMovies, RESTMoviesCommunicationService>();
-            services.AddSingleton<ICommunicationServiceSeries, RESTSeriesCommunicationService>();
-            services.AddSingleton<ICommunicationServiceBooks, RESTBooksCommunicationService>();
+            services.AddHttpClient<ICommunicationServiceMovies, RESTMoviesCommunicationService>("Movies")
+                 .SetHandlerLifetime(TimeSpan.FromMinutes(1))
+                 .AddPolicyHandler(GetRetryPolicy())
+                 .AddPolicyHandler(GetCircuitBreakerPolicy());
+            services.AddHttpClient<ICommunicationServiceSeries, RESTSeriesCommunicationService>("Series")
+                 .SetHandlerLifetime(TimeSpan.FromMinutes(1))
+                 .AddPolicyHandler(GetRetryPolicy())
+                 .AddPolicyHandler(GetCircuitBreakerPolicy());
+            services.AddHttpClient<ICommunicationServiceBooks, RESTBooksCommunicationService>("Books")
+                 .SetHandlerLifetime(TimeSpan.FromMinutes(1))
+                 .AddPolicyHandler(GetRetryPolicy())
+                 .AddPolicyHandler(GetCircuitBreakerPolicy());
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "boomoseries_Search_api", Version = "v1" });
