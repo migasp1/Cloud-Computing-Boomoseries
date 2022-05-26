@@ -12,22 +12,19 @@ namespace boomoseries_Books_api.Services.REST_Communication
     public class RESTCommunicationService : ICommunicationService
     {
         private static readonly string microservicesBaseURL = URLHelper.GetMicroservicesBaseURL();
-        private static readonly HttpClient httpClient = new();
+        private readonly HttpClient httpClient;
 
-        public RESTCommunicationService()
+        public RESTCommunicationService(HttpClient httpClient)
         {
+            this.httpClient = httpClient;   
         }
 
         public async Task<List<BookDTO>> ObtainRandomBooks()
         {
             List<BookDTO> booksDtos = new();
-            //Makes the requests to different microservices
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+           
             var request = httpClient.GetAsync(microservicesBaseURL + "/random");
 
-            stopwatch.Stop();
-            System.Diagnostics.Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var response = request.Result;
 
@@ -43,14 +40,9 @@ namespace boomoseries_Books_api.Services.REST_Communication
         public async Task<List<BookDTO>> ObtainSpecificBook(string bookTitle)
         {
             List<BookDTO> booksDtos = new();
-            //Makes the requests to different microservices
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+           
             var request = httpClient.GetAsync(microservicesBaseURL + "/" + bookTitle);
 
-            //Wait for all the requests to finish
-            stopwatch.Stop();
-            System.Diagnostics.Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var response = request.Result;
 
@@ -61,20 +53,15 @@ namespace boomoseries_Books_api.Services.REST_Communication
             BookDTO deserializedBook = JsonConvert.DeserializeObject<BookDTO>(responseString);
             booksDtos.Add(deserializedBook);
 
-
             return booksDtos;
         }
 
         public async Task<List<BookDTO>> ObtainBooksByRating(double min_rating)
         {
             List<BookDTO> booksDtos = new();
-            Stopwatch stopwatch = new();
-            stopwatch.Start();
+           
             var request = httpClient.GetAsync(microservicesBaseURL + "?min_rating=" + min_rating);
 
-            //Wait for all the requests to finish
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var response = request.Result;
             var responseString = await response.Content.ReadAsStringAsync();
@@ -83,8 +70,6 @@ namespace boomoseries_Books_api.Services.REST_Communication
             {
                 booksDtos.Add(item);
             }
-
-            
 
             return booksDtos;
         }

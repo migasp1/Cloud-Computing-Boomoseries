@@ -6,7 +6,8 @@ namespace boomoseries_Books_api.Helpers
     {
         public static string GetMicroservicesBaseURL()
         {
-            return Environment.GetEnvironmentVariable("GOODREADS_HOST");
+            //Environment.GetEnvironmentVariable("GOODREADS_HOST");
+            return "http://host.docker.internal:5012/api/v1/GoodReads";
         }
     }
 }
