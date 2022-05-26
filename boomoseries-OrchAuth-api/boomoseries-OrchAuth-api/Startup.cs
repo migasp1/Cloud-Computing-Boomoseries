@@ -163,7 +163,7 @@ namespace boomoseries_OrchAuth_api
         {
             return HttpPolicyExtensions
                 .HandleTransientHttpError()
-                .CircuitBreakerAsync(2, TimeSpan.FromSeconds(30));
+                .CircuitBreakerAsync(2, TimeSpan.FromSeconds(10));
         }
     }
 }

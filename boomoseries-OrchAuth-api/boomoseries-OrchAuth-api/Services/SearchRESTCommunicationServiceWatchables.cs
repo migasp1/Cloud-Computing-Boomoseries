@@ -23,11 +23,6 @@ namespace boomoseries_OrchAuth_api.Services
         public async Task<List<WatchableDTO>> GetWatchblesByRating(string type, double minRating)
         {
             var response = await httpClient.GetAsync(microserviceBaseURL + "?type=" + type + "&minRating=" + minRating);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception("Service is currently unavailable");
-            }
             
             List<WatchableDTO> watchableDTOs = new();
             var responseString = await response.Content.ReadAsStringAsync();
@@ -43,10 +38,7 @@ namespace boomoseries_OrchAuth_api.Services
         public async Task<List<WatchableDTO>> ObtainSepcificWatchables(string type, string watchable_title)
         {
             var response = await httpClient.GetAsync(microserviceBaseURL + "/" + watchable_title + "?type=" + type);
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception("Service is currently unavailable");
-            }
+            
             List<WatchableDTO> watchableDTOs = new();
             var responseString = await response.Content.ReadAsStringAsync();
             List<WatchableDTO> deserializedSerie = JsonConvert.DeserializeObject<List<WatchableDTO>>(responseString);
@@ -60,10 +52,7 @@ namespace boomoseries_OrchAuth_api.Services
         public async Task<List<WatchableDTO>> ObtainRandomWatchable(string type)
         {
             var response = await httpClient.GetAsync(microserviceBaseURL + "/random" + "?type=" + type);
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception("Service is currently unavailable");
-            }
+           
             List<WatchableDTO> watchableDTOs = new();
             var responseString = await response.Content.ReadAsStringAsync();
             List<WatchableDTO> deserializedMovie = JsonConvert.DeserializeObject<List<WatchableDTO>>(responseString);
