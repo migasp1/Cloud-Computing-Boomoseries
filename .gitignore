@@ -452,3 +452,6 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+/ingress-deploy.yml.bak
+/docker-compose.yml.bak
+/deployment.yml.bak

@@ -16,24 +16,25 @@ namespace boomoseries_Movies_api.Services.REST_Communication
     public class RESTCommunicationService : ICommunicationService
     {
         private static readonly string[] microservicesBaseURL = URLHelper.GetMicroservicesBaseURL();
-        private static readonly string IMDBBaseUrl = Environment.GetEnvironmentVariable("IMDB_HOST");
-        private static readonly HttpClient httpClient = new();
+        private static readonly string IMDBBaseUrl = "http://host.docker.internal:5002/api/v1/IMDB";
+        //private static readonly string IMDBBaseUrl = Environment.GetEnvironmentVariable("IMDB_HOST");
+        private readonly HttpClient httpClient;
 
-        public RESTCommunicationService()
+        public RESTCommunicationService(
+            HttpClient httpClient
+            )
         {
+            this.httpClient = httpClient;
         }
 
         public async Task<List<MovieDTO>> ObtainRandomMovies()
         {
             //Makes the requests to different microservices
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
             var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url + "/random")).ToList();
 
             //Wait for all the requests to finish
             await Task.WhenAll(requests);
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
+
             //Get the responses
             var responses = requests.Select(task => task.Result);
             List<MovieDTO> movieDtos = new();
@@ -88,22 +89,16 @@ namespace boomoseries_Movies_api.Services.REST_Communication
             }
 
             var results = movieDtos.GroupBy(m => m.Platform).SelectMany(series => series).ToList();
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             return results;
         }
 
         public async Task<List<MovieDTO>> ObtainSepcificMovie(string movieTitle)
         {
             //Makes the requests to different microservices
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
             var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url + "/" + movieTitle)).ToList();
 
             //Wait for all the requests to finish
             await Task.WhenAll(requests);
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var responses = requests.Select(task => task.Result);
             List<MovieDTO> movieDTOs = new();
@@ -155,23 +150,18 @@ namespace boomoseries_Movies_api.Services.REST_Communication
             }
 
             var results = movieDTOs.GroupBy(m => m.Platform).SelectMany(series => series).ToList();
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             return results;
         }
 
-        [HttpGet("movies")]
         public async Task<List<MovieDTO>> GetMoviesByRating(double min_rating)
         {
             List<MovieDTO> movieDtos = new();
-            Stopwatch stopwatch = new();
-            stopwatch.Start();
+
             var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url + "?min_rating=" + min_rating)).ToList();
 
             //Wait for all the requests to finish
             await Task.WhenAll(requests);
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
+
             //Get the responses
             var responses = requests.Select(task => task.Result);
             foreach (var response in responses)
@@ -225,8 +215,6 @@ namespace boomoseries_Movies_api.Services.REST_Communication
             }
 
             var results = movieDtos.GroupBy(m => m.Platform).SelectMany(series => series).ToList();
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             return results;
         }
     }

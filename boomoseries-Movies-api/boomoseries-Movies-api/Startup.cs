@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,6 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Polly;
+using Polly.Extensions.Http;
 
 namespace boomoseries_Movies_api
 {
@@ -30,6 +33,10 @@ namespace boomoseries_Movies_api
         {
 
             services.AddControllers();
+            services.AddHttpClient<ICommunicationService, RESTCommunicationService>("MovieService")
+                 .SetHandlerLifetime(TimeSpan.FromMinutes(1))
+                 .AddPolicyHandler(GetRetryPolicy())
+                 .AddPolicyHandler(GetCircuitBreakerPolicy());
             services.AddSingleton<ICommunicationService, RESTCommunicationService>();
             services.AddSwaggerGen(c =>
             {
@@ -57,6 +64,23 @@ namespace boomoseries_Movies_api
             {
                 endpoints.MapControllers();
             });
+        }
+
+        static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        {
+            Random jitterer = new();
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+                .WaitAndRetryAsync(2, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))  // exponential back-off: 2, 4, 8 etc
+                    + TimeSpan.FromMilliseconds(jitterer.Next(0, 1000))); // plus some jitter: up to 1 second);
+        }
+
+        static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+        {
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .CircuitBreakerAsync(2, TimeSpan.FromSeconds(10));
         }
     }
 }
