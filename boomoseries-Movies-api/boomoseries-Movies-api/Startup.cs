@@ -37,7 +37,6 @@ namespace boomoseries_Movies_api
                  .SetHandlerLifetime(TimeSpan.FromMinutes(1))
                  .AddPolicyHandler(GetRetryPolicy())
                  .AddPolicyHandler(GetCircuitBreakerPolicy());
-            services.AddSingleton<ICommunicationService, RESTCommunicationService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "boomoseries_Movies_api", Version = "v1" });

@@ -16,24 +16,24 @@ namespace bomoseries_Series_api.Services.REST_Communication
     public class RESTCommunicationService : ICommunicationService
     {
         private static readonly string[] microservicesBaseURL = URLHelper.GetMicroservicesBaseURL();
-        private static readonly string IMDBBaseUrl = Environment.GetEnvironmentVariable("IMDB_HOST");
-        private static readonly HttpClient httpClient = new();
+        private static readonly string IMDBBaseUrl = "http://host.docker.internal:5002/api/v1/IMDB";
+        //private static readonly string IMDBBaseUrl = Environment.GetEnvironmentVariable("IMDB_HOST");
+        private readonly HttpClient httpClient;
 
-        public RESTCommunicationService()
+        public RESTCommunicationService(
+            HttpClient httpClient
+            )
         {
+            this.httpClient = httpClient;
         }
 
         public async Task<List<SerieDTO>> ObtainRandomSeries()
         {
             //Makes the requests to different microservices
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
             var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url + "/random")).ToList();
 
             //Wait for all the requests to finish
             await Task.WhenAll(requests);
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var responses = requests.Select(task => task.Result);
             List<SerieDTO> SeriesDtos = new();
@@ -88,22 +88,16 @@ namespace bomoseries_Series_api.Services.REST_Communication
             }
 
             var results = SeriesDtos.GroupBy(m => m.Platform).SelectMany(series => series).ToList();
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             return results;
         }
 
         public async Task<List<SerieDTO>> ObtainSepcificSeries(string seriesTitle)
         {
             //Makes the requests to different microservices
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
             var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url + "/" + seriesTitle)).ToList();
 
             //Wait for all the requests to finish
             await Task.WhenAll(requests);
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             //Get the responses
             var responses = requests.Select(task => task.Result);
             List<SerieDTO> SeriesDtos = new();
@@ -155,16 +149,12 @@ namespace bomoseries_Series_api.Services.REST_Communication
             }
 
             var results = SeriesDtos.GroupBy(m => m.Platform).SelectMany(series => series).ToList();
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             return results;
         }
 
         public async Task<List<SerieDTO>> GetSeriesByRating(double min_rating)
         {
             List<SerieDTO> SeriesDtos = new();
-            Stopwatch stopwatch = new();
-            stopwatch.Start();
             var requests = microservicesBaseURL.Select(url => httpClient.GetAsync(url + "?min_rating=" + min_rating)).ToList();
 
             //Wait for all the requests to finish
@@ -224,8 +214,6 @@ namespace bomoseries_Series_api.Services.REST_Communication
             }
             
             var results = SeriesDtos.GroupBy(m => m.Platform).SelectMany(series => series).ToList();
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds);
             return results;
         }
     }
