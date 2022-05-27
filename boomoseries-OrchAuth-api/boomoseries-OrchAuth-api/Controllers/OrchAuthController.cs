@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using boomoseries_OrchAuth_api.DTOs;
 using boomoseries_OrchAuth_api.Entities;
 using boomoseries_OrchAuth_api.Helpers;
 using boomoseries_OrchAuth_api.Models;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -177,7 +179,12 @@ namespace boomoseries_OrchAuth_api.Controllers
                 try
                 {
                     var responseBody = await _commServiceSearchWatchables.GetWatchblesByRating(type, minRating);
-                    return Ok(responseBody);
+                    if (responseBody is List<WatchableDTO>)
+                    {
+                        List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
+                        return Ok(responseBodyTyped);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {
@@ -189,7 +196,12 @@ namespace boomoseries_OrchAuth_api.Controllers
                 try
                 {
                     var responseBody = await _commServiceSearchWatchables.GetWatchblesByRating(type, minRating);
-                    return Ok(responseBody);
+                    if (responseBody is List<WatchableDTO>)
+                    {
+                        List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
+                        return Ok(responseBodyTyped);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {
@@ -201,11 +213,16 @@ namespace boomoseries_OrchAuth_api.Controllers
                 try
                 {
                     var responseBody = await _commServiceSearchBooks.ObtainBooksByRating(type, minRating);
-                    return Ok(responseBody);
+                    if (responseBody is List<BookDTO>)
+                    {
+                        List<BookDTO> responseBodyTyped = (List<BookDTO>)responseBody;
+                        return Ok(responseBodyTyped);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Oops, something went wrong! error" + ex.ToString());
+                    return BadRequest("Oops, something went wrong! error" + ex.Message);
                 }
             }
             return BadRequest("Oops, something went wrong! Type did not match");
@@ -222,7 +239,12 @@ namespace boomoseries_OrchAuth_api.Controllers
                 try
                 {
                     var responseBody = await _commServiceSearchWatchables.ObtainSepcificWatchables(type, item_title);
-                    return Ok(responseBody);
+                    if (responseBody is List<WatchableDTO>)
+                    {
+                        List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
+                        return Ok(responseBodyTyped);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {
@@ -234,7 +256,12 @@ namespace boomoseries_OrchAuth_api.Controllers
                 try
                 {
                     var responseBody = await _commServiceSearchWatchables.ObtainSepcificWatchables(type, item_title);
-                    return Ok(responseBody);
+                    if (responseBody is List<WatchableDTO>)
+                    {
+                        List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
+                        return Ok(responseBodyTyped);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {
@@ -246,7 +273,12 @@ namespace boomoseries_OrchAuth_api.Controllers
                 try
                 {
                     var responseBody = await _commServiceSearchBooks.ObtainSpecificBook(type, item_title);
-                    return Ok(responseBody);
+                    if (responseBody is List<BookDTO>)
+                    {
+                        List<BookDTO> responseBodyTyped = (List<BookDTO>)responseBody;
+                        return Ok(responseBodyTyped);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {
@@ -267,7 +299,12 @@ namespace boomoseries_OrchAuth_api.Controllers
                 try
                 {
                     var responseBody = await _commServiceSearchWatchables.ObtainRandomWatchable(type);
-                    return Ok(responseBody);
+                    if (responseBody is List<WatchableDTO>)
+                    {
+                        List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
+                        return Ok(responseBodyTyped);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {
@@ -279,7 +316,12 @@ namespace boomoseries_OrchAuth_api.Controllers
                 try
                 {
                     var responseBody = await _commServiceSearchWatchables.ObtainRandomWatchable(type);
-                    return Ok(responseBody);
+                    if (responseBody is List<WatchableDTO>)
+                    {
+                        List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
+                        return Ok(responseBodyTyped);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {
@@ -291,7 +333,12 @@ namespace boomoseries_OrchAuth_api.Controllers
                 try
                 {
                     var responseBody = await _commServiceSearchBooks.ObtainRandomBooks(type);
-                    return Ok(responseBody);
+                    if (responseBody is List<BookDTO>)
+                    {
+                        List<BookDTO> responseBodyTyped = (List<BookDTO>)responseBody;
+                        return Ok(responseBodyTyped);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {

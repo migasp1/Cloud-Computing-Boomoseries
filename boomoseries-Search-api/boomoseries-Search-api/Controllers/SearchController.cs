@@ -1,6 +1,8 @@
-﻿using boomoseries_Search_api.Services;
+﻿using boomoseries_Search_api.DTOs;
+using boomoseries_Search_api.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace boomoseries_Search_api.Controllers
@@ -25,7 +27,12 @@ namespace boomoseries_Search_api.Controllers
                 try
                 {
                     var responseBody = await commServiceMovies.GetMoviesByRating(minRating);
-                    return Ok(responseBody);
+                    if (responseBody is List<MovieDTO>)
+                    {
+                        List<MovieDTO> responseBodyTyped = (List<MovieDTO>)responseBody;
+                        return Ok(responseBody);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {
@@ -37,7 +44,12 @@ namespace boomoseries_Search_api.Controllers
                 try
                 {
                     var responseBody = await commServiceSeries.GetSeriesByRating(minRating);
-                    return Ok(responseBody);
+                    if (responseBody is List<SerieDTO>)
+                    {
+                        List<SerieDTO> responseBodyTyped = (List<SerieDTO>) responseBody;
+                        return Ok(responseBodyTyped);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {
@@ -49,11 +61,16 @@ namespace boomoseries_Search_api.Controllers
                 try
                 {
                     var responseBody = await commServiceBooks.ObtainBooksByRating(minRating);
-                    return Ok(responseBody);
+                    if (responseBody is List<BookDTO>)
+                    {
+                        List<BookDTO> responseBodyTyped = (List<BookDTO>) responseBody;
+                        return Ok(responseBodyTyped);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Oops, something went wrong! error: " + ex.ToString());
+                    return BadRequest("Oops, something went wrong! error: " + ex.Message);
                 }
             }
             return BadRequest("Oops, something went wrong! ");
@@ -67,7 +84,12 @@ namespace boomoseries_Search_api.Controllers
                 try
                 {
                     var responseBody = await commServiceMovies.ObtainSepcificMovie(item_title);
-                    return Ok(responseBody);
+                    if (responseBody is List<MovieDTO>)
+                    {
+                        List<MovieDTO> responseBodyTyped = (List<MovieDTO>)responseBody;
+                        return Ok(responseBody);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {
@@ -79,7 +101,12 @@ namespace boomoseries_Search_api.Controllers
                 try
                 {
                     var responseBody = await commServiceSeries.ObtainSepcificSeries(item_title);
-                    return Ok(responseBody);
+                    if (responseBody is List<SerieDTO>)
+                    {
+                        List<SerieDTO> responseBodyTyped = (List<SerieDTO>)responseBody;
+                        return Ok(responseBodyTyped);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {
@@ -91,11 +118,16 @@ namespace boomoseries_Search_api.Controllers
                 try
                 {
                     var responseBody = await commServiceBooks.ObtainSpecificBook(item_title);
-                    return Ok(responseBody);
+                    if (responseBody is List<BookDTO>)
+                    {
+                        List<BookDTO> responseBodyTyped = (List<BookDTO>)responseBody;
+                        return Ok(responseBody);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Oops, something went wrong! ");
+                    return BadRequest("Oops, something went wrong! " + ex.Message);
                 }
             }
             return BadRequest("Oops, something went wrong! ");
@@ -109,7 +141,12 @@ namespace boomoseries_Search_api.Controllers
                 try
                 {
                     var responseBody = await commServiceMovies.ObtainRandomMovies();
-                    return Ok(responseBody);
+                    if (responseBody is List<MovieDTO>)
+                    {
+                        List<MovieDTO> responseBodyTyped = (List<MovieDTO>)responseBody;
+                        return Ok(responseBody);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {
@@ -121,7 +158,12 @@ namespace boomoseries_Search_api.Controllers
                 try
                 {
                     var responseBody = await commServiceSeries.ObtainRandomSeries();
-                    return Ok(responseBody);
+                    if (responseBody is List<SerieDTO>)
+                    {
+                        List<SerieDTO> responseBodyTyped = (List<SerieDTO>)responseBody;
+                        return Ok(responseBody);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {
@@ -133,7 +175,12 @@ namespace boomoseries_Search_api.Controllers
                 try
                 {
                     var responseBody = await commServiceBooks.ObtainRandomBooks();
-                    return Ok(responseBody);
+                    if (responseBody is List<BookDTO>)
+                    {
+                        List<BookDTO> responseBodyTyped = (List<BookDTO>)responseBody;
+                        return Ok(responseBody);
+                    }
+                    return BadRequest((string)responseBody);
                 }
                 catch (Exception ex)
                 {

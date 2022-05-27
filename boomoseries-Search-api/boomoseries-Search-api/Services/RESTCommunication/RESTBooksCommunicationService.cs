@@ -20,7 +20,7 @@ namespace boomoseries_Search_api.Services.RESTCommunication
             this.httpClient = httpClient;
         }
 
-        public async Task<List<BookDTO>> ObtainRandomBooks()
+        public async Task<object> ObtainRandomBooks()
         {
             List<BookDTO> booksDtos = new();
 
@@ -28,7 +28,10 @@ namespace boomoseries_Search_api.Services.RESTCommunication
 
             //Get the responses
             var response = request.Result;
-
+            if (((int)response.StatusCode == 400))
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
             var responseString = await response.Content.ReadAsStringAsync();
             List<BookDTO> deserializedBook = JsonConvert.DeserializeObject<List<BookDTO>>(responseString);
             foreach (var item in deserializedBook)
@@ -38,7 +41,7 @@ namespace boomoseries_Search_api.Services.RESTCommunication
             return booksDtos;
         }
 
-        public async Task<List<BookDTO>> ObtainSpecificBook(string book_title)
+        public async Task<object> ObtainSpecificBook(string book_title)
         {
             List<BookDTO> booksDtos = new();
 
@@ -46,7 +49,10 @@ namespace boomoseries_Search_api.Services.RESTCommunication
 
             //Get the responses
             var response = request.Result;
-
+            if (((int)response.StatusCode == 400))
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
             var responseString = await response.Content.ReadAsStringAsync();
             List<BookDTO> deserializedBook = JsonConvert.DeserializeObject<List<BookDTO>>(responseString);
             foreach (var item in deserializedBook)
@@ -56,7 +62,7 @@ namespace boomoseries_Search_api.Services.RESTCommunication
             return booksDtos;
         }
 
-        public async Task<List<BookDTO>> ObtainBooksByRating(double min_rating)
+        public async Task<object> ObtainBooksByRating(double min_rating)
         {
             List<BookDTO> booksDtos = new();
 
@@ -64,7 +70,10 @@ namespace boomoseries_Search_api.Services.RESTCommunication
 
             //Get the responses
             var response = request.Result;
-
+            if (((int)response.StatusCode == 400))
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
             var responseString = await response.Content.ReadAsStringAsync();
             List<BookDTO> deserializedBook = JsonConvert.DeserializeObject<List<BookDTO>>(responseString);
             foreach (var item in deserializedBook)

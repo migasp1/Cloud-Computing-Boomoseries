@@ -19,12 +19,16 @@ namespace boomoseries_Search_api.Services.RESTCommunication
             this.httpClient = httpClient;
         }
 
-        public async Task<List<MovieDTO>> ObtainRandomMovies()
+        public async Task<object> ObtainRandomMovies()
         {
             var request = httpClient.GetAsync(microservicesBaseURL[0] + "/random");
 
             //Get the responses
             var response = request.Result;
+            if (((int)response.StatusCode == 400))
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
             List<MovieDTO> movieDTOs = new();
             var responseString = await response.Content.ReadAsStringAsync();
             List<MovieDTO> deserializedMovie = JsonConvert.DeserializeObject<List<MovieDTO>>(responseString);
@@ -35,12 +39,16 @@ namespace boomoseries_Search_api.Services.RESTCommunication
             return movieDTOs;
         }
 
-        public async Task<List<MovieDTO>> ObtainSepcificMovie(string movie_title)
+        public async Task<object> ObtainSepcificMovie(string movie_title)
         {
             var request = httpClient.GetAsync(microservicesBaseURL[0] + "/" + movie_title);
 
             //Get the responses
             var response = request.Result;
+            if (((int)response.StatusCode == 400))
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
             List<MovieDTO> movieDTOs = new();
             var responseString = await response.Content.ReadAsStringAsync();
             List<MovieDTO> deserializedMovie = JsonConvert.DeserializeObject<List<MovieDTO>>(responseString);
@@ -51,13 +59,17 @@ namespace boomoseries_Search_api.Services.RESTCommunication
             return movieDTOs;
         }
 
-        public async Task<List<MovieDTO>> GetMoviesByRating(double minRating)
+        public async Task<object> GetMoviesByRating(double minRating)
         {
 
             var request = httpClient.GetAsync(microservicesBaseURL[0] + "?minRating=" + minRating);
 
             //Get the responses
             var response = request.Result;
+            if (((int)response.StatusCode == 400))
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
             List<MovieDTO> movieDTOs = new();
             var responseString = await response.Content.ReadAsStringAsync();
             List<MovieDTO> deserializedMovie = JsonConvert.DeserializeObject<List<MovieDTO>>(responseString);

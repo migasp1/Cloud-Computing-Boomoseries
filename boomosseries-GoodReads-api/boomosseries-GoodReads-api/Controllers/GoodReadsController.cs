@@ -39,7 +39,7 @@ namespace boomosseries_GoodReads_api.Controllers
                 var result = bookDTO.Where(book => book.Rating >= min_rating).Take(5);
                 if (!result.Any())
                 {
-                    return NotFound("There are no books with more than rating " + min_rating + ".");
+                    return BadRequest("There are no books with more than rating " + min_rating + ".");
                 }
                 else
                 {
@@ -61,7 +61,7 @@ namespace boomosseries_GoodReads_api.Controllers
             var book = books.FirstOrDefault(book => book.Title.ToLower().Contains(book_title.ToLower()));
             if (book == null)
             {
-                return NotFound("This book does not exist");
+                return BadRequest("This book does not exist");
             }
             else
             {

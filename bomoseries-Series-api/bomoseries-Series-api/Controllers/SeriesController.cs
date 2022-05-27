@@ -32,7 +32,6 @@ namespace bomoseries_Series_api.Controllers
         [HttpGet("/api/v1/Series")]
         public async Task<IActionResult> GetSeriesByRating(double minRating)
         {
-            //[FromQuery(Name = "min_rating")]
             try
             {
                 var responseBody = await commService.GetSeriesByRating(minRating);

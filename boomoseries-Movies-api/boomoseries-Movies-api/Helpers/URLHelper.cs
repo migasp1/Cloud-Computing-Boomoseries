@@ -16,9 +16,12 @@ namespace boomoseries_Movies_api.Helpers
             */
             var urls = new string[]
             {
-                "http://host.docker.internal:5000/api/v1/Netflix",
-                "http://host.docker.internal:5004/api/v1/Disney",
-                "http://host.docker.internal:5006/api/v1/Amazon"
+                //"http://host.docker.internal:5000/api/v1/Netflix/movies",
+                //"http://host.docker.internal:5004/api/v1/Disney/movies",
+                //"http://host.docker.internal:5006/api/v1/Amazon/movies"
+                "https://localhost:5001/api/v1/Netflix/movies",
+                "https://localhost:5005/api/v1/Disney/movies",
+                "https://localhost:5007/api/v1/Amazon/movies"
             };
 
             return urls;

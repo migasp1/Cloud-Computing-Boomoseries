@@ -31,7 +31,6 @@ namespace boomoseries_Movies_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddHttpClient<ICommunicationService, RESTCommunicationService>("MovieService")
                  .SetHandlerLifetime(TimeSpan.FromMinutes(1))
@@ -70,7 +69,6 @@ namespace boomoseries_Movies_api
             Random jitterer = new();
             return HttpPolicyExtensions
                 .HandleTransientHttpError()
-                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
                 .WaitAndRetryAsync(2, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))  // exponential back-off: 2, 4, 8 etc
                     + TimeSpan.FromMilliseconds(jitterer.Next(0, 1000))); // plus some jitter: up to 1 second);
         }

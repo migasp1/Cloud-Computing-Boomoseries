@@ -9,7 +9,8 @@ namespace boomoseries_OrchAuth_api.Services
 {
     public class SearchRESTCommunicationServiceWatchables : ISearchCommunicationServiceWatchables
     {
-        private static readonly string microserviceBaseURL = "http://host.docker.internal:5018/api/v1/Search";
+        //private static readonly string microserviceBaseURL = "http://host.docker.internal:5018/api/v1/Search";
+        private static readonly string microserviceBaseURL = "https://localhost:5019/api/v1/Search";
         //private static readonly string microserviceBaseURL = Environment.GetEnvironmentVariable("SEARCH_HOST");
         private readonly HttpClient httpClient;
 
@@ -20,10 +21,13 @@ namespace boomoseries_OrchAuth_api.Services
             this.httpClient = httpClient;
         }
 
-        public async Task<List<WatchableDTO>> GetWatchblesByRating(string type, double minRating)
+        public async Task<object> GetWatchblesByRating(string type, double minRating)
         {
             var response = await httpClient.GetAsync(microserviceBaseURL + "?type=" + type + "&minRating=" + minRating);
-            
+            if (((int)response.StatusCode == 400))
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
             List<WatchableDTO> watchableDTOs = new();
             var responseString = await response.Content.ReadAsStringAsync();
             List<WatchableDTO> deserializedSerie = JsonConvert.DeserializeObject<List<WatchableDTO>>(responseString);
@@ -35,10 +39,13 @@ namespace boomoseries_OrchAuth_api.Services
 
         }
 
-        public async Task<List<WatchableDTO>> ObtainSepcificWatchables(string type, string watchable_title)
+        public async Task<object> ObtainSepcificWatchables(string type, string watchable_title)
         {
             var response = await httpClient.GetAsync(microserviceBaseURL + "/" + watchable_title + "?type=" + type);
-            
+            if (((int)response.StatusCode == 400))
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
             List<WatchableDTO> watchableDTOs = new();
             var responseString = await response.Content.ReadAsStringAsync();
             List<WatchableDTO> deserializedSerie = JsonConvert.DeserializeObject<List<WatchableDTO>>(responseString);
@@ -49,10 +56,13 @@ namespace boomoseries_OrchAuth_api.Services
             return watchableDTOs;
         }
 
-        public async Task<List<WatchableDTO>> ObtainRandomWatchable(string type)
+        public async Task<object> ObtainRandomWatchable(string type)
         {
             var response = await httpClient.GetAsync(microserviceBaseURL + "/random" + "?type=" + type);
-           
+            if (((int)response.StatusCode == 400))
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
             List<WatchableDTO> watchableDTOs = new();
             var responseString = await response.Content.ReadAsStringAsync();
             List<WatchableDTO> deserializedMovie = JsonConvert.DeserializeObject<List<WatchableDTO>>(responseString);

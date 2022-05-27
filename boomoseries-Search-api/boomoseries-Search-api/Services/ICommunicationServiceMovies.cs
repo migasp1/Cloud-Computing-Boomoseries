@@ -6,8 +6,8 @@ namespace boomoseries_Search_api.Services
 {
     public interface ICommunicationServiceMovies
     {
-        Task<List<MovieDTO>> ObtainSepcificMovie(string movieTitle);
-        Task<List<MovieDTO>> GetMoviesByRating(double min_rating);
-        Task<List<MovieDTO>> ObtainRandomMovies();
+        Task<object> ObtainSepcificMovie(string movieTitle);
+        Task<object> GetMoviesByRating(double min_rating);
+        Task<object> ObtainRandomMovies();
     }
 }

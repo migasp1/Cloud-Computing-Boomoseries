@@ -6,8 +6,8 @@ namespace boomoseries_OrchAuth_api.Services
 {
     public interface ISearchCommunicationServiceBooks
     {
-        Task<List<BookDTO>> ObtainSpecificBook(string type, string bookTitle);
-        Task<List<BookDTO>> ObtainRandomBooks(string type);
-        Task<List<BookDTO>> ObtainBooksByRating(string type, double min_rating);
+        Task<object> ObtainSpecificBook(string type, string bookTitle);
+        Task<object> ObtainRandomBooks(string type);
+        Task<object> ObtainBooksByRating(string type, double min_rating);
     }
 }

@@ -19,7 +19,7 @@ namespace boomoseries_Books_api.Services.REST_Communication
             this.httpClient = httpClient;   
         }
 
-        public async Task<List<BookDTO>> ObtainRandomBooks()
+        public async Task<object> ObtainRandomBooks()
         {
             List<BookDTO> booksDtos = new();
            
@@ -27,7 +27,10 @@ namespace boomoseries_Books_api.Services.REST_Communication
 
             //Get the responses
             var response = request.Result;
-
+            if (((int)response.StatusCode == 400))
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
             var responseString = await response.Content.ReadAsStringAsync();
             List<BookDTO> deserializedBook = JsonConvert.DeserializeObject<List<BookDTO>>(responseString);
             foreach (var item in deserializedBook)
@@ -37,7 +40,7 @@ namespace boomoseries_Books_api.Services.REST_Communication
             return booksDtos;
         }
 
-        public async Task<List<BookDTO>> ObtainSpecificBook(string bookTitle)
+        public async Task<object> ObtainSpecificBook(string bookTitle)
         {
             List<BookDTO> booksDtos = new();
            
@@ -45,25 +48,30 @@ namespace boomoseries_Books_api.Services.REST_Communication
 
             //Get the responses
             var response = request.Result;
-
-            var responseString = await response.Content.ReadAsStringAsync();
-            if (response.StatusCode == System.Net.HttpStatusCode.NotFound) {
-                return booksDtos;
+            if (((int)response.StatusCode == 400))
+            {
+                return await response.Content.ReadAsStringAsync();
             }
+            var responseString = await response.Content.ReadAsStringAsync();
+
             BookDTO deserializedBook = JsonConvert.DeserializeObject<BookDTO>(responseString);
             booksDtos.Add(deserializedBook);
 
             return booksDtos;
         }
 
-        public async Task<List<BookDTO>> ObtainBooksByRating(double min_rating)
+        public async Task<object> ObtainBooksByRating(double min_rating)
         {
             List<BookDTO> booksDtos = new();
-           
-            var request = httpClient.GetAsync(microservicesBaseURL + "?min_rating=" + min_rating);
+          
+             var request = httpClient.GetAsync(microservicesBaseURL + "?min_rating=" + min_rating);
 
             //Get the responses
             var response = request.Result;
+            if (((int)response.StatusCode == 400))
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
             var responseString = await response.Content.ReadAsStringAsync();
             List<BookDTO> deserializedBook = JsonConvert.DeserializeObject<List<BookDTO>>(responseString);
             foreach (var item in deserializedBook)

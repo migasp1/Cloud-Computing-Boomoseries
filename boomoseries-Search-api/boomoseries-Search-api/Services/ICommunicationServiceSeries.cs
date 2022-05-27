@@ -6,8 +6,8 @@ namespace boomoseries_Search_api.Services
 {
     public interface ICommunicationServiceSeries
     {
-        Task<List<SerieDTO>> ObtainSepcificSeries(string seriesTitle);
-        Task<List<SerieDTO>> GetSeriesByRating(double min_rating);
-        Task<List<SerieDTO>> ObtainRandomSeries();
+        Task<object> ObtainSepcificSeries(string seriesTitle);
+        Task<object> GetSeriesByRating(double min_rating);
+        Task<object> ObtainRandomSeries();
     }
 }

@@ -15,9 +15,12 @@ namespace boomoseries_Search_api.Helpers
         {
             var urls = new string[]
             {
-                "http://host.docker.internal:5008/api/v1/Movies",
-                "http://host.docker.internal:5016/api/v1/Series",
-                "http://host.docker.internal:5014/api/v1/Books",
+                //"http://host.docker.internal:5008/api/v1/Movies",
+                //"http://host.docker.internal:5016/api/v1/Series",
+                //"http://host.docker.internal:5014/api/v1/Books",
+                "https://localhost:5009/api/v1/Movies",
+                "https://localhost:5017/api/v1/Series",
+                "https://localhost:5015/api/v1/Books"
             };
             return urls;
         }

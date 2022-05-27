@@ -11,7 +11,8 @@ namespace boomoseries_OrchAuth_api.Services
 {
     public class SearchRESTComunicationServiceBooks : ISearchCommunicationServiceBooks
     {
-        private static readonly string microservicesBaseURL = "http://host.docker.internal:5018/api/v1/Search";
+        //private static readonly string microservicesBaseURL = "http://host.docker.internal:5018/api/v1/Search";
+        private static readonly string microservicesBaseURL = "https://localhost:5019/api/v1/Search";
         //private static readonly string microservicesBaseURL = Environment.GetEnvironmentVariable("SEARCH_HOST");
         private readonly HttpClient httpClient;
 
@@ -22,12 +23,15 @@ namespace boomoseries_OrchAuth_api.Services
             this.httpClient = httpClient;
         }
 
-        public async Task<List<BookDTO>> ObtainRandomBooks(string type)
+        public async Task<object> ObtainRandomBooks(string type)
         {
             List<BookDTO> booksDtos = new();
             var request = httpClient.GetAsync(microservicesBaseURL + "/random" + "?type=" + type);
             var response = request.Result;
-
+            if (((int)response.StatusCode == 400))
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
             var responseString = await response.Content.ReadAsStringAsync();
             List<BookDTO> deserializedBook = JsonConvert.DeserializeObject<List<BookDTO>>(responseString);
             foreach (var item in deserializedBook)
@@ -37,12 +41,15 @@ namespace boomoseries_OrchAuth_api.Services
             return booksDtos;
         }
 
-        public async Task<List<BookDTO>> ObtainSpecificBook(string type, string book_title)
+        public async Task<object> ObtainSpecificBook(string type, string book_title)
         {
             List<BookDTO> booksDtos = new();
             var request = httpClient.GetAsync(microservicesBaseURL + "/" + book_title + "?type=" + type);
             var response = request.Result;
-
+            if (((int)response.StatusCode == 400))
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
             var responseString = await response.Content.ReadAsStringAsync();
             List<BookDTO> deserializedBook = JsonConvert.DeserializeObject<List<BookDTO>>(responseString);
             foreach (var item in deserializedBook)
@@ -52,12 +59,15 @@ namespace boomoseries_OrchAuth_api.Services
             return booksDtos;
         }
 
-        public async Task<List<BookDTO>> ObtainBooksByRating(string type, double minRating)
+        public async Task<object> ObtainBooksByRating(string type, double minRating)
         {
             List<BookDTO> booksDtos = new();
             var request = httpClient.GetAsync(microservicesBaseURL + "?type=" + type + "&minRating=" + minRating);
             var response = request.Result;
-
+            if (((int)response.StatusCode == 400))
+            {
+                return await response.Content.ReadAsStringAsync();
+            }
             var responseString = await response.Content.ReadAsStringAsync();
             List<BookDTO> deserializedBook = JsonConvert.DeserializeObject<List<BookDTO>>(responseString);
             foreach (var item in deserializedBook)

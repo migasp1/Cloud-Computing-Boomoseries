@@ -1,6 +1,8 @@
-﻿using boomoseries_Books_api.Services;
+﻿using boomoseries_Books_api.DTOs;
+using boomoseries_Books_api.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace boomoseries_Books_api.Controllers
@@ -20,14 +22,20 @@ namespace boomoseries_Books_api.Controllers
             try
             {
                 var responseBody = await commService.ObtainSpecificBook(book_title);
-                if (responseBody.Count == 0) {
-                    return NotFound("This Book Doesn't Exist!");
+                if (responseBody is List<BookDTO>)
+                {
+                    List<BookDTO> responseBodyTyped = (List<BookDTO>)responseBody;
+                    if (responseBodyTyped.Count == 0)
+                    {
+                        return NotFound("This Book Doesn't Exist!");
+                    }
+                    return Ok(responseBodyTyped);
                 }
-                return Ok(responseBody);
+                return BadRequest((string)responseBody);
             }
             catch (Exception ex)
             {
-                return BadRequest("Oops, something went wrong! ");
+                return BadRequest("Oops, something went wrong! " + ex.Message);
             }
         }
         
@@ -37,11 +45,15 @@ namespace boomoseries_Books_api.Controllers
             try
             {
                 var responseBody = await commService.ObtainRandomBooks();
-                return Ok(responseBody);
+                if (responseBody is List<BookDTO>)
+                {
+                    return Ok(responseBody);
+                }
+                return BadRequest((string)responseBody);
             }
             catch (Exception ex)
             {
-                return BadRequest("Oops, something went wrong! ");
+                return BadRequest("Oops, something went wrong! " + ex.Message);
             }
         }
         
@@ -51,11 +63,15 @@ namespace boomoseries_Books_api.Controllers
             try
             {
                 var responseBody = await commService.ObtainBooksByRating(min_rating);
-                return Ok(responseBody);
+                if (responseBody is List<BookDTO>)
+                {
+                    return Ok(responseBody);
+                }
+                return BadRequest((string)responseBody);
             }
             catch (Exception ex)
             {
-                return BadRequest("Oops, something went wrong! error:" + ex.ToString());
+                return BadRequest("Oops, something went wrong!" + ex.Message);
             }
         }
     }

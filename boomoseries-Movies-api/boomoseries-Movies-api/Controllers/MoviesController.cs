@@ -21,7 +21,6 @@ namespace boomoseries_Movies_api.Controllers
             try
             {
                 var responseBody = await commService.ObtainSepcificMovie(movie_title);
-                //MovieDTO deserializedMovie = JsonConvert.DeserializeObject<MovieDTO>(responseBody);
                 return Ok(responseBody);    
             }
             catch (Exception ex)
@@ -33,7 +32,6 @@ namespace boomoseries_Movies_api.Controllers
         [HttpGet("/api/v1/Movies")]
         public async Task<IActionResult> GetMoviesByRating(double minRating)
         {
-            //[FromQuery(Name = "min_rating")]
             try
             {
                 var responseBody = await commService.GetMoviesByRating(minRating);
