@@ -11,8 +11,8 @@ namespace boomoseries_OrchAuth_api.Services
 {
     public class SearchRESTComunicationServiceBooks : ISearchCommunicationServiceBooks
     {
-        //private static readonly string microservicesBaseURL = "http://host.docker.internal:5018/api/v1/Search";
-        private static readonly string microservicesBaseURL = "https://localhost:5019/api/v1/Search";
+        private static readonly string microservicesBaseURL = "http://host.docker.internal:5018/api/v1/Search";
+        //private static readonly string microservicesBaseURL = "https://localhost:5019/api/v1/Search";
         //private static readonly string microservicesBaseURL = Environment.GetEnvironmentVariable("SEARCH_HOST");
         private readonly HttpClient httpClient;
 

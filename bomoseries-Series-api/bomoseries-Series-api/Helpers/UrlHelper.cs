@@ -18,12 +18,12 @@ namespace bomoseries_Series_api.Helpers
 
             var urls = new string[]
             {
-                //"http://host.docker.internal:5000/api/v1/Netflix/series",
-                //"http://host.docker.internal:5004/api/v1/Disney/series",
-                //"http://host.docker.internal:5006/api/v1/Amazon/series"
-                "https://localhost:5001/api/v1/Netflix/series",
-                "https://localhost:5005/api/v1/Disney/series",
-                "https://localhost:5007/api/v1/Amazon/series"
+                "http://host.docker.internal:5000/api/v1/Netflix/series",
+                "http://host.docker.internal:5004/api/v1/Disney/series",
+                "http://host.docker.internal:5006/api/v1/Amazon/series"
+                //"https://localhost:5001/api/v1/Netflix/series",
+                //"https://localhost:5005/api/v1/Disney/series",
+                //"https://localhost:5007/api/v1/Amazon/series"
             };
 
             return urls;

@@ -15,8 +15,8 @@ namespace boomoseries_OrchAuth_api.Services
     {
         private readonly HttpClient httpClient;
         //private static readonly string _userPreferencesBaseURL = Environment.GetEnvironmentVariable("PREFS_HOST");
-        //private static readonly string _userPreferencesBaseURL = "http://host.docker.internal:5024/UserPreferences/Favorites";
-        private static readonly string _userPreferencesBaseURL = "https://localhost:5025/UserPreferences/Favorites";
+        private static readonly string _userPreferencesBaseURL = "http://host.docker.internal:5024/UserPreferences/Favorites";
+        //private static readonly string _userPreferencesBaseURL = "https://localhost:5025/UserPreferences/Favorites";
 
         public UserPreferencesService(
             HttpClient httpClient
