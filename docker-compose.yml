@@ -13,7 +13,7 @@ services:
     netflix:
         build:
             dockerfile: Dockerfile
-            context: ./boomseries-Netflix-api/boomseries-Netflix-api
+            context: ./boomseries-Netflix-api/boomoseries-Netflix-api
         image: netflixmicroservice
         hostname: netflix
         container_name: netflixmicroservice
@@ -23,7 +23,7 @@ services:
     amazon:
         build:
             dockerfile: Dockerfile
-            context: ./boomseries-Amazon-api/boomseries-Amazon-api
+            context: ./boomoseries-Amazon-api/boomoseries-Amazon-api
         image: amazonmicroservice
         hostname: amazon
         container_name: amazonmicroservice
@@ -33,7 +33,7 @@ services:
     imdb:
         build:
             dockerfile: Dockerfile
-            context: ./boomseries-IMDB-api/boomseries-IMDB-api
+            context: ./boomoseries-IMDB-api/boomoseries-IMDB-api
         image: imdbmicroservice
         hostname: imdb
         container_name: imdbmicroservice
@@ -42,7 +42,7 @@ services:
     goodreads:
         build:
             dockerfile: Dockerfile
-            context: ./boomsseries-GoodReads-api/boomsseries-GoodReads-api
+            context: ./boomosseries-GoodReads-api/boomosseries-GoodReads-api
         image: goodreadsmicroservice
         hostname: goodreads
         container_name: goodreadsmicroservice
@@ -58,7 +58,7 @@ services:
             
         build:
             dockerfile: Dockerfile
-            context: ./boomseries-Movies-api/boomseries-Movies-api
+            context: ./boomoseries-Movies-api/boomoseries-Movies-api
         image: moviesmicroservice
         hostname: movies
         container_name: moviesmicroservice
@@ -74,7 +74,7 @@ services:
             
         build:
             dockerfile: Dockerfile
-            context: ./bomseries-Series-api/bomseries-Series-api
+            context: ./bomoseries-Series-api/bomoseries-Series-api
         image: seriesmicroservice
         hostname: series
         container_name: seriesmicroservice
@@ -87,7 +87,7 @@ services:
             
         build:
             dockerfile: Dockerfile
-            context: ./boomseries-Books-api/boomseries-Books-api
+            context: ./boomoseries-Books-api/boomoseries-Books-api
         image: booksmicroservice
         hostname: books
         container_name: booksmicroservice
@@ -102,7 +102,7 @@ services:
             
         build:
             dockerfile: Dockerfile
-            context: ./boomseries-Search-api/boomseries-Search-api
+            context: ./boomoseries-Search-api/boomoseries-Search-api
         image: searchmicroservice
         hostname: search
         container_name: searchmicroservice
@@ -112,7 +112,7 @@ services:
     users:           
         build:
             dockerfile: Dockerfile
-            context: ./boomseries-Users-api/boomseries-Users-api
+            context: ./boomoseries-Users-api/boomoseries-Users-api
         image: usersmicroservice
         hostname: users
         container_name: usersmicroservice
@@ -122,7 +122,7 @@ services:
     prefs:           
         build:
             dockerfile: Dockerfile
-            context: ./boomseries-prefs-api/boomseries-prefs-api
+            context: ./boomoseries-prefs-api/boomoseries-prefs-api
         image: prefsmicroservice
         hostname: prefs
         container_name: prefsmicroservice
@@ -137,7 +137,7 @@ services:
             
         build:
             dockerfile: Dockerfile
-            context: ./boomseries-OrchAuth-api/boomseries-OrchAuth-api
+            context: ./boomoseries-OrchAuth-api/boomoseries-OrchAuth-api
         image: orchmicroservice
         hostname: orchauth
         container_name: orchauthmicroservice
