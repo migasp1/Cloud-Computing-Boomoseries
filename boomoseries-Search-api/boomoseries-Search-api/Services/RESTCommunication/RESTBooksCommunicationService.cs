@@ -28,7 +28,7 @@ namespace boomoseries_Search_api.Services.RESTCommunication
 
             //Get the responses
             var response = request.Result;
-            if (((int)response.StatusCode == 400))
+            if (!response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsStringAsync();
             }
@@ -49,7 +49,7 @@ namespace boomoseries_Search_api.Services.RESTCommunication
 
             //Get the responses
             var response = request.Result;
-            if (((int)response.StatusCode == 400))
+            if (!response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsStringAsync();
             }
@@ -70,7 +70,7 @@ namespace boomoseries_Search_api.Services.RESTCommunication
 
             //Get the responses
             var response = request.Result;
-            if (((int)response.StatusCode == 400))
+            if (!response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsStringAsync();
             }
