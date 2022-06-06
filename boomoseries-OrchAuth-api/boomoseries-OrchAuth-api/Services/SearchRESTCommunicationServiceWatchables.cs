@@ -24,7 +24,7 @@ namespace boomoseries_OrchAuth_api.Services
         public async Task<object> GetWatchblesByRating(string type, double minRating)
         {
             var response = await httpClient.GetAsync(microserviceBaseURL + "?type=" + type + "&minRating=" + minRating);
-            if (((int)response.StatusCode == 400))
+            if (!response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsStringAsync();
             }
@@ -42,7 +42,7 @@ namespace boomoseries_OrchAuth_api.Services
         public async Task<object> ObtainSepcificWatchables(string type, string watchable_title)
         {
             var response = await httpClient.GetAsync(microserviceBaseURL + "/" + watchable_title + "?type=" + type);
-            if (((int)response.StatusCode == 400))
+            if (!response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsStringAsync();
             }
@@ -59,7 +59,8 @@ namespace boomoseries_OrchAuth_api.Services
         public async Task<object> ObtainRandomWatchable(string type)
         {
             var response = await httpClient.GetAsync(microserviceBaseURL + "/random" + "?type=" + type);
-            if (((int)response.StatusCode == 400))
+
+            if (!response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsStringAsync();
             }

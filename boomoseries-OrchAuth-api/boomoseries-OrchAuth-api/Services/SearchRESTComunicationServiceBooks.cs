@@ -28,7 +28,7 @@ namespace boomoseries_OrchAuth_api.Services
             List<BookDTO> booksDtos = new();
             var request = httpClient.GetAsync(microservicesBaseURL + "/random" + "?type=" + type);
             var response = request.Result;
-            if (((int)response.StatusCode == 400))
+            if (!response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsStringAsync();
             }
@@ -46,7 +46,7 @@ namespace boomoseries_OrchAuth_api.Services
             List<BookDTO> booksDtos = new();
             var request = httpClient.GetAsync(microservicesBaseURL + "/" + book_title + "?type=" + type);
             var response = request.Result;
-            if (((int)response.StatusCode == 400))
+            if (!response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsStringAsync();
             }
@@ -64,7 +64,7 @@ namespace boomoseries_OrchAuth_api.Services
             List<BookDTO> booksDtos = new();
             var request = httpClient.GetAsync(microservicesBaseURL + "?type=" + type + "&minRating=" + minRating);
             var response = request.Result;
-            if (((int)response.StatusCode == 400))
+            if (!response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsStringAsync();
             }
