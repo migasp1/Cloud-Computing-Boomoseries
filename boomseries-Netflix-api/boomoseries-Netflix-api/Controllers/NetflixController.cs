@@ -63,7 +63,7 @@ namespace boomoseries_Netflix_api.Controllers
 
             } else if (min_rating != null) 
             {
-                var result = movieDTOs.Where(movie => movie.Rating >= min_rating);
+                var result = movieDTOs.Where(movie => movie.Rating >= min_rating).Take(2);
                 
                 if (!result.Any())
                 {
@@ -98,7 +98,7 @@ namespace boomoseries_Netflix_api.Controllers
         [HttpGet("series")]
         public async Task<IActionResult> GetSeries(double? min_rating)
         {
-            var series = dataContext.Watchables.Where(watchable => watchable.Type == "TV Show");
+            var series = dataContext.Watchables.Where(watchable => watchable.Type == "TV Show").Take(2);
             List<WatchableDTO> seriesDTOs = new();
 
             foreach (var serie in series)

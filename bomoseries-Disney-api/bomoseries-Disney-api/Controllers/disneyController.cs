@@ -38,7 +38,7 @@ namespace Disney_MicroService.Controllers
             }
             else if (min_rating != null)
             {
-                var result = movieDTOs.Where(movie => movie.Rating >= min_rating);
+                var result = movieDTOs.Where(movie => movie.Rating >= min_rating).Take(2);
                 if (!result.Any())
                 {
                     return NotFound("There are no movies with more then rating " + min_rating + ".");
@@ -100,7 +100,7 @@ namespace Disney_MicroService.Controllers
         [HttpGet("series")]
         public async Task<IActionResult> GetSeries(double? min_rating)
         {
-            var series = dataContext.Watchables.Where(Watchable => Watchable.Type == "TV Show");
+            var series = dataContext.Watchables.Where(Watchable => Watchable.Type == "TV Show").Take(2);
             List<WatchableDTO> seriesDTOs = new();
 
             foreach (var serie in series)

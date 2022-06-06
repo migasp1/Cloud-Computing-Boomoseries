@@ -20,37 +20,37 @@ namespace boomoseries_IMDB_api.Controllers
             this.dataContext = dataContext;
         }
 
-        [HttpGet("movies")]
-        public async Task<IActionResult> GetMovies(double? min_rating)
-        {
-            var movies = dataContext.Watchables.Where(watchable => watchable.Type == "Movie");
-            List<WatchableDTO> movieDTOs = new();
+        //[HttpGet("movies")]
+        //public async Task<IActionResult> GetMovies(double? min_rating)
+        //{
+        //    var movies = dataContext.Watchables.Where(watchable => watchable.Type == "Movie");
+        //    List<WatchableDTO> movieDTOs = new();
 
-            foreach (var movie in movies)
-            {
-                movieDTOs.Add(IMDBMapper.MapToDTO(movie));
-            }
+        //    foreach (var movie in movies)
+        //    {
+        //        movieDTOs.Add(IMDBMapper.MapToDTO(movie));
+        //    }
 
-            if (min_rating == null)
-            {
-                return Ok(movieDTOs);
+        //    if (min_rating == null)
+        //    {
+        //        return Ok(movieDTOs);
 
-            }
-            else if (min_rating != null)
-            {
-                var result = movieDTOs.Where(movie => movie.Rating >= min_rating);
-                if (!result.Any())
-                {
-                    return NotFound("There are no movies with more then rating " + min_rating + ".");
-                }
-                else
-                {
-                    return Ok(result);
-                }
-            }
+        //    }
+        //    else if (min_rating != null)
+        //    {
+        //        var result = movieDTOs.Where(movie => movie.Rating >= min_rating);
+        //        if (!result.Any())
+        //        {
+        //            return NotFound("There are no movies with more then rating " + min_rating + ".");
+        //        }
+        //        else
+        //        {
+        //            return Ok(result);
+        //        }
+        //    }
 
-            return BadRequest("Something went wrong");
-        }
+        //    return BadRequest("Something went wrong");
+        //}
 
         [HttpGet("movies/{movie_title}")]
         public async Task<IActionResult> GetSpecificMovie(string movie_title)
@@ -69,37 +69,37 @@ namespace boomoseries_IMDB_api.Controllers
             }
         }
 
-        [HttpGet("series")]
-        public async Task<IActionResult> GetSeries(double? min_rating)
-        {
-            var series = dataContext.Watchables.Where(watchable => watchable.Type == "TV Show");
-            List<WatchableDTO> seriesDTOs = new();
+        //[HttpGet("series")]
+        //public async Task<IActionResult> GetSeries(double? min_rating)
+        //{
+        //    var series = dataContext.Watchables.Where(watchable => watchable.Type == "TV Show");
+        //    List<WatchableDTO> seriesDTOs = new();
 
-            foreach (var serie in series)
-            {
-                seriesDTOs.Add(IMDBMapper.MapToDTO(serie));
-            }
+        //    foreach (var serie in series)
+        //    {
+        //        seriesDTOs.Add(IMDBMapper.MapToDTO(serie));
+        //    }
 
-            if (min_rating == null)
-            {
-                return Ok(seriesDTOs);
+        //    if (min_rating == null)
+        //    {
+        //        return Ok(seriesDTOs);
 
-            }
-            else if (min_rating != null)
-            {
-                var result = seriesDTOs.Where(serie => serie.Rating >= min_rating);
-                if (!result.Any())
-                {
-                    return NotFound("There are no series with more then rating " + min_rating + ".");
-                }
-                else
-                {
-                    return Ok(result);
-                }
-            }
+        //    }
+        //    else if (min_rating != null)
+        //    {
+        //        var result = seriesDTOs.Where(serie => serie.Rating >= min_rating);
+        //        if (!result.Any())
+        //        {
+        //            return NotFound("There are no series with more then rating " + min_rating + ".");
+        //        }
+        //        else
+        //        {
+        //            return Ok(result);
+        //        }
+        //    }
 
-            return BadRequest("Something went wrong");
-        }
+        //    return BadRequest("Something went wrong");
+        //}
 
         [HttpGet("series/{serie_title}")]
         public async Task<IActionResult> GetSpecificSerie(string serie_title)
