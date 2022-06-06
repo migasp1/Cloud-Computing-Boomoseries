@@ -9,12 +9,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Prometheus;
 using Polly;
 using Polly.Extensions.Http;
 using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Prometheus.DotNetRuntime;
 
 namespace boomoseries_OrchAuth_api
 {
@@ -23,9 +25,11 @@ namespace boomoseries_OrchAuth_api
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Collector = CreateCollector();
         }
 
         public IConfiguration Configuration { get; }
+        public static IDisposable Collector;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -138,6 +142,8 @@ namespace boomoseries_OrchAuth_api
 
             app.UseRouting();
 
+            app.UseHttpMetrics();
+            app.UseMetricServer();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -146,6 +152,23 @@ namespace boomoseries_OrchAuth_api
                 endpoints.MapControllers();
             });
         }
+
+        public static IDisposable CreateCollector()
+        {
+
+            var builder = DotNetRuntimeStatsBuilder.Default();
+            builder = DotNetRuntimeStatsBuilder.Customize()
+                .WithContentionStats(CaptureLevel.Informational)
+                .WithGcStats(CaptureLevel.Verbose)
+                .WithThreadPoolStats(CaptureLevel.Informational)
+                .WithExceptionStats(CaptureLevel.Errors)
+                .WithJitStats();
+
+            builder.RecycleCollectorsEvery(new TimeSpan(0, 10, 0));
+
+            return builder.StartCollecting();
+        }
+
         static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
         {
             Random jitterer = new ();
