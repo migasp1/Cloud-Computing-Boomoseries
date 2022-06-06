@@ -163,7 +163,7 @@ namespace boomoseries_OrchAuth_api
             return builder.StartCollecting();
         }
 
-        static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        public static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
         {
             Random jitterer = new();
             return HttpPolicyExtensions
