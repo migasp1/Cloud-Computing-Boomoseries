@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Polly;
 using Polly.Extensions.Http;
+using Polly.Timeout;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,10 +34,7 @@ namespace bomoseries_Series_api
         {
 
             services.AddControllers();
-            services.AddHttpClient<ICommunicationService, RESTCommunicationService>("SerieService")
-                 .SetHandlerLifetime(TimeSpan.FromMinutes(1))
-                 .AddPolicyHandler(GetRetryPolicy())
-                 .AddPolicyHandler(GetCircuitBreakerPolicy());
+            services.ConfigHttpClient<ICommunicationService, RESTCommunicationService>("Series");
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "bomoseries_Series_api", Version = "v1" });
@@ -65,7 +63,7 @@ namespace bomoseries_Series_api
             });
         }
 
-        static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        public static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
         {
             Random jitterer = new();
             return HttpPolicyExtensions
@@ -74,11 +72,26 @@ namespace bomoseries_Series_api
                     + TimeSpan.FromMilliseconds(jitterer.Next(0, 1000))); // plus some jitter: up to 1 second);
         }
 
-        static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+        public static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
         {
             return HttpPolicyExtensions
                 .HandleTransientHttpError()
+                .Or<TimeoutRejectedException>()
                 .CircuitBreakerAsync(2, TimeSpan.FromSeconds(10));
+        }
+    }
+
+    public static class ServicesExtensions
+    {
+        public static IHttpClientBuilder ConfigHttpClient<TInterface, TClass>(this IServiceCollection services, string httpClientName)
+            where TInterface : class
+            where TClass : class, TInterface
+        {
+
+            return services.AddHttpClient<TInterface, TClass>(httpClientName)
+                .AddPolicyHandler(Startup.GetCircuitBreakerPolicy())
+                .AddPolicyHandler(Startup.GetRetryPolicy())
+                .AddPolicyHandler(Policy.TimeoutAsync<HttpResponseMessage>(3));
         }
     }
 }
