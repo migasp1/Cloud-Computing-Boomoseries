@@ -1,0 +1,150 @@
+version: "3.8"
+services:
+    disney:
+        build:
+            dockerfile: Dockerfile
+            context: ./bomoseries-Disney-api/bomoseries-Disney-api
+        image: disneymicroservice
+        hostname: disney
+        container_name: disneymicroservice
+        ports:
+            - 5004:80
+
+    netflix:
+        build:
+            dockerfile: Dockerfile
+            context: ./boomseries-Netflix-api/boomseries-Netflix-api
+        image: netflixmicroservice
+        hostname: netflix
+        container_name: netflixmicroservice
+        ports:
+            - 5000:80
+
+    amazon:
+        build:
+            dockerfile: Dockerfile
+            context: ./boomseries-Amazon-api/boomseries-Amazon-api
+        image: amazonmicroservice
+        hostname: amazon
+        container_name: amazonmicroservice
+        ports:
+            - 5006:80
+
+    imdb:
+        build:
+            dockerfile: Dockerfile
+            context: ./boomseries-IMDB-api/boomseries-IMDB-api
+        image: imdbmicroservice
+        hostname: imdb
+        container_name: imdbmicroservice
+        ports:
+            - 5002:80
+    goodreads:
+        build:
+            dockerfile: Dockerfile
+            context: ./boomsseries-GoodReads-api/boomsseries-GoodReads-api
+        image: goodreadsmicroservice
+        hostname: goodreads
+        container_name: goodreadsmicroservice
+        ports:
+            - 5012:80
+            
+    movies:
+        environment:
+            NETFLIX_HOST: neflix
+            AMAZON_HOST: amazon
+            DISNEY_HOST: disney
+            IMDB_HOST: imdb
+            
+        build:
+            dockerfile: Dockerfile
+            context: ./boomseries-Movies-api/boomseries-Movies-api
+        image: moviesmicroservice
+        hostname: movies
+        container_name: moviesmicroservice
+        ports:
+            - 5008:80
+            
+    series:
+        environment:
+            NETFLIX_HOST: neflix
+            AMAZON_HOST: amazon
+            DISNEY_HOST: disney
+            IMDB_HOST: imdb
+            
+        build:
+            dockerfile: Dockerfile
+            context: ./bomseries-Series-api/bomseries-Series-api
+        image: seriesmicroservice
+        hostname: series
+        container_name: seriesmicroservice
+        ports:
+            - 5016:80
+            
+    books:
+        environment:
+            GOODREADS_HOST: goodreads
+            
+        build:
+            dockerfile: Dockerfile
+            context: ./boomseries-Books-api/boomseries-Books-api
+        image: booksmicroservice
+        hostname: books
+        container_name: booksmicroservice
+        ports:
+            - 5014:80
+
+    search:
+        environment:
+            MOVIES_HOST: movies
+            SERIES_HOST: series
+            BOOKS_HOST: books
+            
+        build:
+            dockerfile: Dockerfile
+            context: ./boomseries-Search-api/boomseries-Search-api
+        image: searchmicroservice
+        hostname: search
+        container_name: searchmicroservice
+        ports:
+            - 5018:80
+
+    users:           
+        build:
+            dockerfile: Dockerfile
+            context: ./boomseries-Users-api/boomseries-Users-api
+        image: usersmicroservice
+        hostname: users
+        container_name: usersmicroservice
+        ports:
+            - 5020:80
+            
+    prefs:           
+        build:
+            dockerfile: Dockerfile
+            context: ./boomseries-prefs-api/boomseries-prefs-api
+        image: prefsmicroservice
+        hostname: prefs
+        container_name: prefsmicroservice
+        ports:
+            - 5024:80
+            
+    orchauth:
+        environment:
+            SEARCH_HOST: search
+            USER_HOST: users
+            PREFS_HOST: prefs
+            
+        build:
+            dockerfile: Dockerfile
+            context: ./boomseries-OrchAuth-api/boomseries-OrchAuth-api
+        image: orchmicroservice
+        hostname: orchauth
+        container_name: orchauthmicroservice
+        ports:
+            - 5022:80
+
+networks:
+    default:
+        external:
+            name: microservicesNetwork
