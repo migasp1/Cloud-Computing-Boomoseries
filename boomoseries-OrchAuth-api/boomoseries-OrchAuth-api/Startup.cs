@@ -126,6 +126,7 @@ namespace boomoseries_OrchAuth_api
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "boomoseries_OrchAuth_api v1"));
 
             app.UseRouting();
+            app.UseStaticFiles();
 
             app.UseHttpMetrics();
             app.UseMetricServer();
