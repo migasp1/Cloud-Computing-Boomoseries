@@ -7,6 +7,7 @@ using boomoseries_OrchAuth_api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -30,6 +31,7 @@ namespace boomoseries_OrchAuth_api.Controllers
         private readonly ISearchCommunicationServiceBooks _commServiceSearchBooks;
         private readonly AppSettings _appSettings;
         private readonly IMapper _mapper;
+        private ILogger<OrchAuthController> logger; 
 
         public OrchAuthController(
             IUsersCommunicationService userService,
@@ -37,7 +39,8 @@ namespace boomoseries_OrchAuth_api.Controllers
             IOptions<AppSettings> appSettings,
             IMapper mapper,
             ISearchCommunicationServiceBooks commServiceSearchBooks,
-            ISearchCommunicationServiceWatchables commServiceSearchWatchables)
+            ISearchCommunicationServiceWatchables commServiceSearchWatchables,
+            ILogger<OrchAuthController> logger)
         {
             _userService = userService;
             _appSettings = appSettings.Value;
@@ -45,6 +48,7 @@ namespace boomoseries_OrchAuth_api.Controllers
             _mapper = mapper;
             _commServiceSearchWatchables= commServiceSearchWatchables;
             _commServiceSearchBooks = commServiceSearchBooks;
+            this.logger = logger;
         }
 
         [AllowAnonymous]
@@ -127,7 +131,7 @@ namespace boomoseries_OrchAuth_api.Controllers
             }
             catch (Exception ex)
             {
-                //return BadRequest(new { message = "Oops, something went wrong!" });
+                logger.LogError(ex, ex.ToString());
                 return BadRequest(new { message = ex.Message });
             }
         }
@@ -145,8 +149,9 @@ namespace boomoseries_OrchAuth_api.Controllers
 
                 return Ok(deserialized);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError(ex, ex.ToString());
                 return BadRequest(new { message = "Oops, something went wrong!" });
             }
         }
@@ -162,8 +167,9 @@ namespace boomoseries_OrchAuth_api.Controllers
 
                 return Ok(deserialized);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError(ex, ex.ToString());
                 return BadRequest(new { message = "Oops, something went wrong!" });
             }
         }
@@ -188,7 +194,8 @@ namespace boomoseries_OrchAuth_api.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                    logger.LogError(ex, ex.ToString());
+                    return BadRequest("Oops, something went wrong! " + ex.ToString());
                 }
             }
             else if (type.Equals("TV Show"))
@@ -205,7 +212,8 @@ namespace boomoseries_OrchAuth_api.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                    logger.LogError(ex, ex.ToString());
+                    return BadRequest("Oops, something went wrong! " + ex.ToString());
                 }
             }
             else if (type.Equals("Book"))
@@ -222,7 +230,8 @@ namespace boomoseries_OrchAuth_api.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Oops, something went wrong! error" + ex.Message);
+                    logger.LogError(ex, ex.ToString());
+                    return BadRequest("Oops, something went wrong! error" + ex.ToString());
                 }
             }
             return BadRequest("Oops, something went wrong! Type did not match");
@@ -248,7 +257,8 @@ namespace boomoseries_OrchAuth_api.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                    logger.LogError(ex, ex.ToString());
+                    return BadRequest("Oops, something went wrong! " + ex.ToString());
                 }
             }
             else if (type.Equals("TV Show"))
@@ -265,7 +275,8 @@ namespace boomoseries_OrchAuth_api.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                    logger.LogError(ex, ex.ToString());
+                    return BadRequest("Oops, something went wrong! " + ex.ToString());
                 }
             }
             else if (type.Equals("Book"))
@@ -282,7 +293,8 @@ namespace boomoseries_OrchAuth_api.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                    logger.LogError(ex, ex.ToString());
+                    return BadRequest("Oops, something went wrong! " + ex.ToString());
                 }
             }
             return BadRequest("Oops, something went wrong! ");
@@ -308,7 +320,8 @@ namespace boomoseries_OrchAuth_api.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                    logger.LogError(ex, ex.ToString());
+                    return BadRequest("Oops, something went wrong! " + ex.ToString());
                 }
             }
             else if (type.Equals("TV Show"))
@@ -325,7 +338,8 @@ namespace boomoseries_OrchAuth_api.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                    logger.LogError(ex, ex.ToString());
+                    return BadRequest("Oops, something went wrong! " + ex.ToString());
                 }
             }
             else if (type.Equals("Book"))
@@ -342,7 +356,8 @@ namespace boomoseries_OrchAuth_api.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
+                    logger.LogError(ex, ex.ToString());
+                    return BadRequest("Oops, something went wrong! " + ex.ToString());
                 }
             }
             return BadRequest("Oops, something went wrong! ");

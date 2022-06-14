@@ -1,4 +1,5 @@
 ﻿using boomoseries_OrchAuth_api.DTOs;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,17 +14,21 @@ namespace boomoseries_OrchAuth_api.Services
         //private static readonly string microserviceBaseURL = "https://localhost:5019/api/v1/Search";
         //private static readonly string microserviceBaseURL = Environment.GetEnvironmentVariable("SEARCH_HOST");
         private readonly HttpClient httpClient;
+        private readonly ILogger<SearchRESTCommunicationServiceWatchables> logger;
 
-        public SearchRESTCommunicationServiceWatchables(
-            HttpClient httpClient
-            )
+        public SearchRESTCommunicationServiceWatchables(ILogger<SearchRESTCommunicationServiceWatchables> logger, HttpClient httpClient)
         {
+            this.logger = logger;
             this.httpClient = httpClient;
         }
 
+ 
+
         public async Task<object> GetWatchblesByRating(string type, double minRating)
         {
-            var response = await httpClient.GetAsync(microserviceBaseURL + "?type=" + type + "&minRating=" + minRating);
+            var url = microserviceBaseURL + "?type=" + type + "&minRating=" + minRating;
+            logger.LogInformation("Invoking url {Url}", url);
+            var response = await httpClient.GetAsync(url);
             if (!response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsStringAsync();
@@ -41,7 +46,9 @@ namespace boomoseries_OrchAuth_api.Services
 
         public async Task<object> ObtainSepcificWatchables(string type, string watchable_title)
         {
-            var response = await httpClient.GetAsync(microserviceBaseURL + "/" + watchable_title + "?type=" + type);
+            var url = microserviceBaseURL + "/" + watchable_title + "?type=" + type;
+            logger.LogInformation("Invoking url {Url}", url);
+            var response = await httpClient.GetAsync(url);
             if (!response.IsSuccessStatusCode)
             {
                 return await response.Content.ReadAsStringAsync();
@@ -58,7 +65,9 @@ namespace boomoseries_OrchAuth_api.Services
 
         public async Task<object> ObtainRandomWatchable(string type)
         {
-            var response = await httpClient.GetAsync(microserviceBaseURL + "/random" + "?type=" + type);
+            var url = microserviceBaseURL + "/random" + "?type=" + type;
+            logger.LogInformation("Invoking url {Url}", url);
+            var response = await httpClient.GetAsync(url);
 
             if (!response.IsSuccessStatusCode)
             {

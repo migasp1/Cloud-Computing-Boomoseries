@@ -8,7 +8,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: disney
@@ -20,9 +20,14 @@ spec:
       serviceAccountName: default
       containers:
       - name: disney
-        image: "eu.gcr.io/boomoseries-api/disneymicroservice"
+        imagePullPolicy: Always
+        image: "eu.gcr.io/cn-boomoseries-353312/disneymicroservice:latest"
         ports:
         - containerPort: 80
+        - containerPort: 443
+        env:
+        - name: ConnectionStrings__DefaultConnection
+          value: "Server=172.28.144.3; Initial Catalog=DisneyDB;User Id=sqlserver;Password=@|tUIyhyun<+^oT{;" 
 ---
 apiVersion: v1
 kind: Service
@@ -52,7 +57,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: series
@@ -64,18 +69,20 @@ spec:
       serviceAccountName: default
       containers:
       - name: series
-        image: "eu.gcr.io/boomoseries-api/seriesmicroservice"
+        imagePullPolicy: Always
+        image: "eu.gcr.io/cn-boomoseries-353312/seriesmicroservice:latest"
         ports:
         - containerPort: 80
+        - containerPort: 443
         env:
         - name: NETFLIX_HOST
-          value: "https://netflix.default"
+          value: "http://netflix"
         - name: AMAZON_HOST
-          value: "https://amazon.default"
+          value: "http://amazon"
         - name: DISNEY_HOST
-          value: "https://disney.default"
+          value: "http://disney"
         - name: IMDB_HOST
-          value: "https://imdb.default"
+          value: "http://imdb"
 ---
 apiVersion: v1
 kind: Service
@@ -104,7 +111,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: amazon
@@ -116,9 +123,14 @@ spec:
       serviceAccountName: default
       containers:
       - name: amazon
-        image: "eu.gcr.io/boomoseries-api/amazonmicroservice"
+        imagePullPolicy: Always
+        image: "eu.gcr.io/cn-boomoseries-353312/amazonmicroservice:latest"
         ports:
         - containerPort: 80
+        - containerPort: 443
+        env:
+        - name: ConnectionStrings__DefaultConnection
+          value: "Server=172.28.144.3; Initial Catalog=AmazonDB;User Id=sqlserver;Password=@|tUIyhyun<+^oT{;"  
 ---
 apiVersion: v1
 kind: Service
@@ -147,7 +159,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: books
@@ -159,12 +171,14 @@ spec:
       serviceAccountName: default
       containers:
       - name: books
-        image: "eu.gcr.io/boomoseries-api/booksmicroservice"
+        imagePullPolicy: Always
+        image: "eu.gcr.io/cn-boomoseries-353312/booksmicroservice:latest"
         ports:
         - containerPort: 80
+        - containerPort: 443
         env:
         - name: GOODREADS_HOST
-          value: "https://goodreads.default"
+          value: "http://goodreads"
 ---
 apiVersion: v1
 kind: Service
@@ -193,7 +207,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: imdb
@@ -205,9 +219,14 @@ spec:
       serviceAccountName: default
       containers:
       - name: imdb
-        image: "eu.gcr.io/boomoseries-api/imdbmicroservice"
+        imagePullPolicy: Always
+        image: "eu.gcr.io/cn-boomoseries-353312/imdbmicroservice:latest"
         ports:
         - containerPort: 80
+        - containerPort: 443
+        env:
+        - name: ConnectionStrings__DefaultConnection
+          value: "Server=172.28.144.3; Initial Catalog=IMDBDB;User Id=sqlserver;Password=@|tUIyhyun<+^oT{;"  
 ---
 apiVersion: v1
 kind: Service
@@ -236,7 +255,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: movies
@@ -248,18 +267,20 @@ spec:
       serviceAccountName: default
       containers:
       - name: movies
-        image: "eu.gcr.io/boomoseries-api/moviesmicroservice"
+        imagePullPolicy: Always
+        image: "eu.gcr.io/cn-boomoseries-353312/moviesmicroservice:latest"
         ports:
         - containerPort: 80
+        - containerPort: 443
         env:
         - name: NETFLIX_HOST
-          value: "https://netflix.default"
+          value: "http://netflix"
         - name: AMAZON_HOST
-          value: "https://amazon.default"
+          value: "http://amazon"
         - name: DISNEY_HOST
-          value: "https://disney.default"
+          value: "http://disney"
         - name: IMDB_HOST
-          value: "https://imdb.default"
+          value: "http://imdb"
 ---
 apiVersion: v1
 kind: Service
@@ -288,7 +309,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: orchauth
@@ -300,16 +321,38 @@ spec:
       serviceAccountName: default
       containers:
       - name: orchauth
-        image: "eu.gcr.io/boomoseries-api/orchmicroservice"
+        imagePullPolicy: Always
+        image: "eu.gcr.io/cn-boomoseries-353312/orchmicroservice:latest"
         ports:
         - containerPort: 80
+        - containerPort: 443
         env:
         - name: SEARCH_HOST
-          value: "https://search.default"
+          value: "http://search"
         - name: USERS_HOST
-          value: "https://users.default"
+          value: "http://users"
         - name: PREFS_HOST
-          value: "https://prefs.default"
+          value: "http://prefs"
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 2
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 5
+          httpGet:
+            scheme: HTTP
+            path: /index.html
+            port: 80    
+        livenessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 2
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 5
+          httpGet:
+            scheme: HTTP
+            path: /index.html
+            port: 80                       
 ---
 apiVersion: v1
 kind: Service
@@ -327,6 +370,7 @@ spec:
     protocol: TCP
     port: 443
     targetPort: 443
+  type: LoadBalancer
 ---
 apiVersion: "apps/v1"
 kind: Deployment
@@ -338,7 +382,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: prefs
@@ -350,9 +394,14 @@ spec:
       serviceAccountName: default
       containers:
       - name: prefs
-        image: "eu.gcr.io/boomoseries-api/prefsmicroservice"
+        imagePullPolicy: Always
+        image: "eu.gcr.io/cn-boomoseries-353312/prefsmicroservice:latest"
         ports:
         - containerPort: 80
+        - containerPort: 443
+        env:
+        - name: ConnectionStrings__DefaultConnection
+          value: "Server=172.28.144.3; Initial Catalog=PrefsDB;User Id=sqlserver;Password=@|tUIyhyun<+^oT{;"  
 ---
 apiVersion: v1
 kind: Service
@@ -381,7 +430,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: search
@@ -393,16 +442,18 @@ spec:
       serviceAccountName: default
       containers:
       - name: search
-        image: "eu.gcr.io/boomoseries-api/searchmicroservice"
+        imagePullPolicy: Always
+        image: "eu.gcr.io/cn-boomoseries-353312/searchmicroservice:latest"
         ports:
         - containerPort: 80
+        - containerPort: 443
         env:
         - name: MOVIES_HOST
-          value: "https://movies.default"
+          value: "http://movies"
         - name: SERIES_HOST
-          value: "https://series.default"
+          value: "http://series"
         - name: BOOKS_HOST
-          value: "https://books.default"
+          value: "http://books"
 ---
 apiVersion: v1
 kind: Service
@@ -431,7 +482,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: users
@@ -443,9 +494,14 @@ spec:
       serviceAccountName: default
       containers:
       - name: users
-        image: "eu.gcr.io/boomoseries-api/usersmicroservice"
+        imagePullPolicy: Always
+        image: "eu.gcr.io/cn-boomoseries-353312/usersmicroservice:latest"
         ports:
         - containerPort: 80
+        - containerPort: 443
+        env:
+        - name: ConnectionStrings__DefaultConnection
+          value: "Server=172.28.144.3; Initial Catalog=UsersDB;User Id=sqlserver;Password=@|tUIyhyun<+^oT{;"  
 ---
 apiVersion: v1
 kind: Service
@@ -474,7 +530,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: goodreads
@@ -486,9 +542,14 @@ spec:
       serviceAccountName: default
       containers:
       - name: goodreads
-        image: "eu.gcr.io/boomoseries-api/goodreadsmicroservice"
+        imagePullPolicy: Always
+        image: "eu.gcr.io/cn-boomoseries-353312/goodreadsmicroservice:latest"
         ports:
         - containerPort: 80
+        - containerPort: 443
+        env:
+        - name: ConnectionStrings__DefaultConnection
+          value: "Server=172.28.144.3; Initial Catalog=GoodReadsDB;User Id=sqlserver;Password=@|tUIyhyun<+^oT{;"  
 ---
 apiVersion: v1
 kind: Service
@@ -517,7 +578,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: netflix
@@ -529,9 +590,14 @@ spec:
       serviceAccountName: default
       containers:
       - name: netflix
-        image: "eu.gcr.io/boomoseries-api/netflixmicroservice"
+        imagePullPolicy: Always
+        image: "eu.gcr.io/cn-boomoseries-353312/netflixmicroservice:latest"
         ports:
         - containerPort: 80
+        - containerPort: 443
+        env:
+        - name: ConnectionStrings__DefaultConnection
+          value: "Server=172.28.144.3; Initial Catalog=NetflixDB;User Id=sqlserver;Password=@|tUIyhyun<+^oT{;"  
 ---
 apiVersion: v1
 kind: Service

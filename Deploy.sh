@@ -52,4 +52,4 @@ docker push eu.gcr.io/${PROJECT_ID}/goodreadsmicroservice
 docker images
 gcloud container images list
 kubectl get nodes
-gcloud container clusters get-credentials boomoseries --zone europe-west1-b --project boomoseries-api-348309
+gcloud container clusters get-credentials cn-boomoseries-gke --zone europe-west1-b --project $PROJECT_ID

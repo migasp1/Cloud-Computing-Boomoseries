@@ -3,7 +3,6 @@ kind: Ingress
 metadata:
   name: boomoseries-ingress
 spec:
-  ingressClassName: nginx
   defaultBackend:
     service:
       name: orchauth

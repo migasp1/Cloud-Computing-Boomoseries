@@ -1,6 +1,7 @@
 ﻿using boomoseries_OrchAuth_api.Entities;
 using boomoseries_OrchAuth_api.Helpers;
 using boomoseries_OrchAuth_api.Models;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -15,18 +16,23 @@ namespace boomoseries_OrchAuth_api.Services
         //private static readonly string _usersBaseURL = "https://localhost:5021/Users";
         //private static readonly string _usersBaseURL = Environment.GetEnvironmentVariable("USERS_HOST");
         private readonly HttpClient httpClient;
+        private readonly ILogger<UsersRESTCommunicationService> logger;
 
         public UsersRESTCommunicationService(
-            HttpClient httpClient
+            HttpClient httpClient,
+            ILogger<UsersRESTCommunicationService> logger
             )
         {
             this.httpClient = httpClient;
+            this.logger = logger;
         }
 
         public async Task<HttpResponseMessage> AuthenticateUser(AuthenticateModel authenticateModel)
         {
             JsonContent content = JsonContent.Create(authenticateModel);
-            var response = await httpClient.PostAsync(_usersBaseURL + "/authenticate", content);
+            var url = _usersBaseURL + "/authenticate";
+            logger.LogInformation("Invoking url {Url}", url);
+            var response = await httpClient.PostAsync(url, content);
 
             return response;
         }
@@ -34,14 +40,18 @@ namespace boomoseries_OrchAuth_api.Services
         public async Task<HttpResponseMessage> RegisterUser(RegisterModel registerModel)
         {
             JsonContent content = JsonContent.Create(registerModel);
-            var response = await httpClient.PostAsync(_usersBaseURL + "/register", content);
+            var url = _usersBaseURL + "/register";
+            logger.LogInformation("Invoking url {Url}", url);
+            var response = await httpClient.PostAsync(url, content);
 
             return response;
         }
 
         public async Task<User> GetUserById(int id)
         {
-            var request = httpClient.GetAsync(_usersBaseURL + "/" + id);
+            var url = _usersBaseURL + "/" + id;
+            logger.LogInformation("Invoking url {Url}", url);
+            var request = httpClient.GetAsync(url);
             var response = request.Result;
             var responseString = await response.Content.ReadAsStringAsync();
             User user = JsonConvert.DeserializeObject<User>(responseString);
