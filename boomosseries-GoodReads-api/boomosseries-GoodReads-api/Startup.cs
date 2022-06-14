@@ -47,8 +47,6 @@ namespace boomosseries_GoodReads_api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "boomosseries_GoodReads_api v1"));
             }
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseAuthorization();

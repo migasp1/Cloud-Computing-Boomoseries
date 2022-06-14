@@ -35,7 +35,7 @@ cd ..
 cd boomoseries-Users-api/
 docker build -f ./boomoseries-Users-api/Dockerfile -t eu.gcr.io/${PROJECT_ID}/usersmicroservice .
 docker images
-gcloud services enable containerregistry.googleapis.com
+#gcloud services enable containerregistry.googleapis.com
 gcloud auth configure-docker
 docker push eu.gcr.io/${PROJECT_ID}/seriesmicroservice
 docker push eu.gcr.io/${PROJECT_ID}/disneymicroservice
@@ -52,4 +52,4 @@ docker push eu.gcr.io/${PROJECT_ID}/goodreadsmicroservice
 docker images
 gcloud container images list
 kubectl get nodes
-gcloud container clusters get-credentials boomoseries --zone europe-west1-b --project boomoseries-api-348309
+gcloud container clusters get-credentials boomoseries --zone europe-west1-b --project cn-boomoseries-353312

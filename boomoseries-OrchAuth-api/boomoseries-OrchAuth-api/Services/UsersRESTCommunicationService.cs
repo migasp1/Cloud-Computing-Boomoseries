@@ -11,9 +11,9 @@ namespace boomoseries_OrchAuth_api.Services
 {
     public class UsersRESTCommunicationService : IUsersCommunicationService
     {
-        private static readonly string _usersBaseURL = "http://host.docker.internal:5020/Users";
+        //private static readonly string _usersBaseURL = "http://host.docker.internal:5020/Users";
         //private static readonly string _usersBaseURL = "https://localhost:5021/Users";
-        //private static readonly string _usersBaseURL = Environment.GetEnvironmentVariable("USERS_HOST");
+        private static readonly string _usersBaseURL = Environment.GetEnvironmentVariable("USERS_HOST");
         private readonly HttpClient httpClient;
 
         public UsersRESTCommunicationService(
