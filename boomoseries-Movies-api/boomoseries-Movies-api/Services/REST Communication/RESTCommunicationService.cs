@@ -17,8 +17,8 @@ namespace boomoseries_Movies_api.Services.REST_Communication
     {
         private static readonly string[] microservicesBaseURL = URLHelper.GetMicroservicesBaseURL();
         //private static readonly string IMDBBaseUrl = "https://localhost:5003/api/v1/IMDB/movies";
-        private static readonly string IMDBBaseUrl = "http://host.docker.internal:5002/api/v1/IMDB";
-        //private static readonly string IMDBBaseUrl = Environment.GetEnvironmentVariable("IMDB_HOST");
+        //private static readonly string IMDBBaseUrl = "http://host.docker.internal:5002/api/v1/IMDB";
+        private static readonly string IMDBBaseUrl = Environment.GetEnvironmentVariable("IMDB_HOST");
         private readonly HttpClient httpClient;
 
         public RESTCommunicationService(

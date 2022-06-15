@@ -76,13 +76,13 @@ spec:
         - containerPort: 443
         env:
         - name: NETFLIX_HOST
-          value: "http://netflix"
+          value: "http://netflix/api/v1/Netflix/series"
         - name: AMAZON_HOST
-          value: "http://amazon"
+          value: "http://amazon/api/v1/Amazon/series"
         - name: DISNEY_HOST
-          value: "http://disney"
+          value: "http://disney/api/v1/Disney/series"
         - name: IMDB_HOST
-          value: "http://imdb"
+          value: "http://imdb/api/v1/IMDB/series"
 ---
 apiVersion: v1
 kind: Service
@@ -178,7 +178,7 @@ spec:
         - containerPort: 443
         env:
         - name: GOODREADS_HOST
-          value: "http://goodreads"
+          value: "http://goodreads/api/v1/GoodReads/books"
 ---
 apiVersion: v1
 kind: Service
@@ -274,13 +274,13 @@ spec:
         - containerPort: 443
         env:
         - name: NETFLIX_HOST
-          value: "http://netflix"
+          value: "http://netflix/api/v1/Netflix/movies"
         - name: AMAZON_HOST
-          value: "http://amazon"
+          value: "http://amazon/api/v1/Amazon/movies"
         - name: DISNEY_HOST
-          value: "http://disney"
+          value: "http://disney/api/v1/Disney/movies"
         - name: IMDB_HOST
-          value: "http://imdb"
+          value: "http://imdb/api/v1/IMDB/movies"
 ---
 apiVersion: v1
 kind: Service
@@ -328,31 +328,33 @@ spec:
         - containerPort: 443
         env:
         - name: SEARCH_HOST
-          value: "http://search"
+          value: "http://search/api/v1/Search"
         - name: USERS_HOST
-          value: "http://users"
+          value: "http://users/Users"
         - name: PREFS_HOST
-          value: "http://prefs"
-        readinessProbe:
-          initialDelaySeconds: 5
-          periodSeconds: 2
-          timeoutSeconds: 1
-          successThreshold: 1
-          failureThreshold: 5
-          httpGet:
-            scheme: HTTP
-            path: /index.html
-            port: 80    
-        livenessProbe:
-          initialDelaySeconds: 5
-          periodSeconds: 2
-          timeoutSeconds: 1
-          successThreshold: 1
-          failureThreshold: 5
-          httpGet:
-            scheme: HTTP
-            path: /index.html
-            port: 80                       
+          value: "http://prefs/UserPreferences/Favorites"
+        - name: "Logging__LogLevel__Default"
+          value: "Information"          
+      readinessProbe:
+        initialDelaySeconds: 5
+        periodSeconds: 15
+        timeoutSeconds: 2
+        successThreshold: 1
+        failureThreshold: 5
+        httpGet:
+          scheme: HTTP
+          path: /index.html
+          port: 80    
+      livenessProbe:
+        initialDelaySeconds: 5
+        periodSeconds: 15
+        timeoutSeconds: 1
+        successThreshold: 1
+        failureThreshold: 5
+        httpGet:
+          scheme: HTTP
+          path: /index.html
+          port: 80                       
 ---
 apiVersion: v1
 kind: Service
@@ -449,11 +451,11 @@ spec:
         - containerPort: 443
         env:
         - name: MOVIES_HOST
-          value: "http://movies"
+          value: "http://movies/api/v1/Movies"
         - name: SERIES_HOST
-          value: "http://series"
+          value: "http://series/api/v1/Series"
         - name: BOOKS_HOST
-          value: "http://books"
+          value: "http://books/api/v1/Books"
 ---
 apiVersion: v1
 kind: Service

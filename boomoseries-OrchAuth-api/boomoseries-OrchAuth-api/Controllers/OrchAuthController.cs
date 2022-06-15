@@ -31,7 +31,7 @@ namespace boomoseries_OrchAuth_api.Controllers
         private readonly ISearchCommunicationServiceBooks _commServiceSearchBooks;
         private readonly AppSettings _appSettings;
         private readonly IMapper _mapper;
-        private ILogger<OrchAuthController> logger; 
+        private ILogger<OrchAuthController> logger;
 
         public OrchAuthController(
             IUsersCommunicationService userService,
@@ -46,7 +46,7 @@ namespace boomoseries_OrchAuth_api.Controllers
             _appSettings = appSettings.Value;
             _userPreferencesService = userPreferencesService;
             _mapper = mapper;
-            _commServiceSearchWatchables= commServiceSearchWatchables;
+            _commServiceSearchWatchables = commServiceSearchWatchables;
             _commServiceSearchBooks = commServiceSearchBooks;
             this.logger = logger;
         }
@@ -119,21 +119,15 @@ namespace boomoseries_OrchAuth_api.Controllers
         [HttpPost("Favorites/Book")]
         public async Task<IActionResult> AddFavoriteBook(UserBookPreferenceModel model)
         {
-            try
-            {
-                var bookModel = _mapper.Map<UserBookPreferenceDTO>(model);
-                var userId = int.Parse(HttpContext.GetUserId());
-                bookModel.Userid = userId;    
-                var response = await _userPreferencesService.AddFavoriteBook(bookModel);
-                var deserialized = JsonConvert.DeserializeObject<FavoritesModel>(response);
 
-                return Ok(deserialized);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, ex.ToString());
-                return BadRequest(new { message = ex.Message });
-            }
+            var bookModel = _mapper.Map<UserBookPreferenceDTO>(model);
+            var userId = int.Parse(HttpContext.GetUserId());
+            bookModel.Userid = userId;
+            var response = await _userPreferencesService.AddFavoriteBook(bookModel);
+            var deserialized = JsonConvert.DeserializeObject<FavoritesModel>(response);
+
+            return Ok(deserialized);
+
         }
 
         [HttpPost("Favorites/Watchable")]
@@ -178,61 +172,42 @@ namespace boomoseries_OrchAuth_api.Controllers
         [HttpGet("Search")]
         public async Task<IActionResult> SearchItemsByRating(string type, double minRating)
         {
-            if(type == null)
+            if (type == null)
                 return BadRequest("Oops, something went wrong - Null type!");
             if (type.Equals("Movie"))
             {
-                try
+                var responseBody = await _commServiceSearchWatchables.GetWatchblesByRating(type, minRating);
+                if (responseBody is List<WatchableDTO>)
                 {
-                    var responseBody = await _commServiceSearchWatchables.GetWatchblesByRating(type, minRating);
-                    if (responseBody is List<WatchableDTO>)
-                    {
-                        List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
-                        return Ok(responseBodyTyped);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
+                    return Ok(responseBodyTyped);
                 }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, ex.ToString());
-                    return BadRequest("Oops, something went wrong! " + ex.ToString());
-                }
+                return BadRequest((string)responseBody);
+
             }
             else if (type.Equals("TV Show"))
             {
-                try
+
+                var responseBody = await _commServiceSearchWatchables.GetWatchblesByRating(type, minRating);
+                if (responseBody is List<WatchableDTO>)
                 {
-                    var responseBody = await _commServiceSearchWatchables.GetWatchblesByRating(type, minRating);
-                    if (responseBody is List<WatchableDTO>)
-                    {
-                        List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
-                        return Ok(responseBodyTyped);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
+                    return Ok(responseBodyTyped);
                 }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, ex.ToString());
-                    return BadRequest("Oops, something went wrong! " + ex.ToString());
-                }
+                return BadRequest((string)responseBody);
+
             }
             else if (type.Equals("Book"))
             {
-                try
+
+                var responseBody = await _commServiceSearchBooks.ObtainBooksByRating(type, minRating);
+                if (responseBody is List<BookDTO> response)
                 {
-                    var responseBody = await _commServiceSearchBooks.ObtainBooksByRating(type, minRating);
-                    if (responseBody is List<BookDTO>)
-                    {
-                        List<BookDTO> responseBodyTyped = (List<BookDTO>)responseBody;
-                        return Ok(responseBodyTyped);
-                    }
-                    return BadRequest((string)responseBody);
+                    return Ok(response);
                 }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, ex.ToString());
-                    return BadRequest("Oops, something went wrong! error" + ex.ToString());
-                }
+                return BadRequest(responseBody);
+
+
             }
             return BadRequest("Oops, something went wrong! Type did not match");
         }
@@ -245,57 +220,37 @@ namespace boomoseries_OrchAuth_api.Controllers
                 return BadRequest("Oops, something went wrong! ");
             if (type.Equals("Movie"))
             {
-                try
+                var responseBody = await _commServiceSearchWatchables.ObtainSepcificWatchables(type, item_title);
+                if (responseBody is List<WatchableDTO>)
                 {
-                    var responseBody = await _commServiceSearchWatchables.ObtainSepcificWatchables(type, item_title);
-                    if (responseBody is List<WatchableDTO>)
-                    {
-                        List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
-                        return Ok(responseBodyTyped);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
+                    return Ok(responseBodyTyped);
                 }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, ex.ToString());
-                    return BadRequest("Oops, something went wrong! " + ex.ToString());
-                }
+                return BadRequest((string)responseBody);
+
             }
             else if (type.Equals("TV Show"))
             {
-                try
+
+                var responseBody = await _commServiceSearchWatchables.ObtainSepcificWatchables(type, item_title);
+                if (responseBody is List<WatchableDTO>)
                 {
-                    var responseBody = await _commServiceSearchWatchables.ObtainSepcificWatchables(type, item_title);
-                    if (responseBody is List<WatchableDTO>)
-                    {
-                        List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
-                        return Ok(responseBodyTyped);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
+                    return Ok(responseBodyTyped);
                 }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, ex.ToString());
-                    return BadRequest("Oops, something went wrong! " + ex.ToString());
-                }
+                return BadRequest((string)responseBody);
+
             }
             else if (type.Equals("Book"))
             {
-                try
+                var responseBody = await _commServiceSearchBooks.ObtainSpecificBook(type, item_title);
+                if (responseBody is List<BookDTO>)
                 {
-                    var responseBody = await _commServiceSearchBooks.ObtainSpecificBook(type, item_title);
-                    if (responseBody is List<BookDTO>)
-                    {
-                        List<BookDTO> responseBodyTyped = (List<BookDTO>)responseBody;
-                        return Ok(responseBodyTyped);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<BookDTO> responseBodyTyped = (List<BookDTO>)responseBody;
+                    return Ok(responseBodyTyped);
                 }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, ex.ToString());
-                    return BadRequest("Oops, something went wrong! " + ex.ToString());
-                }
+                return BadRequest((string)responseBody);
+
             }
             return BadRequest("Oops, something went wrong! ");
         }
@@ -308,57 +263,39 @@ namespace boomoseries_OrchAuth_api.Controllers
                 return BadRequest("Oops, something went wrong! ");
             if (type.Equals("Movie"))
             {
-                try
+
+                var responseBody = await _commServiceSearchWatchables.ObtainRandomWatchable(type);
+                if (responseBody is List<WatchableDTO>)
                 {
-                    var responseBody = await _commServiceSearchWatchables.ObtainRandomWatchable(type);
-                    if (responseBody is List<WatchableDTO>)
-                    {
-                        List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
-                        return Ok(responseBodyTyped);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
+                    return Ok(responseBodyTyped);
                 }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, ex.ToString());
-                    return BadRequest("Oops, something went wrong! " + ex.ToString());
-                }
+                return BadRequest((string)responseBody);
+
             }
             else if (type.Equals("TV Show"))
             {
-                try
+
+                var responseBody = await _commServiceSearchWatchables.ObtainRandomWatchable(type);
+                if (responseBody is List<WatchableDTO>)
                 {
-                    var responseBody = await _commServiceSearchWatchables.ObtainRandomWatchable(type);
-                    if (responseBody is List<WatchableDTO>)
-                    {
-                        List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
-                        return Ok(responseBodyTyped);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<WatchableDTO> responseBodyTyped = (List<WatchableDTO>)responseBody;
+                    return Ok(responseBodyTyped);
                 }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, ex.ToString());
-                    return BadRequest("Oops, something went wrong! " + ex.ToString());
-                }
+                return BadRequest((string)responseBody);
+
             }
             else if (type.Equals("Book"))
             {
-                try
+
+                var responseBody = await _commServiceSearchBooks.ObtainRandomBooks(type);
+                if (responseBody is List<BookDTO>)
                 {
-                    var responseBody = await _commServiceSearchBooks.ObtainRandomBooks(type);
-                    if (responseBody is List<BookDTO>)
-                    {
-                        List<BookDTO> responseBodyTyped = (List<BookDTO>)responseBody;
-                        return Ok(responseBodyTyped);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<BookDTO> responseBodyTyped = (List<BookDTO>)responseBody;
+                    return Ok(responseBodyTyped);
                 }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, ex.ToString());
-                    return BadRequest("Oops, something went wrong! " + ex.ToString());
-                }
+                return BadRequest((string)responseBody);
+
             }
             return BadRequest("Oops, something went wrong! ");
         }

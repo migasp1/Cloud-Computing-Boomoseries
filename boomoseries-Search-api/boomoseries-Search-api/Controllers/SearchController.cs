@@ -23,55 +23,40 @@ namespace boomoseries_Search_api.Controllers
         [HttpGet("/api/v1/Search")]
         public async Task<IActionResult> GetItemsByRating(string type, double minRating)
         {
-            if (type.Equals("Movie")) {
-                try
+            if (type.Equals("Movie"))
+            {
+                var responseBody = await commServiceMovies.GetMoviesByRating(minRating);
+                if (responseBody is List<MovieDTO>)
                 {
-                    var responseBody = await commServiceMovies.GetMoviesByRating(minRating);
-                    if (responseBody is List<MovieDTO>)
-                    {
-                        List<MovieDTO> responseBodyTyped = (List<MovieDTO>)responseBody;
-                        return Ok(responseBody);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<MovieDTO> responseBodyTyped = (List<MovieDTO>)responseBody;
+                    return Ok(responseBody);
                 }
-                catch (Exception ex)
-                {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
-                }
+                return BadRequest((string)responseBody);
+
             }
             else if (type.Equals("TV Show"))
             {
-                try
+
+                var responseBody = await commServiceSeries.GetSeriesByRating(minRating);
+                if (responseBody is List<SerieDTO>)
                 {
-                    var responseBody = await commServiceSeries.GetSeriesByRating(minRating);
-                    if (responseBody is List<SerieDTO>)
-                    {
-                        List<SerieDTO> responseBodyTyped = (List<SerieDTO>) responseBody;
-                        return Ok(responseBodyTyped);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<SerieDTO> responseBodyTyped = (List<SerieDTO>)responseBody;
+                    return Ok(responseBodyTyped);
                 }
-                catch (Exception ex)
-                {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
-                }
+                return BadRequest((string)responseBody);
+
             }
             else if (type.Equals("Book"))
             {
-                try
+
+                var responseBody = await commServiceBooks.ObtainBooksByRating(minRating);
+                if (responseBody is List<BookDTO>)
                 {
-                    var responseBody = await commServiceBooks.ObtainBooksByRating(minRating);
-                    if (responseBody is List<BookDTO>)
-                    {
-                        List<BookDTO> responseBodyTyped = (List<BookDTO>) responseBody;
-                        return Ok(responseBodyTyped);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<BookDTO> responseBodyTyped = (List<BookDTO>)responseBody;
+                    return Ok(responseBodyTyped);
                 }
-                catch (Exception ex)
-                {
-                    return BadRequest("Oops, something went wrong! error: " + ex.Message);
-                }
+                return BadRequest((string)responseBody);
+
             }
             return BadRequest("Oops, something went wrong! ");
         }
@@ -81,54 +66,39 @@ namespace boomoseries_Search_api.Controllers
         {
             if (type.Equals("Movie"))
             {
-                try
+
+                var responseBody = await commServiceMovies.ObtainSepcificMovie(item_title);
+                if (responseBody is List<MovieDTO>)
                 {
-                    var responseBody = await commServiceMovies.ObtainSepcificMovie(item_title);
-                    if (responseBody is List<MovieDTO>)
-                    {
-                        List<MovieDTO> responseBodyTyped = (List<MovieDTO>)responseBody;
-                        return Ok(responseBody);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<MovieDTO> responseBodyTyped = (List<MovieDTO>)responseBody;
+                    return Ok(responseBody);
                 }
-                catch (Exception ex)
-                {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
-                }
+                return BadRequest((string)responseBody);
+
             }
             else if (type.Equals("TV Show"))
             {
-                try
+
+                var responseBody = await commServiceSeries.ObtainSepcificSeries(item_title);
+                if (responseBody is List<SerieDTO>)
                 {
-                    var responseBody = await commServiceSeries.ObtainSepcificSeries(item_title);
-                    if (responseBody is List<SerieDTO>)
-                    {
-                        List<SerieDTO> responseBodyTyped = (List<SerieDTO>)responseBody;
-                        return Ok(responseBodyTyped);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<SerieDTO> responseBodyTyped = (List<SerieDTO>)responseBody;
+                    return Ok(responseBodyTyped);
                 }
-                catch (Exception ex)
-                {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
-                }
+                return BadRequest((string)responseBody);
+
             }
             else if (type.Equals("Book"))
             {
-                try
+
+                var responseBody = await commServiceBooks.ObtainSpecificBook(item_title);
+                if (responseBody is List<BookDTO>)
                 {
-                    var responseBody = await commServiceBooks.ObtainSpecificBook(item_title);
-                    if (responseBody is List<BookDTO>)
-                    {
-                        List<BookDTO> responseBodyTyped = (List<BookDTO>)responseBody;
-                        return Ok(responseBody);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<BookDTO> responseBodyTyped = (List<BookDTO>)responseBody;
+                    return Ok(responseBody);
                 }
-                catch (Exception ex)
-                {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
-                }
+                return BadRequest((string)responseBody);
+
             }
             return BadRequest("Oops, something went wrong! ");
         }
@@ -138,54 +108,39 @@ namespace boomoseries_Search_api.Controllers
         {
             if (type.Equals("Movie"))
             {
-                try
+
+                var responseBody = await commServiceMovies.ObtainRandomMovies();
+                if (responseBody is List<MovieDTO>)
                 {
-                    var responseBody = await commServiceMovies.ObtainRandomMovies();
-                    if (responseBody is List<MovieDTO>)
-                    {
-                        List<MovieDTO> responseBodyTyped = (List<MovieDTO>)responseBody;
-                        return Ok(responseBody);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<MovieDTO> responseBodyTyped = (List<MovieDTO>)responseBody;
+                    return Ok(responseBody);
                 }
-                catch (Exception ex)
-                {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
-                }
+                return BadRequest((string)responseBody);
+
             }
             else if (type.Equals("TV Show"))
             {
-                try
+
+                var responseBody = await commServiceSeries.ObtainRandomSeries();
+                if (responseBody is List<SerieDTO>)
                 {
-                    var responseBody = await commServiceSeries.ObtainRandomSeries();
-                    if (responseBody is List<SerieDTO>)
-                    {
-                        List<SerieDTO> responseBodyTyped = (List<SerieDTO>)responseBody;
-                        return Ok(responseBody);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<SerieDTO> responseBodyTyped = (List<SerieDTO>)responseBody;
+                    return Ok(responseBody);
                 }
-                catch (Exception ex)
-                {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
-                }
+                return BadRequest((string)responseBody);
+
             }
             else if (type.Equals("Book"))
             {
-                try
+
+                var responseBody = await commServiceBooks.ObtainRandomBooks();
+                if (responseBody is List<BookDTO>)
                 {
-                    var responseBody = await commServiceBooks.ObtainRandomBooks();
-                    if (responseBody is List<BookDTO>)
-                    {
-                        List<BookDTO> responseBodyTyped = (List<BookDTO>)responseBody;
-                        return Ok(responseBody);
-                    }
-                    return BadRequest((string)responseBody);
+                    List<BookDTO> responseBodyTyped = (List<BookDTO>)responseBody;
+                    return Ok(responseBody);
                 }
-                catch (Exception ex)
-                {
-                    return BadRequest("Oops, something went wrong! " + ex.Message);
-                }
+                return BadRequest((string)responseBody);
+
             }
             return BadRequest("Oops, something went wrong! ");
         }

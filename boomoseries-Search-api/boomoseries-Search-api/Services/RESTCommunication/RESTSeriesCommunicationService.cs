@@ -22,7 +22,6 @@ namespace boomoseries_Search_api.Services.RESTCommunication
         public async Task<object> ObtainRandomSeries()
         {
             var request = httpClient.GetAsync(microservicesBaseURL[1] + "/random");
-
             //Get the responses
             var response = request.Result;
             if (!response.IsSuccessStatusCode)
