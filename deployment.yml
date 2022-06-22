@@ -8,7 +8,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: disney
@@ -21,13 +21,13 @@ spec:
       containers:
       - name: disney
         imagePullPolicy: Always
-        image: "eu.gcr.io/cn-boomoseries-353312/disneymicroservice:latest"
+        image: "eu.gcr.io/boomoseries/disneymicroservice:latest"
         ports:
         - containerPort: 80
         - containerPort: 443
         env:
         - name: ConnectionStrings__DefaultConnection
-          value: "Server=172.28.144.3; Initial Catalog=DisneyDB;User Id=sqlserver;Password=@|tUIyhyun<+^oT{;" 
+          value: "Server=10.119.160.8; Database=DisneyDB;User Id=clientTest;Password=123456789" 
 ---
 apiVersion: v1
 kind: Service
@@ -57,7 +57,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: series
@@ -70,7 +70,7 @@ spec:
       containers:
       - name: series
         imagePullPolicy: Always
-        image: "eu.gcr.io/cn-boomoseries-353312/seriesmicroservice:latest"
+        image: "eu.gcr.io/boomoseries/seriesmicroservice:latest"
         ports:
         - containerPort: 80
         - containerPort: 443
@@ -111,7 +111,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: amazon
@@ -124,13 +124,13 @@ spec:
       containers:
       - name: amazon
         imagePullPolicy: Always
-        image: "eu.gcr.io/cn-boomoseries-353312/amazonmicroservice:latest"
+        image: "eu.gcr.io/boomoseries/amazonmicroservice:latest"
         ports:
         - containerPort: 80
         - containerPort: 443
         env:
         - name: ConnectionStrings__DefaultConnection
-          value: "Server=172.28.144.3; Initial Catalog=AmazonDB;User Id=sqlserver;Password=@|tUIyhyun<+^oT{;"  
+          value: "Server=10.119.160.8; Database=AmazonDB;User Id=clientTest;Password=123456789"  
 ---
 apiVersion: v1
 kind: Service
@@ -159,7 +159,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: books
@@ -172,7 +172,7 @@ spec:
       containers:
       - name: books
         imagePullPolicy: Always
-        image: "eu.gcr.io/cn-boomoseries-353312/booksmicroservice:latest"
+        image: "eu.gcr.io/boomoseries/booksmicroservice:latest"
         ports:
         - containerPort: 80
         - containerPort: 443
@@ -207,7 +207,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: imdb
@@ -220,13 +220,13 @@ spec:
       containers:
       - name: imdb
         imagePullPolicy: Always
-        image: "eu.gcr.io/cn-boomoseries-353312/imdbmicroservice:latest"
+        image: "eu.gcr.io/boomoseries/imdbmicroservice:latest"
         ports:
         - containerPort: 80
         - containerPort: 443
         env:
         - name: ConnectionStrings__DefaultConnection
-          value: "Server=172.28.144.3; Initial Catalog=IMDBDB;User Id=sqlserver;Password=@|tUIyhyun<+^oT{;"  
+          value: "Server=10.119.160.8; Database=IMDBDB;User Id=clientTest;Password=123456789"  
 ---
 apiVersion: v1
 kind: Service
@@ -255,7 +255,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: movies
@@ -268,7 +268,7 @@ spec:
       containers:
       - name: movies
         imagePullPolicy: Always
-        image: "eu.gcr.io/cn-boomoseries-353312/moviesmicroservice:latest"
+        image: "eu.gcr.io/boomoseries/moviesmicroservice:latest"
         ports:
         - containerPort: 80
         - containerPort: 443
@@ -309,7 +309,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: orchauth
@@ -322,7 +322,7 @@ spec:
       containers:
       - name: orchauth
         imagePullPolicy: Always
-        image: "eu.gcr.io/cn-boomoseries-353312/orchmicroservice:latest"
+        image: "eu.gcr.io/boomoseries/orchmicroservice:latest"
         ports:
         - containerPort: 80
         - containerPort: 443
@@ -335,26 +335,26 @@ spec:
           value: "http://prefs/UserPreferences/Favorites"
         - name: "Logging__LogLevel__Default"
           value: "Information"          
-      readinessProbe:
-        initialDelaySeconds: 5
-        periodSeconds: 15
-        timeoutSeconds: 2
-        successThreshold: 1
-        failureThreshold: 5
-        httpGet:
-          scheme: HTTP
-          path: /index.html
-          port: 80    
-      livenessProbe:
-        initialDelaySeconds: 5
-        periodSeconds: 15
-        timeoutSeconds: 1
-        successThreshold: 1
-        failureThreshold: 5
-        httpGet:
-          scheme: HTTP
-          path: /index.html
-          port: 80                       
+      #readinessProbe:
+      #  initialDelaySeconds: 5
+      #  periodSeconds: 15
+      #  timeoutSeconds: 2
+      #  successThreshold: 1
+      #  failureThreshold: 5
+      #  httpGet:
+      #    scheme: HTTP
+      #    path: /index.html
+      #    port: 80    
+      #livenessProbe:
+      #  initialDelaySeconds: 5
+      #  periodSeconds: 15
+      #  timeoutSeconds: 1
+      #  successThreshold: 1
+      #  failureThreshold: 5
+      #  httpGet:
+      #    scheme: HTTP
+      #    path: /index.html
+      #    port: 80                       
 ---
 apiVersion: v1
 kind: Service
@@ -384,7 +384,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: prefs
@@ -397,13 +397,13 @@ spec:
       containers:
       - name: prefs
         imagePullPolicy: Always
-        image: "eu.gcr.io/cn-boomoseries-353312/prefsmicroservice:latest"
+        image: "eu.gcr.io/boomoseries/prefsmicroservice:latest"
         ports:
         - containerPort: 80
         - containerPort: 443
         env:
         - name: ConnectionStrings__DefaultConnection
-          value: "Server=172.28.144.3; Initial Catalog=PrefsDB;User Id=sqlserver;Password=@|tUIyhyun<+^oT{;"  
+          value: "Server=10.119.160.8; Database=PrefsDB;User Id=clientTest;Password=123456789"  
 ---
 apiVersion: v1
 kind: Service
@@ -432,7 +432,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: search
@@ -445,7 +445,7 @@ spec:
       containers:
       - name: search
         imagePullPolicy: Always
-        image: "eu.gcr.io/cn-boomoseries-353312/searchmicroservice:latest"
+        image: "eu.gcr.io/boomoseries/searchmicroservice:latest"
         ports:
         - containerPort: 80
         - containerPort: 443
@@ -484,7 +484,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: users
@@ -497,13 +497,13 @@ spec:
       containers:
       - name: users
         imagePullPolicy: Always
-        image: "eu.gcr.io/cn-boomoseries-353312/usersmicroservice:latest"
+        image: "eu.gcr.io/boomoseries/usersmicroservice:latest"
         ports:
         - containerPort: 80
         - containerPort: 443
         env:
         - name: ConnectionStrings__DefaultConnection
-          value: "Server=172.28.144.3; Initial Catalog=UsersDB;User Id=sqlserver;Password=@|tUIyhyun<+^oT{;"  
+          value: "Server=10.119.160.8; Database=UsersDB;User Id=clientTest;Password=123456789"  
 ---
 apiVersion: v1
 kind: Service
@@ -532,7 +532,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: goodreads
@@ -545,13 +545,13 @@ spec:
       containers:
       - name: goodreads
         imagePullPolicy: Always
-        image: "eu.gcr.io/cn-boomoseries-353312/goodreadsmicroservice:latest"
+        image: "eu.gcr.io/boomoseries/goodreadsmicroservice:latest"
         ports:
         - containerPort: 80
         - containerPort: 443
         env:
         - name: ConnectionStrings__DefaultConnection
-          value: "Server=172.28.144.3; Initial Catalog=GoodReadsDB;User Id=sqlserver;Password=@|tUIyhyun<+^oT{;"  
+          value: "Server=10.119.160.8; Database=GoodReadsDB;User Id=clientTest;Password=123456789;"  
 ---
 apiVersion: v1
 kind: Service
@@ -580,7 +580,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: netflix
@@ -593,13 +593,13 @@ spec:
       containers:
       - name: netflix
         imagePullPolicy: Always
-        image: "eu.gcr.io/cn-boomoseries-353312/netflixmicroservice:latest"
+        image: "eu.gcr.io/boomoseries/netflixmicroservice:latest"
         ports:
         - containerPort: 80
         - containerPort: 443
         env:
         - name: ConnectionStrings__DefaultConnection
-          value: "Server=172.28.144.3; Initial Catalog=NetflixDB;User Id=sqlserver;Password=@|tUIyhyun<+^oT{;"  
+          value: "Server=10.119.160.8; Database=NetflixDB;User Id=clientTest;Password=123456789"  
 ---
 apiVersion: v1
 kind: Service
@@ -617,3 +617,425 @@ spec:
     protocol: TCP
     port: 443
     targetPort: 443
+---
+#Autoscaling
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: disney-hpa
+  namespace: default
+  labels:
+    app: disney
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: disney
+  minReplicas: 2
+  maxReplicas: 200
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: AverageValue
+        averageValue: 20
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: 300Mi
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 200
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: series-hpa
+  namespace: default
+  labels:
+    app: series
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: series
+  minReplicas: 2
+  maxReplicas: 200
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: AverageValue
+        averageValue: 20
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: 300Mi
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 200
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: amazon-hpa
+  namespace: default
+  labels:
+    app: amazon
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: amazon
+  minReplicas: 2
+  maxReplicas: 200
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: AverageValue
+        averageValue: 20
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: 300Mi
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 200
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: books-hpa
+  namespace: default
+  labels:
+    app: books
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: books
+  minReplicas: 2
+  maxReplicas: 200
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: AverageValue
+        averageValue: 20
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: 300Mi
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 200
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: imdb-hpa
+  namespace: default
+  labels:
+    app: imdb
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: imdb
+  minReplicas: 2
+  maxReplicas: 200
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: AverageValue
+        averageValue: 20
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: 300Mi
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 200
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: movies-hpa
+  namespace: default
+  labels:
+    app: movies
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: movies
+  minReplicas: 2
+  maxReplicas: 200
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: AverageValue
+        averageValue: 20
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: 300Mi
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 200
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: orchauth-hpa
+  namespace: default
+  labels:
+    app: orchauth
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: orchauth
+  minReplicas: 2
+  maxReplicas: 200
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: AverageValue
+        averageValue: 20
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: 300Mi
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 200
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: prefs-hpa
+  namespace: default
+  labels:
+    app: prefs
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: prefs
+  minReplicas: 2
+  maxReplicas: 200
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: AverageValue
+        averageValue: 20
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: 300Mi
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 200
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: search-hpa
+  namespace: default
+  labels:
+    app: search
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: search
+  minReplicas: 2
+  maxReplicas: 200
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: AverageValue
+        averageValue: 20
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: 300Mi
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 200
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: users-hpa
+  namespace: default
+  labels:
+    app: users
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: users
+  minReplicas: 2
+  maxReplicas: 200
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: AverageValue
+        averageValue: 20
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: 300Mi
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 200
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: goodreads-hpa
+  namespace: default
+  labels:
+    app: goodreads
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: goodreads
+  minReplicas: 2
+  maxReplicas: 200
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: AverageValue
+        averageValue: 20
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: 300Mi
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 200
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: netflix-hpa
+  namespace: default
+  labels:
+    app: netflix
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: netflix
+  minReplicas: 2
+  maxReplicas: 200
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: AverageValue
+        averageValue: 20
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: 300Mi
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 100

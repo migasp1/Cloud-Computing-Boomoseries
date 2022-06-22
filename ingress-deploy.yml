@@ -4,7 +4,18 @@ metadata:
   name: boomoseries-ingress
 spec:
   defaultBackend:
-    service:
+   service:
       name: orchauth
       port:
         number: 80
+  rules:
+  - http:
+      paths:
+      - path: /swagger/index.html
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: orchauth
+            port:
+              number: 80
+  

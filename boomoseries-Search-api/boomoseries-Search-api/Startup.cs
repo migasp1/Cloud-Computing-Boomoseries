@@ -91,7 +91,7 @@ namespace boomoseries_Search_api
             return services.AddHttpClient<TInterface, TClass>(httpClientName)
                 .AddPolicyHandler(Startup.GetCircuitBreakerPolicy())
                 .AddPolicyHandler(Startup.GetRetryPolicy())
-                .AddPolicyHandler(Policy.TimeoutAsync<HttpResponseMessage>(3));
+                .AddPolicyHandler(Policy.TimeoutAsync<HttpResponseMessage>(10));
 
         }
     }
